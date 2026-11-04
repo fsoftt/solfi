@@ -1,9 +1,9 @@
-package com.melodia.app
+package com.solfi.app
 
-import com.melodia.app.audio.AudioEngine
-import com.melodia.app.audio.PlayOptions
-import com.melodia.app.music.Melody
-import com.melodia.app.platform.AudioSink
+import com.solfi.app.audio.AudioEngine
+import com.solfi.app.audio.PlayOptions
+import com.solfi.app.music.Melody
+import com.solfi.app.platform.AudioSink
 import javax.sound.sampled.AudioSystem
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -18,14 +18,20 @@ class DesktopAudioSinkTest {
             val m = Melody.parse("treble", "4/4", "C", 240, "C4:q D4:q E4:h")
             engine.volume = 0.0f // keep the test silent
             engine.playMelody(m, PlayOptions(tempo = 240))
-            Thread.sleep(700)
+            // Poll instead of fixed sleeps: opening the audio line can take a while on a loaded machine.
+            waitUntil(8_000) { engine.audioClockFrames() > 10_000 }
             assertTrue(engine.audioClockFrames() > 10_000, "audio clock should advance, was ${engine.audioClockFrames()}")
-            Thread.sleep(1500)
+            waitUntil(8_000) { !engine.isPlaying.value }
             assertTrue(!engine.isPlaying.value, "melody should have finished")
         } catch (e: IllegalArgumentException) {
             // no usable line on this machine
         } finally {
             engine.shutdown()
         }
+    }
+
+    private fun waitUntil(timeoutMs: Long, cond: () -> Boolean) {
+        val end = System.currentTimeMillis() + timeoutMs
+        while (System.currentTimeMillis() < end && !cond()) Thread.sleep(50)
     }
 }
