@@ -53,6 +53,7 @@ import com.solfi.app.content.Option
 import com.solfi.app.content.Step
 import com.solfi.app.logic.RhythmScorer
 import com.solfi.app.music.Clef
+import com.solfi.app.music.ClefShift
 import com.solfi.app.music.Melody
 import com.solfi.app.music.Pitch
 import com.solfi.app.ui.notation.StaffView
@@ -183,13 +184,13 @@ private fun ChoiceStep(
 }
 
 @Composable
-private fun optionItems(opts: List<Option>): List<ChoiceItem> {
+private fun optionItems(opts: List<Option>, clef: Clef? = null): List<ChoiceItem> {
     val ui = LocalUi.current
-    return remember(opts, ui.lang, ui.naming) {
+    return remember(opts, ui.lang, ui.naming, clef) {
         opts.map { o ->
             val pitch = o.note?.let { Pitch.parseOrNull(it) }
             val label = o.text?.get(ui.lang) ?: pitch?.let { ui.noteName(it) }
-            val mel = o.melody?.let { runCatching { it.toMelody() }.getOrNull() }
+            val mel = o.melody?.let { runCatching { it.toMelody() }.getOrNull() }?.let { m -> if (clef != null) ClefShift.toClef(m, clef) else m }
             ChoiceItem(label, mel, o.melody?.tempo ?: 80, pitch)
         }
     }
@@ -198,7 +199,7 @@ private fun optionItems(opts: List<Option>): List<ChoiceItem> {
 @Composable
 private fun QuizStep(app: AppState, step: Step.Quiz, onDone: (Double?) -> Unit) {
     val ui = LocalUi.current
-    val items = optionItems(step.options)
+    val items = optionItems(step.options, LocalClefOverride.current)
     ChoiceStep(app, items, step.answer, step.explanation[ui.lang], onDone) {
         BigText(step.question[ui.lang])
         step.melody?.let { MelodyPlayerCard(app, it) }
@@ -218,18 +219,23 @@ private fun distractors(answer: Pitch, clef: Clef): List<Pitch> {
 private fun IdentifyNoteStep(app: AppState, step: Step.IdentifyNote, onDone: (Double?) -> Unit) {
     val ui = LocalUi.current
     val answer = Pitch.parse(step.note)
-    val clef = runCatching { Clef.fromCode(step.clef) }.getOrDefault(Clef.TREBLE)
-    val (choices, idx) = remember(step, ui.naming) {
-        val list = step.choices?.map { Pitch.parse(it) } ?: (distractors(answer, clef) + answer).shuffled(Random(answer.midi))
-        list to list.indexOfFirst { it.midi == answer.midi }
+    val authored = runCatching { Clef.fromCode(step.clef) }.getOrDefault(Clef.TREBLE)
+    val override = LocalClefOverride.current
+    val clef = override ?: authored
+    // Whole-octave shift that fits the note on the chosen clef; choices move with it so names stay the same.
+    val shift = remember(step, clef) { if (clef == authored) 0 else ClefShift.octaveShift(listOf(answer), clef) }
+    val shownAnswer = remember(step, shift) { ClefShift.shiftPitch(answer, shift) }
+    val (choices, idx) = remember(step, ui.naming, clef) {
+        val list = step.choices?.map { ClefShift.shiftPitch(Pitch.parse(it), shift) } ?: (distractors(shownAnswer, clef) + shownAnswer).shuffled(Random(shownAnswer.midi))
+        list to list.indexOfFirst { it.midi == shownAnswer.midi }
     }
-    val melody = remember(step) { Melody.parse(clef.code, "4/4", "C", 80, "${step.note}:w") }
+    val melody = remember(step, clef, shift) { Melody.parse(clef.code, "4/4", "C", 80, "$shownAnswer:w") }
     val items = remember(choices, ui.naming, ui.lang) { choices.map { ChoiceItem(ui.noteName(it), null, pitch = it) } }
     ChoiceStep(app, items, idx, step.explanation?.get(ui.lang), onDone) {
         BigText((step.prompt?.get(ui.lang)) ?: ui.strings.whichNoteIsThis)
         PressCard(Modifier.fillMaxWidth()) {
             Box(Modifier.padding(12.dp)) {
-                StaffView(melody, showTime = false, gap = 13.dp, description = ui.strings.cdStaff, onNoteClick = { app.engine.playPitch(answer) })
+                StaffView(melody, showTime = false, gap = 13.dp, description = ui.strings.cdStaff, onNoteClick = { app.engine.playPitch(shownAnswer) })
             }
         }
     }
@@ -321,7 +327,7 @@ private enum class RhythmPhase { READY, RUNNING, DONE }
 private fun RhythmTapStep(app: AppState, step: Step.RhythmTap, onDone: (Double?) -> Unit) {
     val ui = LocalUi.current
     val s = ui.strings
-    val melody = rememberMelody(step.melody) ?: run { onDone(null); return }
+    val melody = rememberMelody(step.melody, null) ?: run { onDone(null); return }
     val tempo = step.melody.tempo
     var phase by remember { mutableStateOf(RhythmPhase.READY) }
     val taps = remember { mutableStateListOf<Double>() }

@@ -39,6 +39,24 @@ interface Strings {
     val letsStart: String
     fun noteNamesDefaultHint(solfege: Boolean): String
 
+    // clef / instrument
+    val instrumentTitle: String
+    fun instrumentName(i: com.solfi.app.music.Instrument): String
+    val clefTitle: String
+    val clefRecommended: String
+    val clefTreble: String
+    val clefBass: String
+    fun clefRecommendedIs(clefName: String): String
+    /** Why this clef is recommended; [clef] null = the lesson's own clef is kept. */
+    fun clefReason(clef: com.solfi.app.music.Clef?): String
+    val clefSettingsTitle: String
+    val instrumentSettingsTitle: String
+    fun clefLockedNote(bass: Boolean): String
+    val clefAuto: String
+    val clefQuickSol: String
+    val clefQuickFa: String
+    val clefQuickTitle: String
+
     // navigation
     val navHome: String
     val navLearn: String

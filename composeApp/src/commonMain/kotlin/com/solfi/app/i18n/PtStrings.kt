@@ -142,6 +142,38 @@ object PtStrings : Strings {
     override val about = "Sobre"
     override val aboutText = "Solfi · Música do zero para crianças e adultos."
 
+    override val instrumentTitle = "Que instrumento você toca ou quer tocar?"
+    override fun instrumentName(i: com.solfi.app.music.Instrument) = when (i) {
+        com.solfi.app.music.Instrument.VOICE -> "Voz"
+        com.solfi.app.music.Instrument.PIANO -> "Piano"
+        com.solfi.app.music.Instrument.GUITAR -> "Violão / guitarra"
+        com.solfi.app.music.Instrument.VIOLIN -> "Violino"
+        com.solfi.app.music.Instrument.FLUTE -> "Flauta"
+        com.solfi.app.music.Instrument.CELLO -> "Violoncelo"
+        com.solfi.app.music.Instrument.BASS -> "Contrabaixo / baixo elétrico"
+        com.solfi.app.music.Instrument.BASSOON -> "Fagote"
+        com.solfi.app.music.Instrument.TROMBONE -> "Trombone"
+        com.solfi.app.music.Instrument.TUBA -> "Tuba"
+        com.solfi.app.music.Instrument.OTHER -> "Outro / nenhum"
+    }
+    override val clefTitle = "Em qual clave você quer ler?"
+    override val clefRecommended = "Recomendada"
+    override val clefTreble = "Clave de sol"
+    override val clefBass = "Clave de fá"
+    override fun clefRecommendedIs(clefName: String) = "Recomendada: $clefName"
+    override fun clefReason(clef: com.solfi.app.music.Clef?) = when (clef) {
+        com.solfi.app.music.Clef.BASS -> "Seu instrumento soa no registro grave, então a clave de fá combina melhor."
+        com.solfi.app.music.Clef.TREBLE -> "Seu instrumento normalmente é lido em clave de sol."
+        null -> "Vamos usar a clave que cada lição traz."
+    }
+    override val clefSettingsTitle = "Clave"
+    override val instrumentSettingsTitle = "Instrumento"
+    override fun clefLockedNote(bass: Boolean) = if (bass) "Esta lição usa clave de fá" else "Esta lição usa clave de sol"
+    override val clefAuto = "Auto"
+    override val clefQuickSol = "Sol"
+    override val clefQuickFa = "Fá"
+    override val clefQuickTitle = "Clave"
+
     override val cdMascot = "Mascote Solfi, uma nota musical sorridente"
     override val cdSettings = "Ajustes"
     override val cdBack = "Voltar"

@@ -37,6 +37,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -55,6 +56,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.solfi.app.AppState
 import com.solfi.app.logic.CompletionResult
+import com.solfi.app.music.Clef
 import com.solfi.app.platform.PlatformBackHandler
 import com.solfi.app.ui.theme.LocalUi
 import com.solfi.app.ui.theme.Palette
@@ -107,6 +109,14 @@ fun LessonScreen(app: AppState, levelIndex: Int, lessonIndex: Int) {
                 label = "step",
             ) { idx ->
                 val step = lesson.steps[idx]
+                val locked = lesson.clefLocked || step.clefLocked
+                val wanted = app.effectiveClef
+                val authored = authoredClef(step)
+                val lockNote = locked && wanted != null && authored != null && wanted != authored
+                CompositionLocalProvider(LocalClefOverride provides (if (locked) null else wanted)) {
+                  Column(Modifier.fillMaxSize()) {
+                    if (lockNote) Text(s.clefLockedNote(authored == Clef.BASS), Modifier.fillMaxWidth().padding(horizontal = 20.dp), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                    Box(Modifier.weight(1f).fillMaxWidth()) {
                 StepContent(app, step) { score ->
                     app.engine.stop()
                     if (score != null) scores += score
@@ -114,6 +124,9 @@ fun LessonScreen(app: AppState, levelIndex: Int, lessonIndex: Int) {
                         accuracy = if (scores.isEmpty()) 1.0 else scores.average()
                         result = app.completeLesson(levelIndex, lessonIndex, accuracy)
                     } else stepIndex = idx + 1
+                }
+                    }
+                  }
                 }
             }
         }
@@ -181,3 +194,16 @@ private fun LessonResultView(
     }
 }
 
+
+/** Clef a step is written in as authored, or null when it shows no staff. */
+fun authoredClef(step: com.solfi.app.content.Step): Clef? {
+    val code = when (step) {
+        is com.solfi.app.content.Step.Explain -> step.melody?.clef
+        is com.solfi.app.content.Step.Listen -> step.melody.clef
+        is com.solfi.app.content.Step.Quiz -> step.melody?.clef ?: step.options.firstNotNullOfOrNull { it.melody?.clef }
+        is com.solfi.app.content.Step.IdentifyNote -> step.clef
+        is com.solfi.app.content.Step.Piano -> step.clef
+        else -> null
+    }
+    return code?.let { c -> runCatching { Clef.fromCode(c) }.getOrNull() }
+}

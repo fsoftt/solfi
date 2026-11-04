@@ -39,6 +39,10 @@ import androidx.compose.ui.unit.sp
 import com.solfi.app.AppState
 import com.solfi.app.Route
 import com.solfi.app.data.Profile
+import com.solfi.app.music.Clef
+import com.solfi.app.music.ClefPolicy
+import com.solfi.app.music.ClefPreference
+import com.solfi.app.music.Instrument
 import com.solfi.app.music.Lang
 import com.solfi.app.music.NoteNaming
 import com.solfi.app.platform.PlatformBackHandler
@@ -79,6 +83,23 @@ fun SettingsScreen(app: AppState) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FilterChip(st.kidMode, { app.updateSettings { copy(kidMode = true) } }, { Text("🧒 " + s.modeKid) })
                     FilterChip(!st.kidMode, { app.updateSettings { copy(kidMode = false) } }, { Text("🧑 " + s.modeAdult) })
+                }
+            }
+            Section(s.instrumentSettingsTitle) {
+                @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+                androidx.compose.foundation.layout.FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Instrument.entries.forEach { ins ->
+                        FilterChip(st.instrument == ins.name, { app.updateSettings { copy(instrument = ins.name) } }, { Text(instrumentEmoji(ins) + " " + s.instrumentName(ins)) })
+                    }
+                }
+            }
+            Section(s.clefSettingsTitle, ClefPolicy.recommended(Instrument.fromName(st.instrument)).let { r ->
+                s.clefRecommendedIs(when (r) { Clef.BASS -> s.clefBass; Clef.TREBLE -> s.clefTreble; null -> s.clefAuto }) + " - " + s.clefReason(r)
+            }) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf(ClefPreference.RECOMMENDED to s.clefRecommended, ClefPreference.TREBLE to s.clefTreble, ClefPreference.BASS to s.clefBass).forEach { (k, label) ->
+                        FilterChip(ClefPreference.fromName(st.clefPreference) == k, { app.updateSettings { copy(clefPreference = k.name) } }, { Text(label) })
+                    }
                 }
             }
             Section(s.theme) {

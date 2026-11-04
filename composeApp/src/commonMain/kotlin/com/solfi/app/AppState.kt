@@ -14,6 +14,10 @@ import com.solfi.app.data.Progress
 import com.solfi.app.i18n.stringsFor
 import com.solfi.app.logic.CompletionResult
 import com.solfi.app.logic.ProgressRepository
+import com.solfi.app.music.ClefPolicy
+import com.solfi.app.music.ClefPreference
+import com.solfi.app.music.Instrument
+import com.solfi.app.music.Clef
 import com.solfi.app.music.Lang
 import com.solfi.app.music.NoteNaming
 import com.solfi.app.platform.Haptics
@@ -61,6 +65,10 @@ class AppState(
             return UiContext(stringsFor(lang), lang, naming, s?.kidMode ?: true)
         }
 
+    /** Clef the learner wants to read in, or null to keep each lesson's own clef. */
+    val effectiveClef: Clef?
+        get() = profile?.settings?.let { ClefPolicy.effective(ClefPreference.fromName(it.clefPreference), Instrument.fromName(it.instrument)) }
+
     val systemLang: Lang get() = Lang.fromCode(systemLanguage)
 
     val availableLevels: List<LevelContent> get() = levels.filterNotNull()
@@ -86,12 +94,16 @@ class AppState(
 
     // ------------------------------------------------------------- profiles
 
-    fun createProfile(name: String, avatar: String, kid: Boolean, lang: Lang, naming: NoteNaming): Profile {
+    fun createProfile(
+        name: String, avatar: String, kid: Boolean, lang: Lang, naming: NoteNaming,
+        instrument: Instrument = Instrument.OTHER, clefPreference: ClefPreference = ClefPreference.RECOMMENDED,
+    ): Profile {
         val p = Profile(
             id = "p" + com.solfi.app.platform.currentTimeMillis().toString(36) + profiles.size,
             name = name.trim().ifEmpty { "Solfi" },
             avatar = avatar,
-            settings = ProfileSettings(language = lang.code, noteNaming = naming.name, kidMode = kid),
+            settings = ProfileSettings(language = lang.code, noteNaming = naming.name, kidMode = kid,
+                instrument = instrument.name, clefPreference = clefPreference.name),
         )
         profiles = profiles + p
         store.saveProfiles(profiles)

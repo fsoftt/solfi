@@ -10,6 +10,7 @@
   "lessons": [
     {
       "id": "l1-treble-clef",
+      "clefLocked": true,
       "title": { "es": "La clave de sol", "en": "The Treble Clef", "pt": "A clave de sol" },
       "emoji": "𝄞",
       "steps": [
@@ -83,6 +84,7 @@
     },
     {
       "id": "l2-staff-notes",
+      "clefLocked": true,
       "title": { "es": "Las notas Do a Do", "en": "Notes from Do to Do", "pt": "As notas Dó a Dó" },
       "emoji": "🎼",
       "steps": [
@@ -327,6 +329,7 @@
     },
     {
       "id": "l5-ledger-lines",
+      "clefLocked": true,
       "title": { "es": "Líneas adicionales", "en": "Ledger Lines", "pt": "Linhas suplementares" },
       "emoji": "➖",
       "steps": [
@@ -482,6 +485,7 @@
     },
     {
       "id": "l7-simple-melodies",
+      "clefLocked": true,
       "title": { "es": "Leer melodías sencillas", "en": "Reading Simple Melodies", "pt": "Ler melodias simples" },
       "emoji": "📖",
       "steps": [
@@ -554,6 +558,7 @@
     },
     {
       "id": "l8-exam",
+      "clefLocked": true,
       "title": { "es": "Examen del nivel 2", "en": "Level 2 Exam", "pt": "Exame do nível 2" },
       "emoji": "🏆",
       "isExam": true,

@@ -154,6 +154,7 @@
     },
     {
       "id": "l3-staff",
+      "clefLocked": true,
       "title": { "es": "El pentagrama y la clave de sol", "en": "The Staff and the Treble Clef", "pt": "A pauta e a clave de sol" },
       "emoji": "🎼",
       "steps": [
@@ -233,6 +234,7 @@
     },
     {
       "id": "l4-doremi",
+      "clefLocked": true,
       "title": { "es": "Do, Re, Mi", "en": "Do, Re, Mi", "pt": "Dó, Ré, Mi" },
       "emoji": "🎹",
       "steps": [
@@ -288,6 +290,7 @@
     },
     {
       "id": "l5-fasol",
+      "clefLocked": true,
       "title": { "es": "Fa y Sol: cinco notas", "en": "Fa and Sol: Five Notes", "pt": "Fá e Sol: cinco notas" },
       "emoji": "⭐",
       "steps": [
@@ -453,6 +456,7 @@
     },
     {
       "id": "l7-melodies",
+      "clefLocked": true,
       "title": { "es": "Primeras melodías", "en": "First Melodies", "pt": "Primeiras melodias" },
       "emoji": "🌟",
       "steps": [
@@ -520,6 +524,7 @@
     },
     {
       "id": "l8-exam",
+      "clefLocked": true,
       "title": { "es": "Examen del nivel 1", "en": "Level 1 Exam", "pt": "Prova do nível 1" },
       "emoji": "🏆",
       "isExam": true,

@@ -382,6 +382,7 @@
         },
         {
           "type": "identifyNote",
+          "clefLocked": true,
           "prompt": {
             "es": "Esta nota cierra la escala. ¿Cuál es?",
             "en": "This note closes the scale. Which is it?",

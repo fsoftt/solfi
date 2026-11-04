@@ -10,6 +10,7 @@
   "lessons": [
     {
       "id": "l4-bass",
+      "clefLocked": true,
       "title": { "es": "La clave de fa", "en": "The Bass Clef", "pt": "A clave de fá" },
       "emoji": "🎼",
       "steps": [
@@ -551,6 +552,7 @@
       "steps": [
         {
           "type": "identifyNote",
+          "clefLocked": true,
           "prompt": {
             "es": "Clave de fa: ¿qué nota es esta?",
             "en": "Bass clef: which note is this?",

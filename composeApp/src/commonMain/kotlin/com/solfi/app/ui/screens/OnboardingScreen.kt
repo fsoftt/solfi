@@ -48,6 +48,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solfi.app.AppState
 import com.solfi.app.i18n.stringsFor
+import com.solfi.app.music.Clef
+import com.solfi.app.music.ClefPolicy
+import com.solfi.app.music.ClefPreference
+import com.solfi.app.music.Instrument
 import com.solfi.app.music.Lang
 import com.solfi.app.music.NoteNaming
 import com.solfi.app.ui.theme.LocalUi
@@ -69,6 +73,8 @@ fun OnboardingScreen(app: AppState, onCancel: (() -> Unit)? = null) {
     var name by remember { mutableStateOf("") }
     var avatar by remember { mutableStateOf(AVATARS.first()) }
     var kid by remember { mutableStateOf(true) }
+    var instrument by remember { mutableStateOf(Instrument.OTHER) }
+    var clefPref by remember { mutableStateOf(ClefPreference.RECOMMENDED) }
     val naming = NoteNaming.defaultFor(lang)
     val ui = UiContext(stringsFor(lang), lang, naming, kid)
 
@@ -80,7 +86,7 @@ fun OnboardingScreen(app: AppState, onCancel: (() -> Unit)? = null) {
                 else if (onCancel != null) Text("‹ ${s.cancel}", Modifier.clickable { onCancel() }.padding(8.dp), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
                 else Spacer(Modifier.height(1.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    for (i in 0..3) Box(Modifier.height(8.dp).width(if (i == page) 28.dp else 10.dp).clip(RoundedCornerShape(4.dp)).background(if (i <= page) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant))
+                    for (i in 0..5) Box(Modifier.height(8.dp).width(if (i == page) 28.dp else 10.dp).clip(RoundedCornerShape(4.dp)).background(if (i <= page) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant))
                 }
             }
             AnimatedContent(
@@ -135,6 +141,36 @@ fun OnboardingScreen(app: AppState, onCancel: (() -> Unit)? = null) {
                             ModeCard("🧑", s.modeAdult, s.modeAdultDesc, !kid) { kid = false }
                             Text(s.noteNamesDefaultHint(naming == NoteNaming.SOLFEGE), Modifier.padding(top = 20.dp), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
                         }
+                        3 -> {
+                            Spacer(Modifier.height(20.dp))
+                            Text(s.instrumentTitle, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
+                            Spacer(Modifier.height(14.dp))
+                            Instrument.entries.forEach { ins ->
+                                val sel = ins == instrument
+                                PressCard(
+                                    Modifier.fillMaxWidth().padding(vertical = 4.dp), onClick = { instrument = ins },
+                                    container = if (sel) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
+                                    border = BorderStroke(if (sel) 2.5.dp else 1.5.dp, if (sel) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant),
+                                ) {
+                                    Row(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                        Text(instrumentEmoji(ins), fontSize = 26.sp)
+                                        Text(s.instrumentName(ins), fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                                    }
+                                }
+                            }
+                        }
+                        4 -> {
+                            val rec = ClefPolicy.recommended(instrument)
+                            val recName = when (rec) { Clef.BASS -> s.clefBass; Clef.TREBLE -> s.clefTreble; null -> null }
+                            Spacer(Modifier.height(20.dp))
+                            Text(s.clefTitle, fontSize = 26.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
+                            Spacer(Modifier.height(18.dp))
+                            ModeCard("\u2B50", s.clefRecommended, recName?.let { s.clefRecommendedIs(it) + "\n" + s.clefReason(rec) } ?: s.clefReason(null), clefPref == ClefPreference.RECOMMENDED) { clefPref = ClefPreference.RECOMMENDED }
+                            Spacer(Modifier.height(12.dp))
+                            ModeCard("\uD834\uDD1E", s.clefTreble, "", clefPref == ClefPreference.TREBLE) { clefPref = ClefPreference.TREBLE }
+                            Spacer(Modifier.height(12.dp))
+                            ModeCard("\uD834\uDD22", s.clefBass, "", clefPref == ClefPreference.BASS) { clefPref = ClefPreference.BASS }
+                        }
                         else -> {
                             Spacer(Modifier.height(30.dp))
                             Mascot(size = 160.dp, mood = Mood.CHEER)
@@ -144,11 +180,11 @@ fun OnboardingScreen(app: AppState, onCancel: (() -> Unit)? = null) {
                     }
                 }
             }
-            val last = page == 3
+            val last = page == 5
             BigButton(
                 if (last) s.letsStart else s.next,
                 {
-                    if (!last) page++ else app.createProfile(name, avatar, kid, lang, naming)
+                    if (!last) page++ else app.createProfile(name, avatar, kid, lang, naming, instrument, clefPref)
                 },
                 enabled = page != 1 || name.isNotBlank(),
             )
@@ -171,4 +207,18 @@ private fun ModeCard(emoji: String, title: String, desc: String, selected: Boole
             }
         }
     }
+}
+
+fun instrumentEmoji(i: Instrument): String = when (i) {
+    Instrument.VOICE -> "\uD83C\uDFA4"
+    Instrument.PIANO -> "\uD83C\uDFB9"
+    Instrument.GUITAR -> "\uD83C\uDFB8"
+    Instrument.VIOLIN -> "\uD83C\uDFBB"
+    Instrument.FLUTE -> "\uD83E\uDE88"
+    Instrument.CELLO -> "\uD83C\uDFBB"
+    Instrument.BASS -> "\uD83C\uDFB8"
+    Instrument.BASSOON -> "\uD83C\uDFB7"
+    Instrument.TROMBONE -> "\uD83C\uDFBA"
+    Instrument.TUBA -> "\uD83C\uDFBA"
+    Instrument.OTHER -> "\uD83C\uDFB5"
 }

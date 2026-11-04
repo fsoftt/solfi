@@ -591,6 +591,7 @@
         },
         {
           "type": "identifyNote",
+          "clefLocked": true,
           "prompt": {
             "es": "¿Qué nota es esta en clave de Fa?",
             "en": "Which note is this in the bass clef?",

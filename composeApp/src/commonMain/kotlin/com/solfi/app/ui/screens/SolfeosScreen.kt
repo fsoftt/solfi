@@ -39,6 +39,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -54,6 +55,7 @@ import com.solfi.app.Route
 import com.solfi.app.audio.AudioEngine
 import com.solfi.app.audio.PlayOptions
 import com.solfi.app.logic.ProgressRepository
+import com.solfi.app.music.Clef
 import com.solfi.app.platform.PlatformBackHandler
 import com.solfi.app.ui.notation.StaffView
 import com.solfi.app.ui.theme.LocalUi
@@ -97,7 +99,10 @@ fun SolfeoPlayerScreen(app: AppState, levelIndex: Int, solfeoIndex: Int) {
     val s = ui.strings
     val level = app.levels.getOrNull(levelIndex)
     val solfeo = level?.solfeos?.getOrNull(solfeoIndex)
-    val melody = rememberMelody(solfeo?.melody)
+    // Session clef override: 0 = Auto (profile preference), 1 = treble, 2 = bass.
+    var clefMode by remember { mutableIntStateOf(0) }
+    val sessionClef = when (clefMode) { 1 -> Clef.TREBLE; 2 -> Clef.BASS; else -> app.effectiveClef }
+    val melody = rememberMelody(solfeo?.melody, sessionClef)
     if (level == null || solfeo == null || melody == null) { app.pop(); return }
     val engine = app.engine
 
@@ -138,6 +143,13 @@ fun SolfeoPlayerScreen(app: AppState, levelIndex: Int, solfeoIndex: Int) {
                         melody, labelFor = if (showNames) ({ p -> ui.noteName(p) }) else null, highlightIndex = if (pulseOnly) -1 else hi,
                         onNoteClick = { e -> e.pitches.forEach { engine.playPitch(it, 0.7) } }, description = s.cdStaff,
                     )
+                }
+            }
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(s.clefQuickTitle, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                listOf(s.clefQuickSol, s.clefQuickFa, s.clefAuto).forEachIndexed { i, label ->
+                    val mode = when (i) { 0 -> 1; 1 -> 2; else -> 0 }
+                    FilterChip(clefMode == mode, { clefMode = mode; if (playing) engine.stop() }, { Text(label) })
                 }
             }
             PulseDots(melody.time.clickTicks, melody.time.measureTicks, if (playing) pos else AudioEngine.IDLE)

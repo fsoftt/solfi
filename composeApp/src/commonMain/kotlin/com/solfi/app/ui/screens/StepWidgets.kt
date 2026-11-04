@@ -36,13 +36,21 @@ import com.solfi.app.AppState
 import com.solfi.app.audio.AudioEngine
 import com.solfi.app.audio.PlayOptions
 import com.solfi.app.content.MelodySpec
+import com.solfi.app.music.Clef
+import com.solfi.app.music.ClefShift
 import com.solfi.app.music.Melody
 import com.solfi.app.ui.notation.StaffView
 import com.solfi.app.ui.theme.LocalUi
 import com.solfi.app.ui.widgets.PressCard
 
+/** Clef the current step must be shown in, or null to keep the authored clef (set per step by the lesson screen). */
+val LocalClefOverride = androidx.compose.runtime.staticCompositionLocalOf<Clef?> { null }
+
+/** Parses [spec], re-written in [clef] (whole-octave shift) when given. Pass `clef = null` to keep the authored clef. */
 @Composable
-fun rememberMelody(spec: MelodySpec?): Melody? = remember(spec) { spec?.let { runCatching { it.toMelody() }.getOrNull() } }
+fun rememberMelody(spec: MelodySpec?, clef: Clef? = LocalClefOverride.current): Melody? = remember(spec, clef) {
+    spec?.let { runCatching { it.toMelody() }.getOrNull() }?.let { m -> if (clef != null) ClefShift.toClef(m, clef) else m }
+}
 
 /** Page layout of a lesson step: scrolling body plus a pinned bottom area. */
 @Composable
@@ -71,9 +79,9 @@ fun engineHighlight(engine: AudioEngine, melody: Melody?): Int {
 
 /** Staff + play/stop button that highlights the notes while playing. */
 @Composable
-fun MelodyPlayerCard(app: AppState, spec: MelodySpec, showLabels: Boolean = true, autoLabelOff: Boolean = false) {
+fun MelodyPlayerCard(app: AppState, spec: MelodySpec, showLabels: Boolean = true, autoLabelOff: Boolean = false, clef: Clef? = LocalClefOverride.current) {
     val ui = LocalUi.current
-    val melody = rememberMelody(spec) ?: return
+    val melody = rememberMelody(spec, clef) ?: return
     val playing by app.engine.isPlaying.collectAsState()
     val hi = engineHighlight(app.engine, melody)
     PressCard(Modifier.fillMaxWidth()) {

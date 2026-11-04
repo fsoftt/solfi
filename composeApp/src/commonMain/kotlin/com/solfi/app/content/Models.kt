@@ -45,6 +45,9 @@ data class SoundSpec(
 
 @Serializable
 sealed class Step {
+    /** When true the step keeps its authored clef whatever the learner's clef preference is. */
+    abstract val clefLocked: Boolean
+
     /** Teaching card. Optionally shows (and, with `play`, can play) a melody. */
     @Serializable @SerialName("explain")
     data class Explain(
@@ -53,11 +56,12 @@ sealed class Step {
         val emoji: String? = null,
         val melody: MelodySpec? = null,
         val play: Boolean = false,
+        override val clefLocked: Boolean = false,
     ) : Step()
 
     /** Play a melody while it is highlighted on the staff. */
     @Serializable @SerialName("listen")
-    data class Listen(val prompt: L10n, val melody: MelodySpec) : Step()
+    data class Listen(val prompt: L10n, val melody: MelodySpec, override val clefLocked: Boolean = false) : Step()
 
     /** Multiple choice. Options may be text, notes or melodies. `melody` is shown/played with the question. */
     @Serializable @SerialName("quiz")
@@ -67,6 +71,7 @@ sealed class Step {
         val answer: Int,
         val explanation: L10n,
         val melody: MelodySpec? = null,
+        override val clefLocked: Boolean = false,
     ) : Step()
 
     /** A note is drawn on the staff; the learner picks its name. Options are generated unless `choices` is given. */
@@ -77,6 +82,7 @@ sealed class Step {
         val note: String,
         val choices: List<String>? = null,
         val explanation: L10n? = null,
+        override val clefLocked: Boolean = false,
     ) : Step()
 
     /** Play a sound and choose the answer. */
@@ -87,6 +93,7 @@ sealed class Step {
         val options: List<Option>,
         val answer: Int,
         val explanation: L10n,
+        override val clefLocked: Boolean = false,
     ) : Step()
 
     /** On-screen keyboard: play the `targets` notes in order. */
@@ -97,6 +104,7 @@ sealed class Step {
         val showStaff: Boolean = true,
         val showLabels: Boolean = true,
         val clef: String = "treble",
+        override val clefLocked: Boolean = false,
     ) : Step()
 
     /** Count-in, then tap the rhythm of `melody` (pitches ignored). */
@@ -107,6 +115,7 @@ sealed class Step {
         val toleranceMs: Int = 180,
         val countIn: Boolean = true,
         val passScore: Double = 0.6,
+        override val clefLocked: Boolean = false,
     ) : Step()
 }
 
@@ -116,6 +125,8 @@ data class Lesson(
     val title: L10n,
     val emoji: String = "🎵",
     val isExam: Boolean = false,
+    /** When true every step of the lesson keeps its authored clef (clef/staff-position lessons). */
+    val clefLocked: Boolean = false,
     val steps: List<Step>,
 )
 

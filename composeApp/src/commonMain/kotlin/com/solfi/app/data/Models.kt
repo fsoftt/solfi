@@ -12,6 +12,10 @@ data class ProfileSettings(
     val theme: String = "SYSTEM",
     val volume: Float = 0.8f,
     val haptics: Boolean = true,
+    /** Instrument enum name (see Instrument); drives the recommended clef. */
+    val instrument: String = "OTHER",
+    /** ClefPreference name: RECOMMENDED, TREBLE or BASS. */
+    val clefPreference: String = "RECOMMENDED",
 )
 
 @Serializable
