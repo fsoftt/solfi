@@ -57,6 +57,9 @@ import com.solfi.app.music.ClefShift
 import com.solfi.app.music.Melody
 import com.solfi.app.music.Pitch
 import com.solfi.app.ui.notation.StaffView
+import com.solfi.app.logic.StepCompletionPolicy
+import com.solfi.app.logic.StepOutcome
+import com.solfi.app.logic.StepState
 import com.solfi.app.ui.theme.LocalUi
 import com.solfi.app.ui.theme.Palette
 import com.solfi.app.ui.widgets.BigButton
@@ -73,16 +76,19 @@ fun feedback(app: AppState, success: Boolean) {
     if (app.profile?.settings?.haptics != false) app.haptics.feedback(success)
 }
 
-/** Renders one lesson step. [onDone] receives the step score (0..1) or null for non-scored steps. */
+/**
+ * Renders one lesson step. [onDone] receives the outcome when the learner leaves the step; every step gates its own
+ * "Continuar" through [StepCompletionPolicy]. In exams ([isExam]) a wrong answer is not repeated.
+ */
 @Composable
-fun StepContent(app: AppState, step: Step, onDone: (Double?) -> Unit) {
+fun StepContent(app: AppState, step: Step, isExam: Boolean = false, onDone: (StepOutcome) -> Unit) {
     when (step) {
-        is Step.Explain -> ExplainStep(app, step) { onDone(null) }
-        is Step.Listen -> ListenStep(app, step) { onDone(null) }
-        is Step.Quiz -> QuizStep(app, step, onDone)
-        is Step.IdentifyNote -> IdentifyNoteStep(app, step, onDone)
-        is Step.EarTraining -> EarTrainingStep(app, step, onDone)
-        is Step.Piano -> PianoStep(app, step, onDone)
+        is Step.Explain -> ExplainStep(app, step) { onDone(StepOutcome.UNSCORED) }
+        is Step.Listen -> ListenStep(app, step) { onDone(StepOutcome.UNSCORED) }
+        is Step.Quiz -> QuizStep(app, step, isExam, onDone)
+        is Step.IdentifyNote -> IdentifyNoteStep(app, step, isExam, onDone)
+        is Step.EarTraining -> EarTrainingStep(app, step, isExam, onDone)
+        is Step.Piano -> PianoStep(app, step, isExam, onDone)
         is Step.RhythmTap -> RhythmTapStep(app, step, onDone)
     }
 }
@@ -93,21 +99,26 @@ fun StepContent(app: AppState, step: Step, onDone: (Double?) -> Unit) {
 private fun ExplainStep(app: AppState, step: Step.Explain, onNext: () -> Unit) {
     val ui = LocalUi.current
     val bounce by animateFloatAsState(1f, spring(Spring.DampingRatioHighBouncy), label = "emoji")
-    StepFrame(bottom = { BottomBar { BigButton(ui.strings.continueBtn, onNext) } }) {
+    // A melody that cannot be parsed is not shown, so it cannot be required either.
+    val gated = if (step.melody != null && rememberMelody(step.melody, null) == null) step.copy(melody = null) else step
+    var st by remember { mutableStateOf(StepState()) }
+    LaunchedEffect(Unit) { delay(StepCompletionPolicy.TEXT_ONLY_DELAY_MS); st = st.copy(elapsedMs = StepCompletionPolicy.TEXT_ONLY_DELAY_MS) }
+    StepFrame(bottom = { GatedContinue(gated, st) { if (StepCompletionPolicy.canContinue(gated, st)) onNext() } }) {
         step.emoji?.let { Text(it, Modifier.align(Alignment.CenterHorizontally).scale(bounce), fontSize = if (ui.kid) 64.sp else 48.sp) }
         step.title?.let { BigText(it[ui.lang], size = if (ui.kid) 26 else 22) }
         Body(step.text[ui.lang])
-        step.melody?.let { MelodyPlayerCard(app, it) }
+        step.melody?.let { MelodyPlayerCard(app, it, onPlayedToEnd = { st = st.copy(playedToEnd = true) }) }
     }
 }
 
 @Composable
 private fun ListenStep(app: AppState, step: Step.Listen, onNext: () -> Unit) {
     val ui = LocalUi.current
-    StepFrame(bottom = { BottomBar { BigButton(ui.strings.continueBtn, onNext) } }) {
+    var st by remember { mutableStateOf(StepState()) }
+    StepFrame(bottom = { GatedContinue(step, st) { if (StepCompletionPolicy.canContinue(step, st)) onNext() } }) {
         Text("🎧", Modifier.align(Alignment.CenterHorizontally), fontSize = 52.sp)
         BigText(step.prompt[ui.lang])
-        MelodyPlayerCard(app, step.melody)
+        MelodyPlayerCard(app, step.melody, onPlayedToEnd = { st = st.copy(playedToEnd = true) })
     }
 }
 
@@ -118,55 +129,51 @@ private class ChoiceItem(val label: String?, val melody: Melody?, val tempo: Int
 @Composable
 private fun ChoiceStep(
     app: AppState,
+    step: Step,
     options: List<ChoiceItem>,
     answer: Int,
     explanation: String?,
-    onDone: (Double?) -> Unit,
-    autoPlay: (suspend () -> Unit)? = null,
+    isExam: Boolean,
+    onDone: (StepOutcome) -> Unit,
+    /** Ear training: options stay locked until the sound has been played. */
+    soundPlayed: Boolean = true,
     header: @Composable ColumnScope.() -> Unit,
 ) {
     val ui = LocalUi.current
     val s = ui.strings
     var selected by remember { mutableIntStateOf(-1) }
     var checked by remember { mutableStateOf(false) }
-    var attempts by remember { mutableIntStateOf(0) }
-    val wrongSet = remember { mutableStateListOf<Int>() }
     val correct = checked && selected == answer
-
-    LaunchedEffect(Unit) { autoPlay?.invoke() }
+    val st = StepState(answered = checked, soundPlayed = soundPlayed)
+    val unlocked = StepCompletionPolicy.answersEnabled(step, st)
 
     StepFrame(bottom = {
         AnimatedVisibility(checked, enter = slideInVertically { it } + fadeIn()) {
             FeedbackPanel(
                 correct = correct,
                 message = if (correct) s.correct(ui.kid) else s.wrong(ui.kid),
-                detail = if (correct) explanation else null,
-                primaryLabel = if (correct) s.continueBtn else s.tryAgain,
-                onPrimary = {
-                    if (correct) onDone(when (attempts) { 1 -> 1.0; 2 -> 0.5; else -> 0.0 })
-                    else { checked = false; selected = -1 }
-                },
+                detail = if (correct) explanation else listOfNotNull(explanation, if (isExam) null else s.wrongWillRepeat).joinToString("\n"),
+                primaryLabel = s.continueBtn,
+                onPrimary = { if (StepCompletionPolicy.canContinue(step, st)) onDone(if (correct) StepOutcome.CORRECT else StepOutcome.WRONG) },
             )
         }
         if (!checked) BottomBar {
             BigButton(s.check, {
-                attempts++
                 checked = true
-                val ok = selected == answer
-                if (!ok) wrongSet += selected
-                feedback(app, ok)
-            }, enabled = selected >= 0)
+                feedback(app, selected == answer)
+            }, enabled = unlocked && selected >= 0)
+            val hint = hintText(s, StepCompletionPolicy.hint(step, st))
+            if (hint.isNotEmpty()) Text(hint, Modifier.fillMaxWidth().padding(top = 8.dp), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
         }
     }) {
         header()
         options.forEachIndexed { i, o ->
             val state = when {
-                checked && i == selected && i == answer -> ChoiceState.CORRECT
-                i in wrongSet && (i == selected || !checked) -> ChoiceState.WRONG
-                i in wrongSet -> ChoiceState.WRONG
+                checked && i == answer -> ChoiceState.CORRECT
+                checked && i == selected -> ChoiceState.WRONG
                 else -> ChoiceState.NORMAL
             }
-            ChoiceCard(selected = i == selected, state = state, enabled = !checked && i !in wrongSet, onClick = {
+            ChoiceCard(selected = i == selected, state = state, enabled = !checked && unlocked, onClick = {
                 selected = i
                 o.melody?.let { app.engine.playMelody(it, PlayOptions(tempo = o.tempo)) }
                 o.pitch?.let { app.engine.playPitch(it, 0.7) }
@@ -197,10 +204,10 @@ private fun optionItems(opts: List<Option>, clef: Clef? = null): List<ChoiceItem
 }
 
 @Composable
-private fun QuizStep(app: AppState, step: Step.Quiz, onDone: (Double?) -> Unit) {
+private fun QuizStep(app: AppState, step: Step.Quiz, isExam: Boolean, onDone: (StepOutcome) -> Unit) {
     val ui = LocalUi.current
     val items = optionItems(step.options, LocalClefOverride.current)
-    ChoiceStep(app, items, step.answer, step.explanation[ui.lang], onDone) {
+    ChoiceStep(app, step, items, step.answer, step.explanation[ui.lang], isExam, onDone) {
         BigText(step.question[ui.lang])
         step.melody?.let { MelodyPlayerCard(app, it) }
     }
@@ -216,7 +223,7 @@ private fun distractors(answer: Pitch, clef: Clef): List<Pitch> {
 }
 
 @Composable
-private fun IdentifyNoteStep(app: AppState, step: Step.IdentifyNote, onDone: (Double?) -> Unit) {
+private fun IdentifyNoteStep(app: AppState, step: Step.IdentifyNote, isExam: Boolean, onDone: (StepOutcome) -> Unit) {
     val ui = LocalUi.current
     val answer = Pitch.parse(step.note)
     val authored = runCatching { Clef.fromCode(step.clef) }.getOrDefault(Clef.TREBLE)
@@ -231,7 +238,7 @@ private fun IdentifyNoteStep(app: AppState, step: Step.IdentifyNote, onDone: (Do
     }
     val melody = remember(step, clef, shift) { Melody.parse(clef.code, "4/4", "C", 80, "$shownAnswer:w") }
     val items = remember(choices, ui.naming, ui.lang) { choices.map { ChoiceItem(ui.noteName(it), null, pitch = it) } }
-    ChoiceStep(app, items, idx, step.explanation?.get(ui.lang), onDone) {
+    ChoiceStep(app, step, items, idx, step.explanation?.get(ui.lang), isExam, onDone) {
         BigText((step.prompt?.get(ui.lang)) ?: ui.strings.whichNoteIsThis)
         PressCard(Modifier.fillMaxWidth()) {
             Box(Modifier.padding(12.dp)) {
@@ -242,13 +249,15 @@ private fun IdentifyNoteStep(app: AppState, step: Step.IdentifyNote, onDone: (Do
 }
 
 @Composable
-private fun EarTrainingStep(app: AppState, step: Step.EarTraining, onDone: (Double?) -> Unit) {
+private fun EarTrainingStep(app: AppState, step: Step.EarTraining, isExam: Boolean, onDone: (StepOutcome) -> Unit) {
     val ui = LocalUi.current
     val items = optionItems(step.options)
     val pitches = remember(step) { step.sound.notes.map { Pitch.parse(it) } }
     val playing by app.engine.isPlaying.collectAsState()
-    val play = { app.engine.playPitches(pitches, step.sound.together, step.sound.tempo); Unit }
-    ChoiceStep(app, items, step.answer, step.explanation[ui.lang], onDone, autoPlay = { delay(350); play() }) {
+    var soundPlayed by remember { mutableStateOf(false) }
+    val play = { app.engine.playPitches(pitches, step.sound.together, step.sound.tempo); soundPlayed = true }
+    LaunchedEffect(Unit) { delay(350); play() }
+    ChoiceStep(app, step, items, step.answer, step.explanation[ui.lang], isExam, onDone, soundPlayed = soundPlayed) {
         Text("👂", Modifier.align(Alignment.CenterHorizontally), fontSize = 48.sp)
         BigText(step.prompt[ui.lang])
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -265,7 +274,7 @@ private fun EarTrainingStep(app: AppState, step: Step.EarTraining, onDone: (Doub
 // ------------------------------------------------------------------ piano
 
 @Composable
-private fun PianoStep(app: AppState, step: Step.Piano, onDone: (Double?) -> Unit) {
+private fun PianoStep(app: AppState, step: Step.Piano, isExam: Boolean, onDone: (StepOutcome) -> Unit) {
     val ui = LocalUi.current
     val s = ui.strings
     val targets = remember(step) { step.targets.map { Pitch.parse(it) } }
@@ -290,8 +299,15 @@ private fun PianoStep(app: AppState, step: Step.Piano, onDone: (Double?) -> Unit
     LaunchedEffect(flashRight) { if (flashRight != null) { delay(250); flashRight = null } }
 
     StepFrame(bottom = {
-        if (done) FeedbackPanel(true, s.correct(ui.kid), null, s.continueBtn, { onDone((1.0 - 0.34 * mistakes).coerceAtLeast(0.0)) })
-        else BottomBar { Text(s.pianoPlayNotes + " " + targets.drop(index).take(1).joinToString { if (step.showLabels) ui.noteName(it) else "?" }, Modifier.fillMaxWidth(), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+        if (done) FeedbackPanel(
+            true, s.correct(ui.kid), if (mistakes > 0 && !isExam) s.wrongWillRepeat else null, s.continueBtn,
+            { if (StepCompletionPolicy.canContinue(step, StepState(pianoDone = done))) onDone(if (mistakes == 0) StepOutcome.CORRECT else StepOutcome.WRONG) },
+        )
+        else BottomBar {
+            Text(s.pianoPlayNotes + " " + targets.drop(index).take(1).joinToString { if (step.showLabels) ui.noteName(it) else "?" }, Modifier.fillMaxWidth().padding(bottom = 8.dp), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            BigButton(s.continueBtn, {}, enabled = false)
+            Text(hintText(s, StepCompletionPolicy.hint(step, StepState(pianoDone = done))), Modifier.fillMaxWidth().padding(top = 8.dp), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+        }
     }) {
         BigText(step.prompt[ui.lang])
         if (step.showStaff) {
@@ -324,16 +340,17 @@ private fun PianoStep(app: AppState, step: Step.Piano, onDone: (Double?) -> Unit
 private enum class RhythmPhase { READY, RUNNING, DONE }
 
 @Composable
-private fun RhythmTapStep(app: AppState, step: Step.RhythmTap, onDone: (Double?) -> Unit) {
+private fun RhythmTapStep(app: AppState, step: Step.RhythmTap, onDone: (StepOutcome) -> Unit) {
     val ui = LocalUi.current
     val s = ui.strings
-    val melody = rememberMelody(step.melody, null) ?: run { onDone(null); return }
+    val melody = rememberMelody(step.melody, null) ?: run { onDone(StepOutcome.WRONG); return }
     val tempo = step.melody.tempo
     var phase by remember { mutableStateOf(RhythmPhase.READY) }
     val taps = remember { mutableStateListOf<Double>() }
     var finished by remember { mutableStateOf(false) }
     var result by remember { mutableStateOf<com.solfi.app.logic.RhythmResult?>(null) }
     var attempts by remember { mutableIntStateOf(0) }
+    var failed by remember { mutableIntStateOf(0) }
     val pos by app.engine.position.collectAsState()
     val running = phase == RhythmPhase.RUNNING
     val hi = if (running && pos > AudioEngine.IDLE + 1) (melody.eventAtBeat(pos)?.index ?: -1) else -1
@@ -347,7 +364,9 @@ private fun RhythmTapStep(app: AppState, step: Step.RhythmTap, onDone: (Double?)
             val r = RhythmScorer.score(expected, taps.map { RhythmScorer.beatsToMs(it, tempo) }, step.toleranceMs.toDouble())
             result = r
             phase = RhythmPhase.DONE
-            feedback(app, r.score >= step.passScore)
+            val ok = StepCompletionPolicy.rhythmPassed(step, r.score)
+            if (!ok) failed++
+            feedback(app, ok)
         }
     }
 
@@ -358,19 +377,23 @@ private fun RhythmTapStep(app: AppState, step: Step.RhythmTap, onDone: (Double?)
     }
 
     val r = result
-    val passed = r != null && r.score >= step.passScore
+    val passed = r != null && StepCompletionPolicy.rhythmPassed(step, r.score)
+    val gate = StepState(rhythmPassed = passed, rhythmFailedAttempts = failed)
+    val canGo = StepCompletionPolicy.canContinue(step, gate)
     StepFrame(bottom = {
         when {
             phase == RhythmPhase.DONE && r != null -> FeedbackPanel(
                 correct = passed, message = if (passed) s.rhythmGreat else s.rhythmTryAgain,
                 detail = s.rhythmResult(r.hits, r.expected),
-                primaryLabel = if (passed) s.continueBtn else s.tryAgain,
-                onPrimary = { if (passed) onDone(r.score) else { phase = RhythmPhase.READY } },
+                primaryLabel = if (canGo) s.continueBtn else s.tryAgain,
+                onPrimary = { if (canGo) onDone(StepCompletionPolicy.rhythmOutcome(gate)) else phase = RhythmPhase.READY },
             )
             else -> BottomBar {
                 if (phase == RhythmPhase.READY) {
                     BigButton(s.startRhythm, { start() }, leading = "▶")
-                    if (attempts >= 2) { Spacer(Modifier.height(8.dp)); SecondaryButton(s.continueBtn, { onDone(0.3) }) }
+                    Spacer(Modifier.height(8.dp))
+                    BigButton(s.continueBtn, {}, enabled = false)
+                    Text(hintText(s, StepCompletionPolicy.hint(step, gate)), Modifier.fillMaxWidth().padding(top = 8.dp), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
                 }
             }
         }

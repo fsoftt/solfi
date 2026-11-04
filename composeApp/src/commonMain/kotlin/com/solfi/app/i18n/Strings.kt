@@ -107,6 +107,16 @@ interface Strings {
     val rhythmGreat: String
     val rhythmTryAgain: String
     val pianoPlayNotes: String
+    val hintListenExample: String
+    val hintListenToEnd: String
+    val hintAnswer: String
+    val hintPlaySoundFirst: String
+    val hintPlayNotes: String
+    val hintTapRhythm: String
+    val hintWait: String
+    val reviewStepLabel: String
+    val wrongWillRepeat: String
+    fun examNeedPercent(percent: Int): String
     fun lessonComplete(kid: Boolean): String
     fun examPassed(kid: Boolean): String
     fun examFailed(kid: Boolean): String

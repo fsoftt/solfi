@@ -31,8 +31,14 @@ class ScreensRenderTest {
         val dir = listOf("src/commonMain/composeResources/files/content").map(::File).first { it.isDirectory }
         a.useLevels(listOf(ContentJson.decodeLevel(File(dir, "level1.json").readText()), null, null, null, null))
         a.createProfile("Lucía", "🦊", kid = true, lang = Lang.ES, naming = NoteNaming.SOLFEGE)
-        a.completeLesson(0, 0, 1.0)
-        a.completeLesson(0, 1, 0.8)
+        for (i in 0..1) {
+            val session = com.solfi.app.logic.LessonSession(a.levels[0]!!.lessons[i])
+            while (!session.isFinished) {
+                val scored = com.solfi.app.logic.LessonSession.isScored(session.currentStep!!)
+                session.submit(if (scored) com.solfi.app.logic.StepOutcome.CORRECT else com.solfi.app.logic.StepOutcome.UNSCORED)
+            }
+            a.completeLesson(0, i, session)
+        }
     }
 
     @AfterTest fun cleanup() { app.profiles.forEach { app.deleteProfile(it.id) }; kv.remove("profiles"); kv.remove("currentProfile") }

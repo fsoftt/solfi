@@ -79,7 +79,11 @@ fun engineHighlight(engine: AudioEngine, melody: Melody?): Int {
 
 /** Staff + play/stop button that highlights the notes while playing. */
 @Composable
-fun MelodyPlayerCard(app: AppState, spec: MelodySpec, showLabels: Boolean = true, autoLabelOff: Boolean = false, clef: Clef? = LocalClefOverride.current) {
+fun MelodyPlayerCard(
+    app: AppState, spec: MelodySpec, showLabels: Boolean = true, autoLabelOff: Boolean = false, clef: Clef? = LocalClefOverride.current,
+    /** Called when the sequencer reaches the end of the melody (not when playback is stopped early). */
+    onPlayedToEnd: (() -> Unit)? = null,
+) {
     val ui = LocalUi.current
     val melody = rememberMelody(spec, clef) ?: return
     val playing by app.engine.isPlaying.collectAsState()
@@ -90,8 +94,32 @@ fun MelodyPlayerCard(app: AppState, spec: MelodySpec, showLabels: Boolean = true
                 melody, labelFor = if (showLabels && !autoLabelOff) ({ p -> ui.noteName(p) }) else null, highlightIndex = hi,
                 description = ui.strings.cdStaff,
             )
-            PlayButton(playing, onPlay = { app.engine.playMelody(melody, PlayOptions(tempo = spec.tempo)) }, onStop = { app.engine.stop() })
+            PlayButton(playing, onPlay = { app.engine.playMelody(melody, PlayOptions(tempo = spec.tempo, onFinished = onPlayedToEnd)) }, onStop = { app.engine.stop() })
         }
+    }
+}
+
+/** Localized text for a [StepHint] ("" for [StepHint.NONE]). */
+fun hintText(s: com.solfi.app.i18n.Strings, hint: com.solfi.app.logic.StepHint): String = when (hint) {
+    com.solfi.app.logic.StepHint.NONE -> ""
+    com.solfi.app.logic.StepHint.LISTEN_EXAMPLE -> s.hintListenExample
+    com.solfi.app.logic.StepHint.LISTEN_TO_END -> s.hintListenToEnd
+    com.solfi.app.logic.StepHint.ANSWER -> s.hintAnswer
+    com.solfi.app.logic.StepHint.PLAY_SOUND_FIRST -> s.hintPlaySoundFirst
+    com.solfi.app.logic.StepHint.PLAY_NOTES -> s.hintPlayNotes
+    com.solfi.app.logic.StepHint.TAP_RHYTHM -> s.hintTapRhythm
+    com.solfi.app.logic.StepHint.WAIT -> s.hintWait
+}
+
+/** "Continuar" button that stays disabled, with a hint under it, until [StepCompletionPolicy] allows it. */
+@Composable
+fun GatedContinue(step: com.solfi.app.content.Step, state: com.solfi.app.logic.StepState, onNext: () -> Unit) {
+    val s = LocalUi.current.strings
+    val can = com.solfi.app.logic.StepCompletionPolicy.canContinue(step, state)
+    BottomBar {
+        com.solfi.app.ui.widgets.BigButton(s.continueBtn, onNext, enabled = can)
+        val hint = hintText(s, com.solfi.app.logic.StepCompletionPolicy.hint(step, state))
+        if (hint.isNotEmpty()) Text(hint, Modifier.fillMaxWidth().padding(top = 8.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
     }
 }
 

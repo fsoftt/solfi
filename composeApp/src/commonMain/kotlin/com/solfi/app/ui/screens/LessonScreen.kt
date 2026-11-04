@@ -56,6 +56,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.solfi.app.AppState
 import com.solfi.app.logic.CompletionResult
+import com.solfi.app.logic.LessonSession
+import com.solfi.app.logic.ProgressRepository
 import com.solfi.app.music.Clef
 import com.solfi.app.platform.PlatformBackHandler
 import com.solfi.app.ui.theme.LocalUi
@@ -75,11 +77,16 @@ fun LessonScreen(app: AppState, levelIndex: Int, lessonIndex: Int) {
     val s = ui.strings
     val level = app.levels.getOrNull(levelIndex)
     val lesson = level?.lessons?.getOrNull(lessonIndex)
-    if (level == null || lesson == null) { app.pop(); return }
+    // Locked / missing lessons can never be shown, whatever put the route on the stack.
+    if (level == null || lesson == null || !app.canOpenLesson(levelIndex, lessonIndex)) {
+        LaunchedEffect(Unit) { app.pop() }
+        return
+    }
 
     var attempt by remember { mutableIntStateOf(0) }
-    var stepIndex by remember(attempt) { mutableIntStateOf(0) }
-    val scores = remember(attempt) { mutableStateListOf<Double>() }
+    // Fresh session on every start (leaving midway never resumes or completes anything).
+    val session = remember(attempt) { LessonSession(lesson) }
+    var slot by remember(attempt) { mutableIntStateOf(0) }
     var result by remember(attempt) { mutableStateOf<CompletionResult?>(null) }
     var accuracy by remember(attempt) { mutableStateOf(1.0) }
     var confirmExit by remember { mutableStateOf(false) }
@@ -91,12 +98,12 @@ fun LessonScreen(app: AppState, levelIndex: Int, lessonIndex: Int) {
         if (result == null) {
             Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
                 IconButton({ confirmExit = true }) { Icon(Icons.Filled.Close, s.exitLesson) }
-                val progress by animateFloatAsState(stepIndex / lesson.steps.size.toFloat(), tween(450), label = "progress")
+                val progress by animateFloatAsState(session.resolvedCount / session.totalSteps.toFloat(), tween(450), label = "progress")
                 LinearProgressIndicator(
                     progress = { progress }, modifier = Modifier.weight(1f).height(if (ui.kid) 14.dp else 10.dp).clip(CircleShape),
                     color = color, trackColor = MaterialTheme.colorScheme.outlineVariant,
                 )
-                Text(s.stepOf((stepIndex + 1).coerceAtMost(lesson.steps.size), lesson.steps.size), Modifier.padding(horizontal = 12.dp), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(s.stepOf((session.resolvedCount + 1).coerceAtMost(session.totalSteps), session.totalSteps), Modifier.padding(horizontal = 12.dp), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
         val r = result
@@ -104,11 +111,12 @@ fun LessonScreen(app: AppState, levelIndex: Int, lessonIndex: Int) {
             LessonResultView(app, lesson.isExam, r, accuracy, onRetry = { attempt++ }, onClose = { app.pop() }, levelColor = color)
         } else {
             AnimatedContent(
-                stepIndex, Modifier.weight(1f).fillMaxWidth(),
+                slot to (session.currentIndex ?: 0), Modifier.weight(1f).fillMaxWidth(),
                 transitionSpec = { (slideInHorizontally(tween(300)) { it / 2 } + fadeIn(tween(300))) togetherWith (slideOutHorizontally(tween(300)) { -it / 2 } + fadeOut(tween(200))) },
                 label = "step",
-            ) { idx ->
+            ) { (slotId, idx) ->
                 val step = lesson.steps[idx]
+                val repeat = remember(slotId) { session.isRepeat(idx) }
                 val locked = lesson.clefLocked || step.clefLocked
                 val wanted = app.effectiveClef
                 val authored = authoredClef(step)
@@ -116,14 +124,16 @@ fun LessonScreen(app: AppState, levelIndex: Int, lessonIndex: Int) {
                 CompositionLocalProvider(LocalClefOverride provides (if (locked) null else wanted)) {
                   Column(Modifier.fillMaxSize()) {
                     if (lockNote) Text(s.clefLockedNote(authored == Clef.BASS), Modifier.fillMaxWidth().padding(horizontal = 20.dp), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                    if (repeat) Text(s.reviewStepLabel, Modifier.fillMaxWidth().padding(horizontal = 20.dp), fontSize = 13.sp, fontWeight = FontWeight.Bold, color = Palette.Coral, textAlign = TextAlign.Center)
                     Box(Modifier.weight(1f).fillMaxWidth()) {
-                StepContent(app, step) { score ->
+                StepContent(app, step, lesson.isExam) { outcome ->
                     app.engine.stop()
-                    if (score != null) scores += score
-                    if (idx + 1 >= lesson.steps.size) {
-                        accuracy = if (scores.isEmpty()) 1.0 else scores.average()
-                        result = app.completeLesson(levelIndex, lessonIndex, accuracy)
-                    } else stepIndex = idx + 1
+                    if (session.currentIndex != idx || result != null) return@StepContent
+                    session.submit(outcome)
+                    if (session.isFinished) {
+                        accuracy = session.accuracy
+                        result = app.completeLesson(levelIndex, lessonIndex, session) ?: run { app.pop(); null }
+                    } else slot++
                 }
                     }
                   }
@@ -171,6 +181,7 @@ private fun LessonResultView(
                 }
             }
             Text(s.accuracyLabel((accuracy * 100).roundToInt()), fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (!r.passed) Text(s.examNeedPercent((ProgressRepository.EXAM_PASS * 100).roundToInt()), fontSize = 15.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
             Text(s.xpGained(r.xpGained), fontSize = 26.sp, fontWeight = FontWeight.ExtraBold, color = Palette.Violet)
             if (badge != null) {
                 Column(
