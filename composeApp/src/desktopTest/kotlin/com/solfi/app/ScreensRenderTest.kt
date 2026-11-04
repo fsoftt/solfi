@@ -71,6 +71,18 @@ class ScreensRenderTest {
     @Test fun randomBasico() = render("random-basico", h = 2300) { RandomSolfeoScreen(app, Difficulty.BASICO, 123456L) }
     @Test fun randomExperto() = render("random-experto", h = 3700) { RandomSolfeoScreen(app, Difficulty.EXPERTO, 654321L) }
     @Test fun randomExpertoDark() = render("random-experto-dark", h = 2300, theme = "DARK") { RandomSolfeoScreen(app, Difficulty.EXPERTO, 654321L) }
+    @Test fun solfeoSixteenths() {
+        val dir = File("src/commonMain/composeResources/files/content")
+        val l4 = ContentJson.decodeLevel(File(dir, "level4.json").readText())
+        val saved = app.levels.toList()
+        app.useLevels(listOf(saved[0], null, null, l4, null))
+        try {
+            val idx = l4.solfeos.indexOfFirst { it.id == "s4-sixteenths" }
+            assertTrue(idx >= 0)
+            render("s4-sixteenths", h = 1400) { SolfeoPlayerScreen(app, 3, idx) }
+        } finally { app.useLevels(saved) }
+    }
+
     @Test fun piano() = render("piano") { PianoScreen(app) }
     @Test fun onboarding() = render("onboarding") { OnboardingScreen(app, onCancel = {}) }
 

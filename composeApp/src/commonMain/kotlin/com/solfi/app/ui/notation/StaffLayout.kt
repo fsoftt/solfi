@@ -23,7 +23,38 @@ class NoteGlyph(
     val highPos get() = heads.maxOfOrNull { it.pos } ?: 4
 }
 
-class BeamGroup(val id: Int, val glyphs: List<NoteGlyph>, val stemUp: Boolean)
+/**
+ * One beam bar of a [BeamGroup]. [level] 1 is the primary beam (spans the whole group), 2 the sixteenth beam.
+ * [from]/[to] are glyph indexes inside the group; for a stub ([from] == [to]) [stubDir] is -1 (points back) or +1 (points forward).
+ */
+class BeamSegment(val level: Int, val from: Int, val to: Int, val stubDir: Int = 0) {
+    val isStub get() = from == to
+}
+
+class BeamGroup(val id: Int, val glyphs: List<NoteGlyph>, val stemUp: Boolean) {
+    val segments: List<BeamSegment> = beamSegments(glyphs)
+}
+
+private fun isSixteenth(g: NoteGlyph?) = g != null && g.event.dur.value == com.solfi.app.music.NoteValue.SIXTEENTH
+
+/** Standard engraving: a full primary beam; runs of 2+ sixteenths share a second beam; an isolated sixteenth gets a short stub. */
+internal fun beamSegments(glyphs: List<NoteGlyph>): List<BeamSegment> {
+    val out = arrayListOf(BeamSegment(1, 0, glyphs.lastIndex))
+    var i = 0
+    while (i < glyphs.size) {
+        if (!isSixteenth(glyphs[i])) { i++; continue }
+        var j = i
+        while (isSixteenth(glyphs.getOrNull(j + 1))) j++
+        if (j > i) out += BeamSegment(2, i, j)
+        else {
+            val prevDotted = glyphs.getOrNull(i - 1)?.event?.dur?.dots?.let { it > 0 } ?: false
+            val dir = if (i == glyphs.lastIndex || prevDotted) -1 else 1
+            out += BeamSegment(2, i, i, dir)
+        }
+        i = j + 1
+    }
+    return out
+}
 
 class MeasureLayout(val startX: Float, val endX: Float, val glyphs: List<NoteGlyph>, val beams: List<BeamGroup>)
 

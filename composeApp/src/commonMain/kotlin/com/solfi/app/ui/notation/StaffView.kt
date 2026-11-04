@@ -258,18 +258,13 @@ private fun DrawScope.drawBeam(b: BeamGroup, bottom: Float, g: Float, color: Col
         val p = Path().apply { moveTo(x1, yA); lineTo(x2, yA); lineTo(x2, yB); lineTo(x1, yB); close() }
         drawPath(p, color)
     }
-    bar(sx(b.glyphs.first()) - stemW / 2, sx(b.glyphs.last()) + stemW / 2, 0f)
-    // secondary beams for sixteenths
-    for (i in b.glyphs.indices) {
-        val gi = b.glyphs[i]
-        if (gi.event.dur.value != NoteValue.SIXTEENTH) continue
-        val next = b.glyphs.getOrNull(i + 1)
-        val prev = b.glyphs.getOrNull(i - 1)
-        if (next != null && next.event.dur.value == NoteValue.SIXTEENTH) bar(sx(gi) - stemW / 2, sx(next) + stemW / 2, th * 1.6f)
-        else if (prev == null || prev.event.dur.value != NoteValue.SIXTEENTH) {
-            val x2 = if (next != null) sx(gi) + g * 0.9f else sx(gi) - g * 0.9f
-            bar(min(sx(gi), x2), max(sx(gi), x2), th * 1.6f)
-        }
+    for (seg in b.segments) {
+        val off = if (seg.level == 1) 0f else th * 1.6f
+        val gi = b.glyphs[seg.from]
+        if (seg.isStub) {
+            val x2 = sx(gi) + seg.stubDir * g * 0.9f
+            bar(min(sx(gi), x2), max(sx(gi), x2), off)
+        } else bar(sx(gi) - stemW / 2, sx(b.glyphs[seg.to]) + stemW / 2, off)
     }
 }
 
