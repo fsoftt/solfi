@@ -66,6 +66,22 @@ class SolfeoGeneratorTest {
         }
     }
 
+    @Test fun chromaticNeighborsAreSpelledByDirection() = forAll { _, g, m ->
+        // lower neighbor = raised note below (sharp/natural), upper neighbor = lowered note above (flat/natural); never an augmented unison
+        val ev = m.events
+        for (i in g.chromaticEvents) {
+            val p = ev[i].pitches[0]
+            val main = ev[i - 1].pitches[0]
+            if (p.midi > main.midi) {
+                assertTrue(p.alter <= 0, "upper neighbor $p of $main must be lowered")
+                assertEquals(1, p.diatonic - main.diatonic, "upper neighbor $p is a second above $main")
+            } else {
+                assertTrue(p.alter >= 0, "lower neighbor $p of $main must be raised")
+                assertEquals(1, main.diatonic - p.diatonic, "lower neighbor $p is a second below $main")
+            }
+        }
+    }
+
     @Test fun phraseStructureAndCadences() = forAll { d, g, m ->
         val notes = m.events.filter { !it.isRest }
         assertTrue(g.scale.slice(listOf(0, 2, 4)).any { sameNote(it, notes.first().pitches[0]) }, "start")
