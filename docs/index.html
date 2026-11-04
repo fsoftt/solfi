@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="es" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solfi · Aprende música desde cero</title>
+<meta name="description" content="Solfi es una app nativa para aprender música desde cero, escrita en Kotlin y Compose Multiplatform. Proyecto de portafolio." data-i18n-content="meta.desc">
+<meta name="theme-color" content="#6C5CE7">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Solfi · Aprende música desde cero">
+<meta property="og:description" content="App nativa para aprender música, escrita en Kotlin + Compose Multiplatform.">
+<meta property="og:url" content="https://fsoftt.github.io/solfi/">
+<meta property="og:image" content="https://fsoftt.github.io/solfi/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Solfi: pantallas de la app y el lema Aprende música desde cero">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Solfi · Aprende música desde cero">
+<meta name="twitter:description" content="App nativa para aprender música, escrita en Kotlin + Compose Multiplatform.">
+<meta name="twitter:image" content="https://fsoftt.github.io/solfi/assets/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body>
+<a class="skip" href="#main" data-i18n="skip">Saltar al contenido</a>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#top"><img src="assets/favicon.svg" alt="" width="32" height="32"><span>Solfi</span></a>
+    <nav class="links" aria-label="Principal" data-i18n-label="nav.aria">
+      <a href="#que-hace" data-i18n="nav.what">¿Qué hace?</a>
+      <a href="#demo" data-i18n="nav.demo">Demo</a>
+      <a href="#niveles" data-i18n="nav.levels">Niveles</a>
+      <a href="#pantallas" data-i18n="nav.screens">Pantallas</a>
+      <a href="#tecnica" data-i18n="nav.tech">Cómo está construida</a>
+    </nav>
+    <div class="tools">
+      <button class="chip-btn" id="lang" type="button" aria-label="Cambiar idioma" data-i18n-label="lang.aria">EN</button>
+      <button class="chip-btn" id="theme" type="button" aria-label="Cambiar tema" data-i18n-label="theme.aria">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero" id="top">
+  <div class="notes-deco" aria-hidden="true">
+    <span style="left:4%;top:10%">♪</span><span style="left:46%;top:6%;animation-delay:-3s">♫</span>
+    <span style="left:92%;top:30%;animation-delay:-5s">♩</span><span style="left:12%;top:80%;animation-delay:-2s">♬</span>
+    <span style="left:60%;top:88%;animation-delay:-7s">♪</span>
+  </div>
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow" data-i18n="hero.eyebrow">Proyecto de portafolio · Kotlin Multiplatform</p>
+      <h1 class="grad">Solfi</h1>
+      <p class="tagline" data-i18n="hero.tagline">Aprende música desde cero</p>
+      <p class="lead" data-i18n="hero.lead">Aplicación nativa para niños y adultos: lecciones cortas, solfeos que suenan y un pentagrama dibujado a mano en Canvas. Android, iOS y escritorio desde un único código Kotlin, sin conexión y sin cuenta.</p>
+      <div class="cta">
+        <a class="btn primary" href="https://github.com/fsoftt/solfi" data-i18n="hero.gh">Ver en GitHub</a>
+        <a class="btn" href="#tecnica" data-i18n="hero.how">Cómo está construida</a>
+      </div>
+    </div>
+    <div class="phones">
+      <div class="phone"><img src="assets/screens/solfeo.webp" width="430" height="860" alt="Reproductor de solfeos con «Oda a la alegría» en el pentagrama" data-i18n-alt="alt.solfeo"></div>
+      <div class="phone"><img src="assets/screens/home.webp" width="430" height="860" alt="Pantalla de inicio con racha, XP, estrellas y la lección en curso" data-i18n-alt="alt.home"></div>
+      <div class="phone"><img src="assets/screens/map.webp" width="430" height="860" alt="Mapa de lecciones del nivel 1 Iniciación" data-i18n-alt="alt.map"></div>
+    </div>
+  </div>
+</section>
+
+<section id="que-hace">
+  <div class="wrap">
+    <p class="eyebrow rv" data-i18n="what.eyebrow">Funciones</p>
+    <h2 class="rv" data-i18n="what.title">¿Qué hace?</h2>
+    <div class="cards">
+      <article class="card glass rv"><div class="ic" aria-hidden="true">🪜</div><h3 data-i18n="f1.t">5 niveles</h3><p data-i18n="f1.p">De Iniciación a Experto, con desbloqueo secuencial y un examen por nivel.</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">🎯</div><h3 data-i18n="f2.t">Lecciones cortas, 7 tipos de ejercicio</h3><p data-i18n="f2.p">Explicación, escucha, pregunta de opción múltiple, identificar nota, entrenamiento auditivo, piano y ritmo (tocar al compás).</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">🎼</div><h3 data-i18n="f3.t">Solfeos que suenan</h3><p data-i18n="f3.p">Resaltado sincronizado con el audio, tempo 40–160, metrónomo, cuenta previa y repetición.</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">🧒</div><h3 data-i18n="f4.t">Modo niño y modo adulto</h3><p data-i18n="f4.p">Botones grandes, color, mascota y confeti, o un estilo más sobrio.</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">🌎</div><h3 data-i18n="f5.t">es / en / pt</h3><p data-i18n="f5.p">Tres idiomas y nombres de nota a elección: Do Re Mi o C D E.</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">𝄞</div><h3 data-i18n="f6.t">Elige tu clave</h3><p data-i18n="f6.p">Sol, Fa o recomendada según tu instrumento; las melodías se reescriben a la clave elegida.</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">🏆</div><h3 data-i18n="f7.t">XP, estrellas, rachas e insignias</h3><p data-i18n="f7.p">1–3 estrellas por precisión, racha diaria e insignia al aprobar cada examen.</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">📴</div><h3 data-i18n="f8.t">Sin conexión y sin cuenta</h3><p data-i18n="f8.p">Sin backend: el progreso se guarda en el dispositivo, con perfiles locales.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap">
+    <p class="eyebrow rv" data-i18n="demo.eyebrow">Pruébalo aquí</p>
+    <h2 class="rv" data-i18n="demo.title">Mini-demo interactiva</h2>
+    <p class="lead rv" data-i18n="demo.lead">Primera frase de la «Oda a la alegría» (dominio público), con un pentagrama dibujado en SVG y audio con Web Audio. La nota actual se resalta en sincronía con el reloj de audio.</p>
+    <div class="demo glass rv">
+      <div class="staff-wrap"><svg id="staff" viewBox="0 0 760 290" role="img" aria-label="Pentagrama con la primera frase de la Oda a la alegría" data-i18n-label="demo.staffalt"></svg></div>
+      <div class="controls">
+        <button class="play" id="play" type="button" aria-label="Reproducir" data-i18n-label="demo.play">▶</button>
+        <label class="ctl"><span data-i18n="demo.tempo">Tempo</span>
+          <input id="tempo" type="range" min="40" max="160" value="100"><output id="tempoOut">100</output></label>
+        <label class="ctl"><input id="loop" type="checkbox"><span data-i18n="demo.loop">Repetir</span></label>
+        <div class="seg" role="group" aria-label="Nombres de nota" data-i18n-label="demo.names">
+          <button type="button" id="nSol" aria-pressed="true">Do Re Mi</button>
+          <button type="button" id="nLet" aria-pressed="false">C D E</button>
+        </div>
+      </div>
+      <div class="piano" id="piano" role="group" aria-label="Piano de una octava" data-i18n-label="demo.piano"></div>
+      <p class="small" style="margin:14px 0 0" data-i18n="demo.note">Esta demo usa osciladores de Web Audio. La app real usa su propio sintetizador Kotlin con precisión de muestra, común a las tres plataformas.</p>
+    </div>
+  </div>
+</section>
+
+<section id="niveles">
+  <div class="wrap">
+    <p class="eyebrow rv" data-i18n="lv.eyebrow">Ruta de aprendizaje</p>
+    <h2 class="rv" data-i18n="lv.title">Cinco niveles, de cero a experto</h2>
+    <ol class="path">
+      <li class="lv rv"><div class="node" style="background:#6C5CE7" aria-hidden="true">1</div><div class="body glass"><h3 data-i18n="lv1.t">Iniciación</h3><p class="topics" data-i18n="lv1.p">El sonido y el pulso · Agudo y grave · El pentagrama y la clave de sol · Do, Re, Mi · Fa y Sol · Redonda, blanca y negra · Primeras melodías</p></div></li>
+      <li class="lv rv"><div class="node" style="background:#00877c" aria-hidden="true">2</div><div class="body glass"><h3 data-i18n="lv2.t">Básico</h3><p class="topics" data-i18n="lv2.p">La clave de sol · Notas Do a Do · Los silencios · Compases y barras · Líneas adicionales · El teclado del piano · Leer melodías sencillas</p></div></li>
+      <li class="lv rv"><div class="node" style="background:#2f6fe0" aria-hidden="true">3</div><div class="body glass"><h3 data-i18n="lv3.t">Intermedio</h3><p class="topics" data-i18n="lv3.p">Corcheas y su silencio · Puntillo y ligadura · Sostenidos y bemoles · Tonos y semitonos · Escala de Do mayor · Intervalos simples</p></div></li>
+      <li class="lv rv"><div class="node" style="background:#c2492b" aria-hidden="true">4</div><div class="body glass"><h3 data-i18n="lv4.t">Avanzado</h3><p class="topics" data-i18n="lv4.p">La clave de fa · Escalas mayores y armaduras · Escalas menores · Semicorcheas · Tríadas · Dinámica · Tempo y carácter</p></div></li>
+      <li class="lv rv"><div class="node" style="background:#C2185B" aria-hidden="true">5</div><div class="body glass"><h3 data-i18n="lv5.t">Experto</h3><p class="topics" data-i18n="lv5.p">Compás compuesto 6/8 · Síncopa y contratiempo · Intervalos con cualidad · Acordes de séptima · Funciones I–IV–V–I · Modos griegos · Transposición</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="pantallas">
+  <div class="wrap">
+    <p class="eyebrow rv" data-i18n="sc.eyebrow">Capturas reales</p>
+    <h2 class="rv" data-i18n="sc.title">Pantallas de la app</h2>
+    <p class="lead rv" data-i18n="sc.lead">Renders reales de la interfaz Compose generados por los tests fuera de pantalla (datos de ejemplo; textos en español).</p>
+    <div class="gallery" tabindex="0" role="region" aria-label="Galería de pantallas" data-i18n-label="sc.aria">
+      <figure><img loading="lazy" src="assets/screens/onboarding.webp" width="430" height="860" alt="Bienvenida con la mascota y elección de idioma" data-i18n-alt="alt.onb"><figcaption data-i18n="cap.onb">Bienvenida</figcaption></figure>
+      <figure><img loading="lazy" src="assets/screens/instruments.webp" width="430" height="1000" alt="Elección de instrumento en modo oscuro" data-i18n-alt="alt.inst"><figcaption data-i18n="cap.inst">Instrumento (modo oscuro)</figcaption></figure>
+      <figure><img loading="lazy" src="assets/screens/home.webp" width="430" height="860" alt="Pantalla de inicio" data-i18n-alt="alt.home"><figcaption data-i18n="cap.home">Inicio</figcaption></figure>
+      <figure><img loading="lazy" src="assets/screens/map.webp" width="430" height="860" alt="Mapa de niveles" data-i18n-alt="alt.map"><figcaption data-i18n="cap.map">Mapa del nivel</figcaption></figure>
+      <figure><img loading="lazy" src="assets/screens/identify.webp" width="430" height="860" alt="Ejercicio: identificar la nota en el pentagrama" data-i18n-alt="alt.id"><figcaption data-i18n="cap.id">Identificar nota</figcaption></figure>
+      <figure><img loading="lazy" src="assets/screens/listen.webp" width="430" height="860" alt="Ejercicio de escucha con resaltado de notas" data-i18n-alt="alt.listen"><figcaption data-i18n="cap.listen">Escucha con resaltado</figcaption></figure>
+      <figure><img loading="lazy" src="assets/screens/lessonpiano.webp" width="430" height="860" alt="Ejercicio de piano: tocar Sol, Fa, Mi" data-i18n-alt="alt.lp"><figcaption data-i18n="cap.lp">Ejercicio de piano</figcaption></figure>
+      <figure><img loading="lazy" src="assets/screens/solfeo.webp" width="430" height="860" alt="Reproductor de solfeos" data-i18n-alt="alt.solfeo"><figcaption data-i18n="cap.solfeo">Reproductor de solfeos</figcaption></figure>
+      <figure><img loading="lazy" src="assets/screens/piano.webp" width="430" height="860" alt="Piano libre" data-i18n-alt="alt.piano"><figcaption data-i18n="cap.piano">Piano libre</figcaption></figure>
+      <figure><img loading="lazy" src="assets/screens/staff.webp" width="430" height="855" alt="Muestras del pentagrama: claves, armaduras, ligaduras y barras" data-i18n-alt="alt.staff"><figcaption data-i18n="cap.staff">Muestras del pentagrama</figcaption></figure>
+      <figure><img loading="lazy" src="assets/screens/progress.webp" width="430" height="860" alt="Pantalla de progreso" data-i18n-alt="alt.prog"><figcaption data-i18n="cap.prog">Progreso</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="tecnica">
+  <div class="wrap">
+    <p class="eyebrow rv" data-i18n="t.eyebrow">Inmersión técnica</p>
+    <h2 class="rv" data-i18n="t.title">Cómo está construida</h2>
+    <p class="lead rv" data-i18n="t.lead">Casi todo vive en <code>commonMain</code>. Cada plataforma solo aporta lo que no se puede compartir, mediante <code>expect</code>/<code>actual</code>.</p>
+
+    <div class="diagram glass rv">
+      <svg viewBox="0 0 900 440" role="img" aria-label="Arquitectura: commonMain con UI, teoría, parser, sintetizador, pentagrama, contenido, i18n y progreso, sobre actuals de Android, iOS y escritorio" data-i18n-label="t.dgalt">
+        <rect class="dg-main" x="10" y="10" width="880" height="226" rx="18"/>
+        <text class="dg-t" x="32" y="42">commonMain (Kotlin)</text>
+        <g>
+          <rect class="dg-chip" x="30" y="62" width="196" height="50" rx="10"/><text class="dg-t" x="42" y="92">UI Compose</text>
+          <rect class="dg-chip" x="237" y="62" width="196" height="50" rx="10"/><text class="dg-t" x="249" y="92">Teoría musical</text>
+          <rect class="dg-chip" x="444" y="62" width="196" height="50" rx="10"/><text class="dg-t" x="456" y="92">Parser de melodías</text>
+          <rect class="dg-chip" x="651" y="62" width="209" height="50" rx="10"/><text class="dg-t" x="663" y="92">Sintetizador + secuenciador</text>
+          <rect class="dg-chip" x="30" y="124" width="196" height="50" rx="10"/><text class="dg-t" x="42" y="154">Renderer de pentagrama</text>
+          <rect class="dg-chip" x="237" y="124" width="196" height="50" rx="10"/><text class="dg-t" x="249" y="154">Contenido JSON</text>
+          <rect class="dg-chip" x="444" y="124" width="196" height="50" rx="10"/><text class="dg-t" x="456" y="154">i18n tipado</text>
+          <rect class="dg-chip" x="651" y="124" width="209" height="50" rx="10"/><text class="dg-t" x="663" y="154">Progreso (XP, rachas)</text>
+        </g>
+        <text class="dg-s" x="32" y="208">expect: AudioSink · Haptics · KeyValueStore · systemLanguageCode · todayEpochDay</text>
+        <path class="dg-arrow" d="M150 236V300M450 236V300M750 236V300"/>
+        <path class="dg-arrow" d="M144 292l6 10 6-10M444 292l6 10 6-10M744 292l6 10 6-10"/>
+        <text class="dg-s" x="470" y="274">actual</text>
+        <g>
+          <rect class="dg-box" x="10" y="310" width="280" height="120" rx="16"/><text class="dg-t" x="28" y="342">Android</text>
+          <text class="dg-s" x="28" y="372">AudioTrack</text><text class="dg-s" x="28" y="392">Vibrator</text><text class="dg-s" x="28" y="412">SharedPreferences</text>
+          <rect class="dg-box" x="310" y="310" width="280" height="120" rx="16"/><text class="dg-t" x="328" y="342">iOS (Kotlin/Native)</text>
+          <text class="dg-s" x="328" y="372">AVAudioEngine + AVAudioSourceNode</text><text class="dg-s" x="328" y="392">UIImpactFeedbackGenerator</text><text class="dg-s" x="328" y="412">NSUserDefaults</text>
+          <rect class="dg-box" x="610" y="310" width="280" height="120" rx="16"/><text class="dg-t" x="628" y="342">Escritorio (JVM)</text>
+          <text class="dg-s" x="628" y="372">SourceDataLine</text><text class="dg-s" x="628" y="392">(sin háptica)</text><text class="dg-s" x="628" y="412">java.util.prefs</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="cards">
+      <article class="card glass rv"><div class="ic" aria-hidden="true">🎹</div><h3 data-i18n="e1.t">Un sintetizador común</h3><p data-i18n="e1.p">Voz tipo piano con armónicos y ADSR, polifonía y metrónomo, a 44,1 kHz mono. El secuenciador agenda con precisión de muestra y el reloj de audio (frames reproducidos) alimenta el resaltado de la UI y la puntuación del ritmo.</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">🖌️</div><h3 data-i18n="e2.t">Notación propia en Canvas</h3><p data-i18n="e2.p">Claves de sol y fa como curvas Bézier, barras, ligaduras, líneas adicionales, alteraciones, puntillos y silencios, sin dependencias externas.</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">✍️</div><h3 data-i18n="e3.t">Notación compacta</h3><p data-i18n="e3.p">Las melodías se escriben como texto: <code>"C4:q D4:q E4:h | r:q"</code>. Un parser las convierte en eventos para el pentagrama y el sintetizador.</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">🌐</div><h3 data-i18n="e4.t">i18n tipado</h3><p data-i18n="e4.p">Los textos son una interfaz Kotlin (<code>Strings</code>) con una implementación por idioma: si falta una clave, no compila.</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">📦</div><h3 data-i18n="e5.t">Contenido como datos</h3><p data-i18n="e5.p">Cada nivel es un JSON (kotlinx.serialization) comprobado por un validador. Añadir un nivel no toca código.</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">🔁</div><h3 data-i18n="e6.t">Re-clave por octavas</h3><p data-i18n="e6.p">Al cambiar de clave, la melodía se desplaza por octavas enteras minimizando líneas adicionales; los nombres de nota no cambian. <code>clefLocked</code> fija la clave cuando la lección habla del pentagrama.</p></article>
+      <article class="card glass rv"><div class="ic" aria-hidden="true">✅</div><div class="stat">68</div><h3 data-i18n="e7.t">Tests unitarios y de render</h3><p data-i18n="e7.p">Teoría, audio, claves, progreso, textos, contenido y renders fuera de pantalla de las pantallas, todos en verde con <code>desktopTest</code>.</p></article>
+    </div>
+
+    <div class="snips two">
+      <div class="snip rv"><h3 data-i18n="sn1.t">Contenido: melodía en JSON</h3>
+<pre><code><span class="c">// level1.json · «Oda a la alegría»</span>
+{ <span class="s">"clef"</span>: <span class="s">"treble"</span>, <span class="s">"time"</span>: <span class="s">"4/4"</span>,
+  <span class="s">"key"</span>: <span class="s">"C"</span>, <span class="s">"tempo"</span>: <span class="n">100</span>,
+  <span class="s">"notes"</span>: <span class="s">"E4:q E4:q F4:q G4:q |
+            G4:q F4:q E4:q D4:q |
+            C4:q C4:q D4:q E4:q |
+            E4:q. D4:8 D4:h"</span> }</code></pre></div>
+      <div class="snip rv"><h3 data-i18n="sn2.t">expect / actual</h3>
+<pre><code><span class="c">// commonMain</span>
+<span class="k">expect class</span> <span class="t">KeyValueStore</span>(name: <span class="t">String</span>) {
+    <span class="k">fun</span> getString(key: <span class="t">String</span>): <span class="t">String</span>?
+    <span class="k">fun</span> putString(key: <span class="t">String</span>, value: <span class="t">String</span>)
+}
+
+<span class="c">// desktopMain</span>
+<span class="k">actual class</span> <span class="t">KeyValueStore</span> <span class="k">actual constructor</span>(name: <span class="t">String</span>) {
+    <span class="k">private val</span> prefs: <span class="t">Preferences</span> =
+        <span class="t">Preferences</span>.userRoot().node(<span class="s">"com/solfi/app/$name"</span>)
+    <span class="c">// ...</span>
+}</code></pre></div>
+    </div>
+    <div class="snips">
+      <div class="snip rv"><h3 data-i18n="sn3.t">ClefShift: contar líneas adicionales</h3>
+<pre><code><span class="c">/** Octave shift that best fits [pitches] on [target]: fewest total ledger lines. */</span>
+<span class="k">fun</span> ledgerLines(diatonic: <span class="t">Int</span>, clef: <span class="t">Clef</span>): <span class="t">Int</span> {
+    <span class="k">val</span> pos = diatonic - clef.bottomLineDiatonic
+    <span class="k">return when</span> {
+        pos &lt; <span class="n">0</span> -&gt; (-pos) / <span class="n">2</span>
+        pos &gt; <span class="n">8</span> -&gt; (pos - <span class="n">8</span>) / <span class="n">2</span>
+        <span class="k">else</span> -&gt; <span class="n">0</span>
+    }
+}</code></pre></div>
+    </div>
+
+    <h3 style="margin-top:36px" class="rv" data-i18n="stack.t">Stack</h3>
+    <div class="stack rv" role="list">
+      <span class="badge" role="listitem"><b>Kotlin</b> 2.1.21</span>
+      <span class="badge" role="listitem"><b>Compose Multiplatform</b> 1.8.2 + Material 3</span>
+      <span class="badge" role="listitem"><b>Kotlin/Native</b> iosArm64 · iosSimulatorArm64</span>
+      <span class="badge" role="listitem"><b>kotlinx.serialization</b> 1.8.1</span>
+      <span class="badge" role="listitem"><b>kotlinx.coroutines</b> 1.10.2</span>
+      <span class="badge" role="listitem"><b>kotlinx-datetime</b> 0.6.2</span>
+      <span class="badge" role="listitem"><b>Gradle</b> 8.11.1 · AGP 8.7.3</span>
+      <span class="badge" role="listitem"><b>GitHub Pages</b></span>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong data-i18n="foot.proj">Proyecto de portafolio</strong> · <a href="https://github.com/fsoftt/solfi">github.com/fsoftt/solfi</a></p>
+    <p class="small"><a href="https://github.com/fsoftt/solfi/blob/main/LICENSE">MIT License</a></p>
+  </div>
+</footer>
+<script src="assets/app.js"></script>
+</body>
+</html>
