@@ -1,13 +1,13 @@
 // Applied from build.gradle.kts only when an Android SDK is present.
 android {
     namespace = "com.solfi.app"
-    compileSdk = 35
+    compileSdk = 36
     buildToolsVersion = "36.0.0"
 
     defaultConfig {
         applicationId = "com.solfi.app"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = (System.getenv("SOLFI_VERSION_CODE") ?: "1").toInteger()
         versionName = System.getenv("SOLFI_VERSION_NAME") ?: "1.0.0"
     }
