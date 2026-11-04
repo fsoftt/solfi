@@ -37,9 +37,9 @@ class ScreensRenderTest {
 
     @AfterTest fun cleanup() { app.profiles.forEach { app.deleteProfile(it.id) }; kv.remove("profiles"); kv.remove("currentProfile") }
 
-    private fun render(name: String, w: Int = 860, h: Int = 1720, content: @Composable () -> Unit) {
+    private fun render(name: String, w: Int = 860, h: Int = 1720, theme: String = "LIGHT", content: @Composable () -> Unit) {
         val scene = ImageComposeScene(w, h, Density(2f)) {
-            SolfiTheme("LIGHT", kid = app.ui.kid) {
+            SolfiTheme(theme, kid = app.ui.kid) {
                 CompositionLocalProvider(LocalUi provides app.ui) { Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) { content() } }
             }
         }
@@ -59,6 +59,9 @@ class ScreensRenderTest {
     @Test fun solfeoPlayer() = render("solfeoPlayer") { SolfeoPlayerScreen(app, 0, 2) }
     @Test fun piano() = render("piano") { PianoScreen(app) }
     @Test fun onboarding() = render("onboarding") { OnboardingScreen(app, onCancel = {}) }
+
+    @Test fun onboardingInstrumentsLight() = render("instruments-light", h = 2000, theme = "LIGHT") { OnboardingScreen(app, initialPage = 3) }
+    @Test fun onboardingInstrumentsDark() = render("instruments-dark", h = 2000, theme = "DARK") { OnboardingScreen(app, initialPage = 3) }
 
     @Test fun lessonSteps() {
         // one render per lesson of level 1 (first step) plus the interactive steps

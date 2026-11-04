@@ -149,6 +149,8 @@ object EsStrings : Strings {
         com.solfi.app.music.Instrument.GUITAR -> "Guitarra"
         com.solfi.app.music.Instrument.VIOLIN -> "Violín"
         com.solfi.app.music.Instrument.FLUTE -> "Flauta"
+        com.solfi.app.music.Instrument.SAXOPHONE -> "Saxofón"
+        com.solfi.app.music.Instrument.TRUMPET -> "Trompeta"
         com.solfi.app.music.Instrument.CELLO -> "Chelo"
         com.solfi.app.music.Instrument.BASS -> "Contrabajo / bajo eléctrico"
         com.solfi.app.music.Instrument.BASSOON -> "Fagot"

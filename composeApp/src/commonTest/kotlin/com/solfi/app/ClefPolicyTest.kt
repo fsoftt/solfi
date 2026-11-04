@@ -69,7 +69,7 @@ class ClefPolicyTest {
 
     @Test fun recommendedResolutionPerInstrument() {
         for (i in listOf(Instrument.CELLO, Instrument.BASS, Instrument.BASSOON, Instrument.TROMBONE, Instrument.TUBA)) assertEquals(Clef.BASS, ClefPolicy.recommended(i), "$i")
-        for (i in listOf(Instrument.VOICE, Instrument.GUITAR, Instrument.VIOLIN, Instrument.FLUTE)) assertEquals(Clef.TREBLE, ClefPolicy.recommended(i), "$i")
+        for (i in listOf(Instrument.VOICE, Instrument.GUITAR, Instrument.VIOLIN, Instrument.FLUTE, Instrument.TRUMPET, Instrument.SAXOPHONE)) assertEquals(Clef.TREBLE, ClefPolicy.recommended(i), "$i")
         assertEquals(null, ClefPolicy.recommended(Instrument.PIANO))
         assertEquals(null, ClefPolicy.recommended(Instrument.OTHER))
     }

@@ -55,13 +55,17 @@ fun BigButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     color: Color = MaterialTheme.colorScheme.primary,
-    content: Color = Color.White,
+    content: Color? = null,
     leading: String? = null,
 ) {
     val kid = LocalUi.current.kid
+    val fg = content ?: if (color == MaterialTheme.colorScheme.primary) MaterialTheme.colorScheme.onPrimary else Color.White
     Button(
         onClick = onClick, enabled = enabled, modifier = modifier.fillMaxWidth().heightIn(min = if (kid) 62.dp else 52.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = color, contentColor = content),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = color, contentColor = fg,
+            disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f), disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+        ),
         shape = RoundedCornerShape(if (kid) 24.dp else 14.dp),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = if (kid) 4.dp else 0.dp),
     ) {

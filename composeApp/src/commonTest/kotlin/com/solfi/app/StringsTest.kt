@@ -44,4 +44,15 @@ class StringsTest {
         assertEquals(Lang.PT, Lang.fromCode("pt-BR"))
         assertEquals(Lang.ES, Lang.fromCode("fr"))
     }
+
+    @Test fun everyInstrumentHasIconAndLocalizedName() {
+        for (i in com.solfi.app.music.Instrument.entries) {
+            assertTrue(com.solfi.app.ui.icons.instrumentIcon(i).root.iterator().hasNext(), "icon $i")
+            val names = all.map { (_, s) -> s.instrumentName(i) }
+            names.forEach { assertTrue(it.isNotBlank(), "name $i") }
+        }
+        assertEquals("Trompeta", EsStrings.instrumentName(com.solfi.app.music.Instrument.TRUMPET))
+        assertEquals("Saxophone", EnStrings.instrumentName(com.solfi.app.music.Instrument.SAXOPHONE))
+        assertEquals("Saxofone", PtStrings.instrumentName(com.solfi.app.music.Instrument.SAXOPHONE))
+    }
 }

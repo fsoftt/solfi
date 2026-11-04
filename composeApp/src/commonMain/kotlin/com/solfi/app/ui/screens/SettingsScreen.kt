@@ -43,6 +43,7 @@ import com.solfi.app.music.Clef
 import com.solfi.app.music.ClefPolicy
 import com.solfi.app.music.ClefPreference
 import com.solfi.app.music.Instrument
+import com.solfi.app.ui.icons.InstrumentIcon
 import com.solfi.app.music.Lang
 import com.solfi.app.music.NoteNaming
 import com.solfi.app.platform.PlatformBackHandler
@@ -89,7 +90,7 @@ fun SettingsScreen(app: AppState) {
                 @OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
                 androidx.compose.foundation.layout.FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Instrument.entries.forEach { ins ->
-                        FilterChip(st.instrument == ins.name, { app.updateSettings { copy(instrument = ins.name) } }, { Text(instrumentEmoji(ins) + " " + s.instrumentName(ins)) })
+                        FilterChip(st.instrument == ins.name, { app.updateSettings { copy(instrument = ins.name) } }, { Text(s.instrumentName(ins)) }, leadingIcon = { InstrumentIcon(ins, 24.dp) })
                     }
                 }
             }

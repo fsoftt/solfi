@@ -149,6 +149,8 @@ object EnStrings : Strings {
         com.solfi.app.music.Instrument.GUITAR -> "Guitar"
         com.solfi.app.music.Instrument.VIOLIN -> "Violin"
         com.solfi.app.music.Instrument.FLUTE -> "Flute"
+        com.solfi.app.music.Instrument.SAXOPHONE -> "Saxophone"
+        com.solfi.app.music.Instrument.TRUMPET -> "Trumpet"
         com.solfi.app.music.Instrument.CELLO -> "Cello"
         com.solfi.app.music.Instrument.BASS -> "Double bass / bass guitar"
         com.solfi.app.music.Instrument.BASSOON -> "Bassoon"

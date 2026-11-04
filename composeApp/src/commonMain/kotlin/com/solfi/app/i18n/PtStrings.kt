@@ -149,6 +149,8 @@ object PtStrings : Strings {
         com.solfi.app.music.Instrument.GUITAR -> "Violão / guitarra"
         com.solfi.app.music.Instrument.VIOLIN -> "Violino"
         com.solfi.app.music.Instrument.FLUTE -> "Flauta"
+        com.solfi.app.music.Instrument.SAXOPHONE -> "Saxofone"
+        com.solfi.app.music.Instrument.TRUMPET -> "Trompete"
         com.solfi.app.music.Instrument.CELLO -> "Violoncelo"
         com.solfi.app.music.Instrument.BASS -> "Contrabaixo / baixo elétrico"
         com.solfi.app.music.Instrument.BASSOON -> "Fagote"
