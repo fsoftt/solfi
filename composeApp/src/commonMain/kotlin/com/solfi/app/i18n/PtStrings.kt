@@ -112,7 +112,7 @@ object PtStrings : Strings {
     override fun bpm(n: Int) = "$n bpm"
     override val metronome = "Metrônomo"
     override val countIn = "Contagem inicial"
-    override val loop = "Repetir"
+    override val loop = "Loop"
     override val pulseOnly = "Só pulsação"
     override val pulseOnlyDesc = "Ouça só a pulsação e toque ou cante a melodia você mesmo"
     override val showNoteNames = "Nomes das notas"

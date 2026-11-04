@@ -112,7 +112,7 @@ object EsStrings : Strings {
     override fun bpm(n: Int) = "$n ppm"
     override val metronome = "Metrónomo"
     override val countIn = "Cuenta previa"
-    override val loop = "Repetir"
+    override val loop = "Bucle"
     override val pulseOnly = "Solo pulso"
     override val pulseOnlyDesc = "Escucha solo el pulso y toca o canta tú la melodía"
     override val showNoteNames = "Nombres de notas"
