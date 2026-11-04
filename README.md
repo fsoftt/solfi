@@ -18,6 +18,7 @@ Esta es la **fase 1**: arquitectura, motor de audio, toda la interfaz y el conte
   secuenciador con precisión de muestra. La posición de reproducción (en pulsos) alimenta el resaltado y el reloj de
   audio puntúa los toques de ritmo.
 * **Solfeos**: reproducir/pausar/detener, tempo 40–160, metrónomo, cuenta previa, repetición y modo «solo pulso».
+* **Preferencia de clave** por perfil: Recomendada (según el instrumento), Sol o Fa. Las melodías se reescriben en la clave elegida; el contenido que habla de posiciones del pentagrama puede fijar su clave con `clefLocked` (ver [CONTENT.md](CONTENT.md)).
 * **Piano libre**: 3 octavas con desplazamiento, multitoque y etiquetas.
 * **Progreso**: XP, 1–3 estrellas por precisión, desbloqueo secuencial, examen que desbloquea el siguiente nivel y
   da una insignia, racha diaria. La lógica es pura y está probada (`ProgressRepository`).

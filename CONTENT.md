@@ -247,6 +247,30 @@ notas en el pentagrama; `showLabels` pone nombres a las teclas y a las notas. Ca
   avanzados: 100–150.
 * `passScore` (0–1): puntuación mínima para continuar. Los golpes de más restan.
 
+## Clave del aprendiz y `clefLocked`
+
+Cada perfil elige una **preferencia de clave**: *Recomendada* (según el instrumento), *Sol* o *Fa*. Por defecto
+la app reescribe las melodías en esa clave: desplaza **octavas completas** hacia la clave elegida con el mínimo
+de líneas adicionales; los nombres de las notas no cambian. No se aplica a los pasos `piano`, `earTraining`
+ni `rhythmTap`.
+
+`clefLocked` es un campo opcional (`Boolean`, por defecto `false`) que existe a nivel de **lección** y en los
+**7 tipos de paso**. Con `true` se conserva la clave escrita (`melody.clef`) e sy se ignora la preferencia del aprendiz.
+
+Úsalo cuando el texto se refiere a posiciones en el pentagrama, líneas adicionales o a una clave concreta
+(«la nota en la segunda línea», «Do central en clave de Sol»); si no, la explicación dejaría de coincidir con lo dibujado.
+En una lección, `clefLocked: true` bloquea todos sus pasos.
+
+```json
+{
+  "type": "identifyNote",
+  "clefLocked": true,
+  "prompt": { "es": "¿Qué nota está en la segunda línea?", "en": "Which note is on the second line?", "pt": "Qual nota está na segunda linha?" },
+  "clef": "treble",
+  "note": "G4"
+}
+```
+
 ## Lista de comprobación para un nivel nuevo
 
 1. 6–8 lecciones, la última `"isExam": true`, con 3–6 pasos cada una y mezcla de tipos.
