@@ -1,0 +1,27 @@
+// Applied from build.gradle.kts only when an Android SDK is present.
+android {
+    namespace = "com.melodia.app"
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "com.melodia.app"
+        minSdk = 24
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0.0"
+    }
+    packaging {
+        resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
+    }
+    buildTypes {
+        release { minifyEnabled false }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets {
+        main.manifest.srcFile "src/androidMain/AndroidManifest.xml"
+        main.res.srcDirs = ["src/androidMain/res"]
+    }
+}

@@ -1,0 +1,115 @@
+package com.melodia.app.logic
+
+import com.melodia.app.content.BadgeSpec
+import com.melodia.app.content.LevelContent
+import com.melodia.app.data.LessonResult
+import com.melodia.app.data.Progress
+
+data class CompletionResult(
+    val progress: Progress,
+    val passed: Boolean,
+    val stars: Int,
+    val xpGained: Int,
+    val newBadge: BadgeSpec?,
+    val unlockedLevel: Int?,
+    val streak: Int,
+)
+
+/** Pure progression rules: XP, stars, sequential unlock, exams and daily streak. */
+object ProgressRepository {
+    const val EXAM_PASS = 0.6
+    const val XP_PER_XPLEVEL = 100
+
+    fun starsFor(accuracy: Double): Int = when {
+        accuracy >= 0.9 -> 3
+        accuracy >= 0.7 -> 2
+        else -> 1
+    }
+
+    fun xpFor(isExam: Boolean, stars: Int): Int = (if (isExam) 50 else 20) + 10 * stars
+
+    fun xpLevel(xp: Int): Int = xp / XP_PER_XPLEVEL + 1
+
+    /** Streak after activity on [today]. */
+    fun streakAfterActivity(p: Progress, today: Int): Int = when {
+        p.lastActiveDay == today -> p.streak.coerceAtLeast(1)
+        p.lastActiveDay == today - 1 -> p.streak + 1
+        else -> 1
+    }
+
+    /** Streak to display on [today]: broken streaks show 0. */
+    fun currentStreak(p: Progress, today: Int): Int =
+        if (p.lastActiveDay == today || p.lastActiveDay == today - 1) p.streak else 0
+
+    fun isLevelUnlocked(levelNumber: Int, p: Progress): Boolean = levelNumber <= 1 || (levelNumber - 1) in p.examsPassed
+
+    fun isLessonCompleted(level: LevelContent, index: Int, p: Progress): Boolean {
+        val l = level.lessons.getOrNull(index) ?: return false
+        return p.result(level.level, l.id)?.let { it.completions > 0 } == true
+    }
+
+    fun isLessonUnlocked(level: LevelContent, index: Int, p: Progress): Boolean {
+        if (!isLevelUnlocked(level.level, p)) return false
+        if (index <= 0) return true
+        return isLessonCompleted(level, index - 1, p)
+    }
+
+    fun levelProgress(level: LevelContent, p: Progress): Pair<Int, Int> =
+        level.lessons.indices.count { isLessonCompleted(level, it, p) } to level.lessons.size
+
+    fun totalStars(p: Progress): Int = p.lessons.values.sumOf { it.stars }
+
+    /** First unlocked and not yet completed lesson across the given levels: (levelIndex, lessonIndex). */
+    fun nextLesson(levels: List<LevelContent>, p: Progress): Pair<Int, Int>? {
+        for ((li, lv) in levels.withIndex()) {
+            if (!isLevelUnlocked(lv.level, p)) return null
+            for (i in lv.lessons.indices) if (!isLessonCompleted(lv, i, p)) return li to i
+        }
+        return null
+    }
+
+    /** Applies the outcome of a lesson with [accuracy] 0..1. A failed exam (< [EXAM_PASS]) gives a little XP only. */
+    fun complete(p: Progress, level: LevelContent, lessonIndex: Int, accuracy: Double, today: Int): CompletionResult {
+        val lesson = level.lessons[lessonIndex]
+        val passed = !lesson.isExam || accuracy >= EXAM_PASS
+        val streak = streakAfterActivity(p, today)
+        if (!passed) {
+            val np = p.copy(xp = p.xp + 5, streak = streak, bestStreak = maxOf(p.bestStreak, streak), lastActiveDay = today)
+            return CompletionResult(np, false, 0, 5, null, null, streak)
+        }
+        val stars = starsFor(accuracy)
+        val key = "${level.level}/${lesson.id}"
+        val old = p.lessons[key]
+        val newResult = LessonResult(
+            stars = maxOf(old?.stars ?: 0, stars),
+            bestAccuracy = maxOf(old?.bestAccuracy ?: 0.0, accuracy),
+            completions = (old?.completions ?: 0) + 1,
+        )
+        // Repeating a lesson gives reduced XP.
+        val base = xpFor(lesson.isExam, stars)
+        val xp = if (old != null) base / 4 else base
+        var badges = p.badges
+        var exams = p.examsPassed
+        var newBadge: BadgeSpec? = null
+        var unlocked: Int? = null
+        if (lesson.isExam) {
+            if (level.level !in exams) { exams = exams + level.level; unlocked = level.level + 1 }
+            if (level.badge.id !in badges) { badges = badges + level.badge.id; newBadge = level.badge }
+        }
+        val np = p.copy(
+            xp = p.xp + xp,
+            streak = streak,
+            bestStreak = maxOf(p.bestStreak, streak),
+            lastActiveDay = today,
+            lessons = p.lessons + (key to newResult),
+            badges = badges,
+            examsPassed = exams,
+        )
+        return CompletionResult(np, true, stars, xp, newBadge, unlocked, streak)
+    }
+
+    fun recordSolfeo(p: Progress, today: Int): Progress {
+        val streak = streakAfterActivity(p, today)
+        return p.copy(solfeosPlayed = p.solfeosPlayed + 1, streak = streak, bestStreak = maxOf(p.bestStreak, streak), lastActiveDay = today)
+    }
+}
