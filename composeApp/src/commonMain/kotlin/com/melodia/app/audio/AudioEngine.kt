@@ -15,7 +15,8 @@ data class PlayOptions(
     val loop: Boolean = false,
     /** Only the pulse (clicks), no notes. */
     val pulseOnly: Boolean = false,
-    /** Keep clicking after the count-in (only relevant when [metronome] is true). */
+    /** Start (resume) at this beat; no count-in is played when greater than zero. */
+    val fromBeat: Double = 0.0,
     val onFinished: (() -> Unit)? = null,
 )
 
@@ -135,60 +136,60 @@ class AudioEngine(private val sink: AudioSink? = null) {
         stop()
         val myRun = ++runId
         val clock = BeatClock(o.tempo)
-        val countBeats = if (o.countIn) melody.time.measureTicks / Melody.TICKS_PER_QUARTER.toDouble() else 0.0
+        val countBeats = if (o.countIn && o.fromBeat <= 0.0) melody.time.measureTicks / Melody.TICKS_PER_QUARTER.toDouble() else 0.0
         val lead = 512L
         val origin = mixer.frame + lead
         val first = clock.frameForBeat(countBeats, origin)
         runClock = clock
-        runStart = first
+        runStart = first - clock.frameForBeat(o.fromBeat)
         runLength = melody.totalBeats
         runLoop = o.loop
-        _position.value = -countBeats
+        _position.value = o.fromBeat - countBeats
         _playing.value = true
 
-        if (o.countIn) scheduleClicks(melody, clock, origin, countBeats, 0.0)
+        if (countBeats > 0) scheduleClicks(melody, clock, origin, countBeats, 0.0)
 
-        fun iteration(start: Long) {
+        fun iteration(start: Long, from: Double) {
             if (myRun != runId) return
-            scheduleMelody(melody, clock, start, o)
-            val end = clock.frameForBeat(melody.totalBeats, start)
+            scheduleMelody(melody, clock, start, o, from)
+            val end = clock.frameForBeat(melody.totalBeats - from, start)
             mixer.schedule(Scheduled.Action(end) {
                 if (myRun != runId) return@Action
                 if (o.loop) {
                     runStart = end
-                    iteration(end)
+                    iteration(end, 0.0)
                 } else {
                     _playing.value = false
                     _position.value = IDLE
-                    runClock = null
                     o.onFinished?.invoke()
                 }
             })
         }
-        iteration(first)
+        iteration(first, o.fromBeat)
     }
 
-    private fun scheduleMelody(melody: Melody, clock: BeatClock, start: Long, o: PlayOptions) {
+    private fun scheduleMelody(melody: Melody, clock: BeatClock, start: Long, o: PlayOptions, from: Double) {
         if (!o.pulseOnly) {
             for (n in melody.soundNotes()) {
-                val f = clock.frameForBeat(n.startBeat, start)
+                if (n.startBeat < from - 1e-9) continue
+                val f = clock.frameForBeat(n.startBeat - from, start)
                 val sustain = (clock.framesPerBeat * n.durBeats * 0.98).toLong().coerceAtLeast(200)
                 for (p in n.pitches) {
                     mixer.schedule(Scheduled.Start(f, PianoVoice(p.frequency, 0.8f, sustain).also { it.id = mixer.newVoiceId() }))
                 }
             }
         }
-        if (o.metronome || o.pulseOnly) scheduleClicks(melody, clock, start, melody.totalBeats, 0.0)
+        if (o.metronome || o.pulseOnly) scheduleClicks(melody, clock, start, melody.totalBeats, 0.0, from)
     }
 
-    private fun scheduleClicks(melody: Melody, clock: BeatClock, start: Long, beats: Double, from: Double) {
+    private fun scheduleClicks(melody: Melody, clock: BeatClock, start: Long, beats: Double, offset: Double, from: Double = 0.0) {
         val clickTicks = melody.time.clickTicks
         val total = (beats * Melody.TICKS_PER_QUARTER).toInt()
         var t = 0
         while (t < total) {
             val accent = t % melody.time.measureTicks == 0
-            val beat = t / Melody.TICKS_PER_QUARTER.toDouble() + from
-            mixer.schedule(Scheduled.Start(clock.frameForBeat(beat, start), ClickVoice(accent).also { it.id = mixer.newVoiceId() }))
+            val beat = t / Melody.TICKS_PER_QUARTER.toDouble()
+            if (beat >= from - 1e-9) mixer.schedule(Scheduled.Start(clock.frameForBeat(beat - from + offset, start), ClickVoice(accent).also { it.id = mixer.newVoiceId() }))
             t += clickTicks
         }
     }

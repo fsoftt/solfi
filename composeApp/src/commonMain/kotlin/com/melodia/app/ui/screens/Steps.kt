@@ -1,0 +1,416 @@
+package com.melodia.app.ui.screens
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.VolumeUp
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.melodia.app.AppState
+import com.melodia.app.audio.AudioEngine
+import com.melodia.app.audio.PlayOptions
+import com.melodia.app.content.MelodySpec
+import com.melodia.app.content.Option
+import com.melodia.app.content.Step
+import com.melodia.app.logic.RhythmScorer
+import com.melodia.app.music.Clef
+import com.melodia.app.music.Melody
+import com.melodia.app.music.Pitch
+import com.melodia.app.ui.notation.StaffView
+import com.melodia.app.ui.theme.LocalUi
+import com.melodia.app.ui.theme.Palette
+import com.melodia.app.ui.widgets.BigButton
+import com.melodia.app.ui.widgets.FeedbackPanel
+import com.melodia.app.ui.widgets.PianoKeyboard
+import com.melodia.app.ui.widgets.PressCard
+import com.melodia.app.ui.widgets.SecondaryButton
+import kotlinx.coroutines.delay
+import kotlin.random.Random
+
+/** Feedback side effects shared by every interactive step. */
+fun feedback(app: AppState, success: Boolean) {
+    app.engine.playFeedback(success)
+    if (app.profile?.settings?.haptics != false) app.haptics.feedback(success)
+}
+
+/** Renders one lesson step. [onDone] receives the step score (0..1) or null for non-scored steps. */
+@Composable
+fun StepContent(app: AppState, step: Step, onDone: (Double?) -> Unit) {
+    when (step) {
+        is Step.Explain -> ExplainStep(app, step) { onDone(null) }
+        is Step.Listen -> ListenStep(app, step) { onDone(null) }
+        is Step.Quiz -> QuizStep(app, step, onDone)
+        is Step.IdentifyNote -> IdentifyNoteStep(app, step, onDone)
+        is Step.EarTraining -> EarTrainingStep(app, step, onDone)
+        is Step.Piano -> PianoStep(app, step, onDone)
+        is Step.RhythmTap -> RhythmTapStep(app, step, onDone)
+    }
+}
+
+// ------------------------------------------------------------------ explain / listen
+
+@Composable
+private fun ExplainStep(app: AppState, step: Step.Explain, onNext: () -> Unit) {
+    val ui = LocalUi.current
+    val bounce by animateFloatAsState(1f, spring(Spring.DampingRatioHighBouncy), label = "emoji")
+    StepFrame(bottom = { BottomBar { BigButton(ui.strings.continueBtn, onNext) } }) {
+        step.emoji?.let { Text(it, Modifier.align(Alignment.CenterHorizontally).scale(bounce), fontSize = if (ui.kid) 64.sp else 48.sp) }
+        step.title?.let { BigText(it[ui.lang], size = if (ui.kid) 26 else 22) }
+        Body(step.text[ui.lang])
+        step.melody?.let { MelodyPlayerCard(app, it) }
+    }
+}
+
+@Composable
+private fun ListenStep(app: AppState, step: Step.Listen, onNext: () -> Unit) {
+    val ui = LocalUi.current
+    StepFrame(bottom = { BottomBar { BigButton(ui.strings.continueBtn, onNext) } }) {
+        Text("🎧", Modifier.align(Alignment.CenterHorizontally), fontSize = 52.sp)
+        BigText(step.prompt[ui.lang])
+        MelodyPlayerCard(app, step.melody)
+    }
+}
+
+// ------------------------------------------------------------------ choice based steps
+
+private class ChoiceItem(val label: String?, val melody: Melody?, val tempo: Int = 80, val pitch: Pitch? = null)
+
+@Composable
+private fun ChoiceStep(
+    app: AppState,
+    options: List<ChoiceItem>,
+    answer: Int,
+    explanation: String?,
+    onDone: (Double?) -> Unit,
+    autoPlay: (suspend () -> Unit)? = null,
+    header: @Composable ColumnScope.() -> Unit,
+) {
+    val ui = LocalUi.current
+    val s = ui.strings
+    var selected by remember { mutableIntStateOf(-1) }
+    var checked by remember { mutableStateOf(false) }
+    var attempts by remember { mutableIntStateOf(0) }
+    val wrongSet = remember { mutableStateListOf<Int>() }
+    val correct = checked && selected == answer
+
+    LaunchedEffect(Unit) { autoPlay?.invoke() }
+
+    StepFrame(bottom = {
+        AnimatedVisibility(checked, enter = slideInVertically { it } + fadeIn()) {
+            FeedbackPanel(
+                correct = correct,
+                message = if (correct) s.correct(ui.kid) else s.wrong(ui.kid),
+                detail = if (correct) explanation else null,
+                primaryLabel = if (correct) s.continueBtn else s.tryAgain,
+                onPrimary = {
+                    if (correct) onDone(when (attempts) { 1 -> 1.0; 2 -> 0.5; else -> 0.0 })
+                    else { checked = false; selected = -1 }
+                },
+            )
+        }
+        if (!checked) BottomBar {
+            BigButton(s.check, {
+                attempts++
+                checked = true
+                val ok = selected == answer
+                if (!ok) wrongSet += selected
+                feedback(app, ok)
+            }, enabled = selected >= 0)
+        }
+    }) {
+        header()
+        options.forEachIndexed { i, o ->
+            val state = when {
+                checked && i == selected && i == answer -> ChoiceState.CORRECT
+                i in wrongSet && (i == selected || !checked) -> ChoiceState.WRONG
+                i in wrongSet -> ChoiceState.WRONG
+                else -> ChoiceState.NORMAL
+            }
+            ChoiceCard(selected = i == selected, state = state, enabled = !checked && i !in wrongSet, onClick = {
+                selected = i
+                o.melody?.let { app.engine.playMelody(it, PlayOptions(tempo = o.tempo)) }
+                o.pitch?.let { app.engine.playPitch(it, 0.7) }
+            }) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    if (o.melody != null) {
+                        Box(Modifier.weight(1f)) { StaffView(o.melody, showTime = false, gap = 8.dp) }
+                        Icon(Icons.Filled.VolumeUp, ui.strings.play, tint = MaterialTheme.colorScheme.primary)
+                    }
+                    if (o.label != null) Text(o.label, fontSize = if (ui.kid) 22.sp else 18.sp, fontWeight = FontWeight.SemiBold)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun optionItems(opts: List<Option>): List<ChoiceItem> {
+    val ui = LocalUi.current
+    return remember(opts, ui.lang, ui.naming) {
+        opts.map { o ->
+            val pitch = o.note?.let { Pitch.parseOrNull(it) }
+            val label = o.text?.get(ui.lang) ?: pitch?.let { ui.noteName(it) }
+            val mel = o.melody?.let { runCatching { it.toMelody() }.getOrNull() }
+            ChoiceItem(label, mel, o.melody?.tempo ?: 80, pitch)
+        }
+    }
+}
+
+@Composable
+private fun QuizStep(app: AppState, step: Step.Quiz, onDone: (Double?) -> Unit) {
+    val ui = LocalUi.current
+    val items = optionItems(step.options)
+    ChoiceStep(app, items, step.answer, step.explanation[ui.lang], onDone) {
+        BigText(step.question[ui.lang])
+        step.melody?.let { MelodyPlayerCard(app, it) }
+    }
+}
+
+private fun distractors(answer: Pitch, clef: Clef): List<Pitch> {
+    val seed = answer.midi * 31 + clef.ordinal
+    val rnd = Random(seed)
+    val steps = listOf(-3, -2, -1, 1, 2, 3).map { answer.diatonic + it }
+        .filter { it >= clef.bottomLineDiatonic - 3 && it <= clef.bottomLineDiatonic + 11 }
+        .map { d -> Pitch(d % 7, 0, d / 7) }
+    return steps.shuffled(rnd).take(3)
+}
+
+@Composable
+private fun IdentifyNoteStep(app: AppState, step: Step.IdentifyNote, onDone: (Double?) -> Unit) {
+    val ui = LocalUi.current
+    val answer = Pitch.parse(step.note)
+    val clef = runCatching { Clef.fromCode(step.clef) }.getOrDefault(Clef.TREBLE)
+    val (choices, idx) = remember(step, ui.naming) {
+        val list = step.choices?.map { Pitch.parse(it) } ?: (distractors(answer, clef) + answer).shuffled(Random(answer.midi))
+        list to list.indexOfFirst { it.midi == answer.midi }
+    }
+    val melody = remember(step) { Melody.parse(clef.code, "4/4", "C", 80, "${step.note}:w") }
+    val items = remember(choices, ui.naming, ui.lang) { choices.map { ChoiceItem(ui.noteName(it), null, pitch = it) } }
+    ChoiceStep(app, items, idx, step.explanation?.get(ui.lang), onDone) {
+        BigText((step.prompt?.get(ui.lang)) ?: ui.strings.whichNoteIsThis)
+        PressCard(Modifier.fillMaxWidth()) {
+            Box(Modifier.padding(12.dp)) {
+                StaffView(melody, showTime = false, gap = 13.dp, description = ui.strings.cdStaff, onNoteClick = { app.engine.playPitch(answer) })
+            }
+        }
+    }
+}
+
+@Composable
+private fun EarTrainingStep(app: AppState, step: Step.EarTraining, onDone: (Double?) -> Unit) {
+    val ui = LocalUi.current
+    val items = optionItems(step.options)
+    val pitches = remember(step) { step.sound.notes.map { Pitch.parse(it) } }
+    val playing by app.engine.isPlaying.collectAsState()
+    val play = { app.engine.playPitches(pitches, step.sound.together, step.sound.tempo); Unit }
+    ChoiceStep(app, items, step.answer, step.explanation[ui.lang], onDone, autoPlay = { delay(350); play() }) {
+        Text("👂", Modifier.align(Alignment.CenterHorizontally), fontSize = 48.sp)
+        BigText(step.prompt[ui.lang])
+        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            Box(
+                Modifier.size(if (ui.kid) 104.dp else 88.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primary).clickable { play() },
+                contentAlignment = Alignment.Center,
+            ) { Icon(Icons.Filled.VolumeUp, ui.strings.playSound, Modifier.size(48.dp), tint = Color.White) }
+        }
+        Text(ui.strings.pressPlayToListen, Modifier.fillMaxWidth(), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (playing) Spacer(Modifier.height(0.dp))
+    }
+}
+
+// ------------------------------------------------------------------ piano
+
+@Composable
+private fun PianoStep(app: AppState, step: Step.Piano, onDone: (Double?) -> Unit) {
+    val ui = LocalUi.current
+    val s = ui.strings
+    val targets = remember(step) { step.targets.map { Pitch.parse(it) } }
+    val clef = runCatching { Clef.fromCode(step.clef) }.getOrDefault(Clef.TREBLE)
+    val melody = remember(step) { Melody.parseLoose(targets.joinToString(" ") { "$it:q" }, clef.code) }
+    var index by remember { mutableIntStateOf(0) }
+    var mistakes by remember { mutableIntStateOf(0) }
+    var flashWrong by remember { mutableStateOf<Int?>(null) }
+    var flashRight by remember { mutableStateOf<Int?>(null) }
+    val held = remember { HashMap<Int, Int>() }
+    val done = index >= targets.size
+
+    val lo = targets.minOf { it.midi }
+    val hi = targets.maxOf { it.midi }
+    var first = (lo / 12) * 12
+    if (clef == Clef.TREBLE && first > 60) first = 60.coerceAtLeast((lo / 12) * 12)
+    var last = first + 12
+    if (hi > last) last = first + 19.coerceAtLeast(((hi - first) / 12 + 1) * 12)
+    while (last % 12 !in setOf(0, 2, 4, 5, 7, 9, 11)) last--
+
+    LaunchedEffect(flashWrong) { if (flashWrong != null) { delay(350); flashWrong = null } }
+    LaunchedEffect(flashRight) { if (flashRight != null) { delay(250); flashRight = null } }
+
+    StepFrame(bottom = {
+        if (done) FeedbackPanel(true, s.correct(ui.kid), null, s.continueBtn, { onDone((1.0 - 0.34 * mistakes).coerceAtLeast(0.0)) })
+        else BottomBar { Text(s.pianoPlayNotes + " " + targets.drop(index).take(1).joinToString { if (step.showLabels) ui.noteName(it) else "?" }, Modifier.fillMaxWidth(), textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+    }) {
+        BigText(step.prompt[ui.lang])
+        if (step.showStaff) {
+            PressCard(Modifier.fillMaxWidth()) {
+                Box(Modifier.padding(12.dp)) {
+                    StaffView(melody, labelFor = if (step.showLabels) ({ p -> ui.noteName(p) }) else null, highlightIndex = index.coerceAtMost(targets.size - 1), showTime = false, description = s.cdStaff)
+                }
+            }
+        }
+        Spacer(Modifier.height(8.dp))
+        PianoKeyboard(
+            firstMidi = first, lastMidi = last, height = if (ui.kid) 190.dp else 170.dp, showLabels = step.showLabels || index >= targets.size,
+            highlight = if (mistakes >= 2 && !done) setOf(targets[index].midi) else emptySet(),
+            correct = flashRight?.let { setOf(it) } ?: emptySet(),
+            wrong = flashWrong?.let { setOf(it) } ?: emptySet(),
+            onDown = { p ->
+                held[p.midi] = app.engine.noteOn(p)
+                if (!done) {
+                    if (p.midi == targets[index].midi) { index++; flashRight = p.midi; if (index >= targets.size) feedback(app, true) }
+                    else { mistakes++; flashWrong = p.midi; if (app.profile?.settings?.haptics != false) app.haptics.feedback(false) }
+                }
+            },
+            onUp = { p -> held.remove(p.midi)?.let { app.engine.noteOff(it) } },
+        )
+    }
+}
+
+// ------------------------------------------------------------------ rhythm tap
+
+private enum class RhythmPhase { READY, RUNNING, DONE }
+
+@Composable
+private fun RhythmTapStep(app: AppState, step: Step.RhythmTap, onDone: (Double?) -> Unit) {
+    val ui = LocalUi.current
+    val s = ui.strings
+    val melody = rememberMelody(step.melody) ?: run { onDone(null); return }
+    val tempo = step.melody.tempo
+    var phase by remember { mutableStateOf(RhythmPhase.READY) }
+    val taps = remember { mutableStateListOf<Double>() }
+    var finished by remember { mutableStateOf(false) }
+    var result by remember { mutableStateOf<com.melodia.app.logic.RhythmResult?>(null) }
+    var attempts by remember { mutableIntStateOf(0) }
+    val pos by app.engine.position.collectAsState()
+    val running = phase == RhythmPhase.RUNNING
+    val hi = if (running && pos > AudioEngine.IDLE + 1) (melody.eventAtBeat(pos)?.index ?: -1) else -1
+    val countingIn = running && pos < 0 && pos > AudioEngine.IDLE + 1
+    val playing by app.engine.isPlaying.collectAsState()
+
+    LaunchedEffect(finished) {
+        if (finished) {
+            delay(350)
+            val expected = melody.onsetBeats().map { RhythmScorer.beatsToMs(it, tempo) }
+            val r = RhythmScorer.score(expected, taps.map { RhythmScorer.beatsToMs(it, tempo) }, step.toleranceMs.toDouble())
+            result = r
+            phase = RhythmPhase.DONE
+            feedback(app, r.score >= step.passScore)
+        }
+    }
+
+    fun start() {
+        taps.clear(); result = null; finished = false; attempts++
+        phase = RhythmPhase.RUNNING
+        app.engine.playMelody(melody, PlayOptions(tempo = tempo, countIn = step.countIn, metronome = true, pulseOnly = true, onFinished = { finished = true }))
+    }
+
+    val r = result
+    val passed = r != null && r.score >= step.passScore
+    StepFrame(bottom = {
+        when {
+            phase == RhythmPhase.DONE && r != null -> FeedbackPanel(
+                correct = passed, message = if (passed) s.rhythmGreat else s.rhythmTryAgain,
+                detail = s.rhythmResult(r.hits, r.expected),
+                primaryLabel = if (passed) s.continueBtn else s.tryAgain,
+                onPrimary = { if (passed) onDone(r.score) else { phase = RhythmPhase.READY } },
+            )
+            else -> BottomBar {
+                if (phase == RhythmPhase.READY) {
+                    BigButton(s.startRhythm, { start() }, leading = "▶")
+                    if (attempts >= 2) { Spacer(Modifier.height(8.dp)); SecondaryButton(s.continueBtn, { onDone(0.3) }) }
+                }
+            }
+        }
+    }) {
+        Text("🥁", Modifier.align(Alignment.CenterHorizontally), fontSize = 48.sp)
+        BigText(step.prompt[ui.lang])
+        PressCard(Modifier.fillMaxWidth()) {
+            Box(Modifier.padding(12.dp)) { StaffView(melody, highlightIndex = hi, description = s.cdStaff) }
+        }
+        if (phase == RhythmPhase.READY && attempts == 0) {
+            SecondaryButton(s.listenAgain, { app.engine.playMelody(melody, PlayOptions(tempo = tempo, metronome = true)) })
+        }
+        Text(
+            when {
+                countingIn -> s.getReady
+                running -> s.tapNow
+                else -> s.tapRhythmHint
+            },
+            Modifier.fillMaxWidth(), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 18.sp,
+            color = if (countingIn) Palette.Coral else MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        TapPad(enabled = running, label = s.tapHere) {
+            app.engine.playTap()
+            val b = app.engine.beatNow()
+            if (b > -0.6) taps += b
+        }
+        if (!running && playing) Spacer(Modifier.height(0.dp))
+    }
+}
+
+@Composable
+private fun TapPad(enabled: Boolean, label: String, onTap: () -> Unit) {
+    var down by remember { mutableStateOf(false) }
+    val sc by animateFloatAsState(if (down) 0.92f else 1f, spring(Spring.DampingRatioMediumBouncy), label = "tap")
+    val color = if (enabled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.surfaceVariant
+    Box(Modifier.fillMaxWidth().height(170.dp), contentAlignment = Alignment.Center) {
+        Box(
+            Modifier.size(150.dp).scale(sc).clip(CircleShape).background(color)
+                .pointerInput(enabled) {
+                    detectTapGestures(onPress = {
+                        if (enabled) { down = true; onTap() }
+                        tryAwaitRelease()
+                        down = false
+                    })
+                },
+            contentAlignment = Alignment.Center,
+        ) { Text(label, color = Color.White, fontSize = 28.sp, fontWeight = FontWeight.ExtraBold) }
+    }
+}
