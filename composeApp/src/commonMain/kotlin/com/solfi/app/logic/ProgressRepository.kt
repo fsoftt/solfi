@@ -119,4 +119,31 @@ object ProgressRepository {
         val streak = streakAfterActivity(p, today)
         return p.copy(solfeosPlayed = p.solfeosPlayed + 1, streak = streak, bestStreak = maxOf(p.bestStreak, streak), lastActiveDay = today)
     }
+
+    // ---------------------------------------------------------------- random exercises
+
+    const val RANDOM_DAILY_CAP = 20
+
+    /** Self-assessment after a random exercise. */
+    enum class RandomRating(val xp: Int) { GOOD(5), OK(3), REPEAT(0) }
+
+    /** Random-exercise XP awards still available on [today]. */
+    fun randomAwardsLeft(p: Progress, today: Int): Int =
+        if (p.randomXpDay == today) (RANDOM_DAILY_CAP - p.randomXpAwards).coerceAtLeast(0) else RANDOM_DAILY_CAP
+
+    /**
+     * Applies a self-assessment: XP 5/3/0 for Bien/Regular/Repetir, at most [RANDOM_DAILY_CAP] XP-granting awards per day.
+     * Never touches lesson results or stars. Returns the new progress and the XP actually granted.
+     */
+    fun rateRandom(p: Progress, rating: RandomRating, today: Int): Pair<Progress, Int> {
+        val streak = streakAfterActivity(p, today)
+        val used = if (p.randomXpDay == today) p.randomXpAwards else 0
+        val grant = if (rating.xp > 0 && used < RANDOM_DAILY_CAP) rating.xp else 0
+        val np = p.copy(
+            xp = p.xp + grant,
+            streak = streak, bestStreak = maxOf(p.bestStreak, streak), lastActiveDay = today,
+            randomXpDay = today, randomXpAwards = used + if (grant > 0) 1 else 0,
+        )
+        return np to grant
+    }
 }

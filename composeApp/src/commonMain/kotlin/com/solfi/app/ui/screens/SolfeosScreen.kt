@@ -56,6 +56,7 @@ import com.solfi.app.audio.AudioEngine
 import com.solfi.app.audio.PlayOptions
 import com.solfi.app.logic.ProgressRepository
 import com.solfi.app.music.Clef
+import com.solfi.app.music.generator.Difficulty
 import com.solfi.app.platform.PlatformBackHandler
 import com.solfi.app.ui.notation.StaffView
 import com.solfi.app.ui.theme.LocalUi
@@ -70,7 +71,17 @@ fun SolfeosScreen(app: AppState) {
     val ui = LocalUi.current
     val s = ui.strings
     LazyColumn(Modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 24.dp)) {
-        item { ScreenTitle(s.solfeosTitle, subtitle = s.solfeosIntro) }
+        item { ScreenTitle(s.solfeosTitle, subtitle = if (app.solfeosSection == 1) s.randomIntro else s.solfeosIntro) }
+        item {
+            Row(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilterChip(app.solfeosSection == 0, { app.solfeosSection = 0 }, { Text(s.solfeosTabLessons) })
+                FilterChip(app.solfeosSection == 1, { app.solfeosSection = 1 }, { Text(s.solfeosTabRandom) })
+            }
+        }
+        if (app.solfeosSection == 1) {
+            items(Difficulty.entries.size, key = { "r$it" }) { i -> RandomDifficultyCard(app, Difficulty.entries[i]) }
+            return@LazyColumn
+        }
         app.levels.forEachIndexed { li, level ->
             if (level == null || !ProgressRepository.isLevelUnlocked(level.level, app.progress)) return@forEachIndexed
             item(key = "h$li") {
@@ -182,7 +193,7 @@ fun SolfeoPlayerScreen(app: AppState, levelIndex: Int, solfeoIndex: Int) {
 }
 
 @Composable
-private fun ToggleRow(label: String, checked: Boolean, desc: String? = null, enabled: Boolean = true, onChange: (Boolean) -> Unit) {
+internal fun ToggleRow(label: String, checked: Boolean, desc: String? = null, enabled: Boolean = true, onChange: (Boolean) -> Unit) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
             Text(label, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
@@ -194,7 +205,7 @@ private fun ToggleRow(label: String, checked: Boolean, desc: String? = null, ena
 
 /** Row of dots, one per click of the measure; the current beat is enlarged. */
 @Composable
-private fun PulseDots(clickTicks: Int, measureTicks: Int, position: Double) {
+internal fun PulseDots(clickTicks: Int, measureTicks: Int, position: Double) {
     val perMeasure = measureTicks / clickTicks
     val active = if (position <= AudioEngine.IDLE + 1) -1 else floor(((position * 24.0) % measureTicks + measureTicks) % measureTicks / clickTicks).toInt()
     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {

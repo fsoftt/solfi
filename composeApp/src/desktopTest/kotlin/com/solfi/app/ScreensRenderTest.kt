@@ -13,6 +13,7 @@ import com.solfi.app.content.ContentJson
 import com.solfi.app.data.ProfileStore
 import com.solfi.app.music.Lang
 import com.solfi.app.music.NoteNaming
+import com.solfi.app.music.generator.Difficulty
 import com.solfi.app.platform.Haptics
 import com.solfi.app.platform.KeyValueStore
 import com.solfi.app.ui.screens.*
@@ -63,6 +64,13 @@ class ScreensRenderTest {
     @Test fun settings() = render("settings") { SettingsScreen(app) }
     @Test fun solfeos() = render("solfeos") { SolfeosScreen(app) }
     @Test fun solfeoPlayer() = render("solfeoPlayer") { SolfeoPlayerScreen(app, 0, 2) }
+    @Test fun solfeosRandomSection() {
+        app.solfeosSection = 1
+        try { render("solfeos-random") { SolfeosScreen(app) } } finally { app.solfeosSection = 0 }
+    }
+    @Test fun randomBasico() = render("random-basico", h = 2300) { RandomSolfeoScreen(app, Difficulty.BASICO, 123456L) }
+    @Test fun randomExperto() = render("random-experto", h = 3700) { RandomSolfeoScreen(app, Difficulty.EXPERTO, 654321L) }
+    @Test fun randomExpertoDark() = render("random-experto-dark", h = 2300, theme = "DARK") { RandomSolfeoScreen(app, Difficulty.EXPERTO, 654321L) }
     @Test fun piano() = render("piano") { PianoScreen(app) }
     @Test fun onboarding() = render("onboarding") { OnboardingScreen(app, onCancel = {}) }
 

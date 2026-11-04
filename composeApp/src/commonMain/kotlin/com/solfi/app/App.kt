@@ -38,6 +38,7 @@ import com.solfi.app.ui.screens.LevelMapScreen
 import com.solfi.app.ui.screens.OnboardingScreen
 import com.solfi.app.ui.screens.PianoScreen
 import com.solfi.app.ui.screens.ProgressScreen
+import com.solfi.app.ui.screens.RandomSolfeoScreen
 import com.solfi.app.ui.screens.SettingsScreen
 import com.solfi.app.ui.screens.SolfeoPlayerScreen
 import com.solfi.app.ui.screens.SolfeosScreen
@@ -87,6 +88,7 @@ private fun Root(app: AppState) {
             null -> MainTabs(app)
             is Route.Lesson -> LessonScreen(app, route.levelIndex, route.lessonIndex)
             is Route.Solfeo -> SolfeoPlayerScreen(app, route.levelIndex, route.solfeoIndex)
+            is Route.RandomSolfeo -> RandomSolfeoScreen(app, route.difficulty, route.seed)
             Route.Settings -> SettingsScreen(app)
             Route.AddProfile -> OnboardingScreen(app, onCancel = { app.pop() })
         }

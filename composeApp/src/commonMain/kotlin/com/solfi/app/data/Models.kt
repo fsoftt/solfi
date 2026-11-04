@@ -41,6 +41,10 @@ data class Progress(
     val badges: List<String> = emptyList(),
     val examsPassed: List<Int> = emptyList(),
     val solfeosPlayed: Int = 0,
+    /** Epoch day the random-exercise XP counter below refers to, -1 when none. */
+    val randomXpDay: Int = -1,
+    /** Random-exercise XP awards already granted on [randomXpDay]. */
+    val randomXpAwards: Int = 0,
 ) {
     fun result(level: Int, lessonId: String): LessonResult? = lessons["$level/$lessonId"]
 }

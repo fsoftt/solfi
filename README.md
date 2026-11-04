@@ -20,6 +20,7 @@ Esta es la **fase 1**: arquitectura, motor de audio, toda la interfaz y el conte
   secuenciador con precisión de muestra. La posición de reproducción (en pulsos) alimenta el resaltado y el reloj de
   audio puntúa los toques de ritmo.
 * **Solfeos**: reproducir/pausar/detener, tempo 40–160, metrónomo, cuenta previa, repetición y modo «solo pulso».
+* **Solfeos aleatorios**: pestaña «Aleatorios» con 4 dificultades (Básico, Intermedio, Avanzado, Experto), todas disponibles desde el inicio. Un generador puro y determinista (PRNG propio SplitMix64, mismo número de ejercicio = misma melodía en todas las plataformas) crea frases antecedente/consecuente con cadencia suspensiva y final en la tónica, a partir de bibliotecas de células rítmicas por compás. El ejercicio no suena solo: se practica con pulso y cuenta previa, luego «Escuchar solución». Autoevaluación «¿Cómo te fue?» (Bien/Regular/Repetir = 5/3/0 XP, máx. 20 premios al día, sin afectar estrellas) y opción «Ir a ejercicio #» para repetir una semilla.
 * **Preferencia de clave** por perfil: Recomendada (según el instrumento), Sol o Fa. Las melodías se reescriben en la clave elegida; el contenido que habla de posiciones del pentagrama puede fijar su clave con `clefLocked` (ver [CONTENT.md](CONTENT.md)).
 * **Piano libre**: 3 octavas con desplazamiento, multitoque y etiquetas.
 * **Progreso**: XP, 1–3 estrellas por precisión, desbloqueo secuencial, examen que desbloquea el siguiente nivel y

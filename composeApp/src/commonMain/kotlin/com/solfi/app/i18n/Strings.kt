@@ -1,5 +1,7 @@
 package com.solfi.app.i18n
 
+import com.solfi.app.music.generator.Difficulty
+import com.solfi.app.music.generator.GenMode
 import com.solfi.app.music.Lang
 
 /**
@@ -184,6 +186,27 @@ interface Strings {
     val editProfile: String
     val about: String
     val aboutText: String
+
+    // random solfeos
+    val solfeosTabLessons: String
+    val solfeosTabRandom: String
+    val randomIntro: String
+    fun difficultyName(d: Difficulty): String
+    fun difficultyConcepts(d: Difficulty, keys: String): String
+    fun modeName(m: GenMode): String
+    fun randomTitle(seed: Long): String
+    fun randomHint(kid: Boolean): String
+    val practicePulse: String
+    val listenSolution: String
+    val newExercise: String
+    val goToExercise: String
+    val goLabel: String
+    val howDidItGo: String
+    val rateGood: String
+    val rateOk: String
+    val rateRepeat: String
+    val randomCapReached: String
+    fun randomRepeatHint(kid: Boolean): String
 
     // accessibility
     val cdMascot: String

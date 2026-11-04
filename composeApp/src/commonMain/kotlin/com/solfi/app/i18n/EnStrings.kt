@@ -1,5 +1,8 @@
 package com.solfi.app.i18n
 
+import com.solfi.app.music.generator.Difficulty
+import com.solfi.app.music.generator.GenMode
+
 object EnStrings : Strings {
     override val appName = "Solfi"
     override val tagline = "Learn music from scratch"
@@ -185,6 +188,31 @@ object EnStrings : Strings {
     override val clefQuickSol = "Treble"
     override val clefQuickFa = "Bass"
     override val clefQuickTitle = "Clef"
+
+    override val solfeosTabLessons = "Lessons"
+    override val solfeosTabRandom = "Random"
+    override val randomIntro = "A fresh exercise every time. All difficulties are available from the start."
+    override fun difficultyName(d: Difficulty) = when (d) { Difficulty.BASICO -> "Basic"; Difficulty.INTERMEDIO -> "Intermediate"; Difficulty.AVANZADO -> "Advanced"; Difficulty.EXPERTO -> "Expert" }
+    override fun difficultyConcepts(d: Difficulty, keys: String) = when (d) {
+        Difficulty.BASICO -> "Quarter and half notes, quarter rest · $keys"
+        Difficulty.INTERMEDIO -> "Eighth notes, dotted quarter, ties · $keys"
+        Difficulty.AVANZADO -> "Sixteenth notes, minor keys, chromatic notes · $keys"
+        Difficulty.EXPERTO -> "Syncopation, 6/8 and 3/8, modes, ties across bars · $keys"
+    }
+    override fun modeName(m: GenMode) = when (m) { GenMode.MAJOR -> "major"; GenMode.NATURAL_MINOR -> "minor"; GenMode.HARMONIC_MINOR -> "harmonic minor"; GenMode.DORIAN -> "Dorian"; GenMode.MIXOLYDIAN -> "Mixolydian" }
+    override fun randomTitle(seed: Long) = "Exercise #$seed"
+    override fun randomHint(kid: Boolean) = if (kid) "Sing first! Follow the beat and read the notes. Then listen to the solution." else "Sight-sing with the pulse, without hearing the melody. Then compare with the solution."
+    override val practicePulse = "Practice with pulse"
+    override val listenSolution = "Hear solution"
+    override val newExercise = "New exercise"
+    override val goToExercise = "Go to exercise #"
+    override val goLabel = "Go"
+    override val howDidItGo = "How did it go?"
+    override val rateGood = "Good"
+    override val rateOk = "So-so"
+    override val rateRepeat = "Repeat"
+    override val randomCapReached = "You reached today's XP limit for random exercises. You can keep practicing without XP."
+    override fun randomRepeatHint(kid: Boolean) = if (kid) "You can do it! Try once more." else "Repeat the exercise until you feel confident."
 
     override val cdMascot = "Solfi mascot, a smiling music note"
     override val cdSettings = "Settings"

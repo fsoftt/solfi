@@ -21,6 +21,7 @@ import com.solfi.app.music.Instrument
 import com.solfi.app.music.Clef
 import com.solfi.app.music.Lang
 import com.solfi.app.music.NoteNaming
+import com.solfi.app.music.generator.Difficulty
 import com.solfi.app.platform.Haptics
 import com.solfi.app.platform.todayEpochDay
 import com.solfi.app.ui.theme.UiContext
@@ -30,6 +31,8 @@ enum class Tab { HOME, LEARN, SOLFEOS, PIANO, PROGRESS }
 sealed interface Route {
     data class Lesson(val levelIndex: Int, val lessonIndex: Int) : Route
     data class Solfeo(val levelIndex: Int, val solfeoIndex: Int) : Route
+    /** Random solfeo of a [difficulty]; [seed] null = pick a fresh one. */
+    data class RandomSolfeo(val difficulty: Difficulty, val seed: Long? = null) : Route
     data object Settings : Route
     data object AddProfile : Route
 }
@@ -54,6 +57,8 @@ class AppState(
         private set
 
     var tab by mutableStateOf(Tab.HOME)
+    /** Section of the Solfeos tab: 0 = lesson solfeos, 1 = random exercises. */
+    var solfeosSection by mutableStateOf(0)
     val stack = mutableStateListOf<Route>()
 
     val profile: Profile? get() = profiles.firstOrNull { it.id == currentId }
@@ -177,6 +182,15 @@ class AppState(
     }
 
     fun recordSolfeo() = saveProgress(ProgressRepository.recordSolfeo(progress, todayEpochDay()))
+
+    /** Records the self-assessment of a random exercise; returns the XP granted (0 when capped or "repeat"). */
+    fun rateRandomExercise(rating: ProgressRepository.RandomRating): Int {
+        val (np, xp) = ProgressRepository.rateRandom(progress, rating, todayEpochDay())
+        saveProgress(np)
+        return xp
+    }
+
+    val randomAwardsLeft: Int get() = ProgressRepository.randomAwardsLeft(progress, todayEpochDay())
 
     val streak: Int get() = ProgressRepository.currentStreak(progress, todayEpochDay())
 }
