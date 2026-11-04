@@ -1,6 +1,6 @@
-package com.melodia.app.i18n
+package com.solfi.app.i18n
 
-import com.melodia.app.music.Lang
+import com.solfi.app.music.Lang
 
 /**
  * All UI strings. Every language implements this interface, so a missing translation fails to compile.

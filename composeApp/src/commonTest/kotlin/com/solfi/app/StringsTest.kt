@@ -1,7 +1,7 @@
-package com.melodia.app
+package com.solfi.app
 
-import com.melodia.app.i18n.*
-import com.melodia.app.music.Lang
+import com.solfi.app.i18n.*
+import com.solfi.app.music.Lang
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals

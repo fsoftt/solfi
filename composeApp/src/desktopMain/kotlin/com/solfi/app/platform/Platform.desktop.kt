@@ -1,4 +1,4 @@
-package com.melodia.app.platform
+package com.solfi.app.platform
 
 import java.util.Locale
 import java.util.concurrent.locks.ReentrantLock
@@ -39,7 +39,7 @@ actual class AudioSink actual constructor() {
                 }
                 l.write(bytes, 0, bytes.size)
             }
-        }, "melodia-audio").apply { isDaemon = true; priority = Thread.MAX_PRIORITY; start() }
+        }, "solfi-audio").apply { isDaemon = true; priority = Thread.MAX_PRIORITY; start() }
     }
 
     actual fun stop() {
@@ -59,7 +59,7 @@ actual class Haptics actual constructor() {
 
 /** java.util.prefs limits a value to 8192 chars, so values are chunked. */
 actual class KeyValueStore actual constructor(name: String) {
-    private val prefs: Preferences = Preferences.userRoot().node("com/melodia/app/$name")
+    private val prefs: Preferences = Preferences.userRoot().node("com/solfi/app/$name")
     private val chunk = 7000
 
     actual fun getString(key: String): String? {

@@ -23,7 +23,7 @@ val androidSdkDir: String? = run {
         System.getenv("LOCALAPPDATA")?.let { "$it/Android/Sdk" },
     ).filterNotNull().firstOrNull { File(it, "platforms").isDirectory && (File(it, "platforms").list()?.isNotEmpty() == true) }
 }
-val hasAndroid = androidSdkDir != null && System.getProperty("melodia.noAndroid") == null
+val hasAndroid = androidSdkDir != null && System.getProperty("solfi.noAndroid") == null
 if (hasAndroid) {
     apply(plugin = "com.android.application")
     apply(from = "android.gradle")
@@ -79,16 +79,16 @@ kotlin {
 }
 
 compose.resources {
-    packageOfResClass = "com.melodia.app.resources"
+    packageOfResClass = "com.solfi.app.resources"
     generateResClass = always
 }
 
 compose.desktop {
     application {
-        mainClass = "com.melodia.app.MainKt"
+        mainClass = "com.solfi.app.MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Msi, TargetFormat.Dmg, TargetFormat.Deb)
-            packageName = "Melodia"
+            packageName = "Solfi"
             packageVersion = "1.0.0"
         }
     }

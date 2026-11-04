@@ -1,9 +1,9 @@
-package com.melodia.app.logic
+package com.solfi.app.logic
 
-import com.melodia.app.content.BadgeSpec
-import com.melodia.app.content.LevelContent
-import com.melodia.app.data.LessonResult
-import com.melodia.app.data.Progress
+import com.solfi.app.content.BadgeSpec
+import com.solfi.app.content.LevelContent
+import com.solfi.app.data.LessonResult
+import com.solfi.app.data.Progress
 
 data class CompletionResult(
     val progress: Progress,

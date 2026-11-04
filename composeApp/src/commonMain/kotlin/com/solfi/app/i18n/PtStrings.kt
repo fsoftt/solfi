@@ -1,7 +1,7 @@
-package com.melodia.app.i18n
+package com.solfi.app.i18n
 
 object PtStrings : Strings {
-    override val appName = "Melodía"
+    override val appName = "Solfi"
     override val tagline = "Aprenda música do zero"
 
     override val ok = "OK"
@@ -17,7 +17,7 @@ object PtStrings : Strings {
     override val comingSoon = "Em breve"
     override val comingSoonDesc = "Este nível estará disponível muito em breve."
 
-    override val welcomeTitle = "Bem-vindo ao Melodía!"
+    override val welcomeTitle = "Bem-vindo ao Solfi!"
     override val welcomeSubtitle = "Vamos preparar seu perfil em poucos passos."
     override val chooseLanguage = "Escolha seu idioma"
     override val yourName = "Qual é o seu nome?"
@@ -140,9 +140,9 @@ object PtStrings : Strings {
     override val activeProfile = "Perfil ativo"
     override val editProfile = "Editar perfil"
     override val about = "Sobre"
-    override val aboutText = "Melodía · Música do zero para crianças e adultos."
+    override val aboutText = "Solfi · Música do zero para crianças e adultos."
 
-    override val cdMascot = "Mascote Melodía, uma nota musical sorridente"
+    override val cdMascot = "Mascote Solfi, uma nota musical sorridente"
     override val cdSettings = "Ajustes"
     override val cdBack = "Voltar"
     override val cdPianoKey = "Tecla de piano"

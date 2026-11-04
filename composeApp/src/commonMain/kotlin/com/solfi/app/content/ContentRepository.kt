@@ -1,6 +1,6 @@
-package com.melodia.app.content
+package com.solfi.app.content
 
-import com.melodia.app.resources.Res
+import com.solfi.app.resources.Res
 
 /** Loads level files bundled as compose resources (`files/content/levelN.json`). Missing levels are simply absent. */
 object ContentRepository {

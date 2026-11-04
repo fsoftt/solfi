@@ -1,8 +1,8 @@
-package com.melodia.app
+package com.solfi.app
 
-import com.melodia.app.content.*
-import com.melodia.app.data.Progress
-import com.melodia.app.logic.ProgressRepository as PR
+import com.solfi.app.content.*
+import com.solfi.app.data.Progress
+import com.solfi.app.logic.ProgressRepository as PR
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse

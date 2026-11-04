@@ -1,4 +1,4 @@
-package com.melodia.app
+package com.solfi.app
 
 import androidx.compose.ui.window.ComposeUIViewController
 

@@ -1,4 +1,4 @@
-package com.melodia.app.ui.widgets
+package com.solfi.app.ui.widgets
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -24,13 +24,13 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.melodia.app.ui.theme.LocalUi
-import com.melodia.app.ui.theme.Palette
+import com.solfi.app.ui.theme.LocalUi
+import com.solfi.app.ui.theme.Palette
 
 enum class Mood { HAPPY, CHEER, THINKING, SAD }
 
 /**
- * Melodía's mascot: a smiling eighth-note with a face, drawn on a Canvas.
+ * Solfi's mascot: a smiling eighth-note with a face, drawn on a Canvas.
  * Bounces gently (more when [mood] is CHEER) and blinks.
  */
 @Composable

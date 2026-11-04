@@ -1,4 +1,4 @@
-# Melodía
+# Solfi
 
 Aplicación nativa para **aprender música desde cero**, pensada para niños y adultos. Escrita en Kotlin con
 Compose Multiplatform (Android, iOS y escritorio JVM), sin backend: todo funciona sin conexión y el progreso
@@ -83,7 +83,7 @@ El código iOS específico (`AVAudioEngine` + `AVAudioSourceNode`, háptica, `NS
 
 ```
 composeApp/src/
-  commonMain/kotlin/com/melodia/app/
+  commonMain/kotlin/com/solfi/app/
     music/      teoría: Pitch, nombres de nota, intervalos, escalas, armaduras, acordes, Melody + parser
     audio/      Synth (voces), Mixer (precisión de muestra), AudioEngine (reproducción y posición)
     content/    modelos @Serializable, ContentValidator, ContentRepository

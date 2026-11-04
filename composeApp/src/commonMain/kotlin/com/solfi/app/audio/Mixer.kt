@@ -1,6 +1,6 @@
-package com.melodia.app.audio
+package com.solfi.app.audio
 
-import com.melodia.app.platform.PlatformLock
+import com.solfi.app.platform.PlatformLock
 import kotlin.math.roundToLong
 
 /** Something scheduled at an absolute mixer frame. */

@@ -1,4 +1,4 @@
-package com.melodia.app.music
+package com.solfi.app.music
 
 class MelodyParseException(message: String) : IllegalArgumentException(message)
 

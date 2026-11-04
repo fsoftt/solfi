@@ -1,4 +1,4 @@
-package com.melodia.app.platform
+package com.solfi.app.platform
 
 import androidx.compose.runtime.Composable
 

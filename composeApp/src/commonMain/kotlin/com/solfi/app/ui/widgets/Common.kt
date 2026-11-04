@@ -1,4 +1,4 @@
-package com.melodia.app.ui.widgets
+package com.solfi.app.ui.widgets
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -44,8 +44,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.melodia.app.ui.theme.LocalUi
-import com.melodia.app.ui.theme.Palette
+import com.solfi.app.ui.theme.LocalUi
+import com.solfi.app.ui.theme.Palette
 
 /** Big rounded primary button; taller in kid mode. */
 @Composable

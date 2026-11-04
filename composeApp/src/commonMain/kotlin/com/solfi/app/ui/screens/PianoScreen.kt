@@ -1,4 +1,4 @@
-package com.melodia.app.ui.screens
+package com.solfi.app.ui.screens
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement
@@ -24,11 +24,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.melodia.app.AppState
-import com.melodia.app.music.Pitch
-import com.melodia.app.ui.theme.LocalUi
-import com.melodia.app.ui.widgets.PianoKeyboard
-import com.melodia.app.ui.widgets.ScreenTitle
+import com.solfi.app.AppState
+import com.solfi.app.music.Pitch
+import com.solfi.app.ui.theme.LocalUi
+import com.solfi.app.ui.widgets.PianoKeyboard
+import com.solfi.app.ui.widgets.ScreenTitle
 import kotlinx.coroutines.launch
 
 /** Free piano: three scrollable octaves (C3-B5), multitouch, labels follow the note-name setting. */

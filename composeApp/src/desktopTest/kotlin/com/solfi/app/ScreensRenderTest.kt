@@ -1,4 +1,4 @@
-package com.melodia.app
+package com.solfi.app
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -8,16 +8,16 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.ImageComposeScene
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Density
-import com.melodia.app.audio.AudioEngine
-import com.melodia.app.content.ContentJson
-import com.melodia.app.data.ProfileStore
-import com.melodia.app.music.Lang
-import com.melodia.app.music.NoteNaming
-import com.melodia.app.platform.Haptics
-import com.melodia.app.platform.KeyValueStore
-import com.melodia.app.ui.screens.*
-import com.melodia.app.ui.theme.LocalUi
-import com.melodia.app.ui.theme.MelodiaTheme
+import com.solfi.app.audio.AudioEngine
+import com.solfi.app.content.ContentJson
+import com.solfi.app.data.ProfileStore
+import com.solfi.app.music.Lang
+import com.solfi.app.music.NoteNaming
+import com.solfi.app.platform.Haptics
+import com.solfi.app.platform.KeyValueStore
+import com.solfi.app.ui.screens.*
+import com.solfi.app.ui.theme.LocalUi
+import com.solfi.app.ui.theme.SolfiTheme
 import org.jetbrains.skia.EncodedImageFormat
 import java.io.File
 import kotlin.test.AfterTest
@@ -26,7 +26,7 @@ import kotlin.test.assertTrue
 
 /** Renders the main screens off-screen with real level-1 content (smoke test + PNGs in build/render). */
 class ScreensRenderTest {
-    private val kv = KeyValueStore("melodia-render-test")
+    private val kv = KeyValueStore("solfi-render-test")
     private val app = AppState(ProfileStore(kv), AudioEngine(null), Haptics(), "es").also { a ->
         val dir = listOf("src/commonMain/composeResources/files/content").map(::File).first { it.isDirectory }
         a.useLevels(listOf(ContentJson.decodeLevel(File(dir, "level1.json").readText()), null, null, null, null))
@@ -39,7 +39,7 @@ class ScreensRenderTest {
 
     private fun render(name: String, w: Int = 860, h: Int = 1720, content: @Composable () -> Unit) {
         val scene = ImageComposeScene(w, h, Density(2f)) {
-            MelodiaTheme("LIGHT", kid = app.ui.kid) {
+            SolfiTheme("LIGHT", kid = app.ui.kid) {
                 CompositionLocalProvider(LocalUi provides app.ui) { Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) { content() } }
             }
         }

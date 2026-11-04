@@ -1,4 +1,4 @@
-package com.melodia.app.ui.widgets
+package com.solfi.app.ui.widgets
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +14,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.runtime.withFrameNanos
-import com.melodia.app.ui.theme.Palette
+import com.solfi.app.ui.theme.Palette
 import kotlin.math.sin
 import kotlin.random.Random
 

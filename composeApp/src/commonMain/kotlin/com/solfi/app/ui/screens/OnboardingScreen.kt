@@ -1,4 +1,4 @@
-package com.melodia.app.ui.screens
+package com.solfi.app.ui.screens
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -46,18 +46,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.melodia.app.AppState
-import com.melodia.app.i18n.stringsFor
-import com.melodia.app.music.Lang
-import com.melodia.app.music.NoteNaming
-import com.melodia.app.ui.theme.LocalUi
-import com.melodia.app.ui.theme.UiContext
-import com.melodia.app.ui.widgets.AvatarCircle
-import com.melodia.app.ui.widgets.BigButton
-import com.melodia.app.ui.widgets.Mascot
-import com.melodia.app.ui.widgets.Mood
-import com.melodia.app.ui.widgets.PressCard
-import com.melodia.app.ui.widgets.SecondaryButton
+import com.solfi.app.AppState
+import com.solfi.app.i18n.stringsFor
+import com.solfi.app.music.Lang
+import com.solfi.app.music.NoteNaming
+import com.solfi.app.ui.theme.LocalUi
+import com.solfi.app.ui.theme.UiContext
+import com.solfi.app.ui.widgets.AvatarCircle
+import com.solfi.app.ui.widgets.BigButton
+import com.solfi.app.ui.widgets.Mascot
+import com.solfi.app.ui.widgets.Mood
+import com.solfi.app.ui.widgets.PressCard
+import com.solfi.app.ui.widgets.SecondaryButton
 
 val AVATARS = listOf("🦊", "🐼", "🐯", "🦁", "🐸", "🐵", "🦄", "🐙", "🐧", "🐶", "🐱", "🦉", "🎸", "🎹", "🥁", "🎷")
 
@@ -138,7 +138,7 @@ fun OnboardingScreen(app: AppState, onCancel: (() -> Unit)? = null) {
                         else -> {
                             Spacer(Modifier.height(30.dp))
                             Mascot(size = 160.dp, mood = Mood.CHEER)
-                            Text("${avatar} ${name.ifBlank { "Melodía" }}", fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
+                            Text("${avatar} ${name.ifBlank { "Solfi" }}", fontSize = 28.sp, fontWeight = FontWeight.ExtraBold, textAlign = TextAlign.Center)
                             Text(s.tagline, Modifier.padding(top = 6.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }

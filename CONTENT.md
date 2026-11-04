@@ -1,7 +1,7 @@
-# Formato de contenido de Melodía (`levelN.json`)
+# Formato de contenido de Solfi (`levelN.json`)
 
 Este documento es suficiente para escribir `level2.json` … `level5.json` sin leer el código.
-El esquema tipado vive en `composeApp/src/commonMain/kotlin/com/melodia/app/content/Models.kt`
+El esquema tipado vive en `composeApp/src/commonMain/kotlin/com/solfi/app/content/Models.kt`
 y las reglas de validación en `.../content/ContentValidator.kt`.
 
 ## Dónde van los archivos

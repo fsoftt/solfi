@@ -1,4 +1,4 @@
-package com.melodia.app.data
+package com.solfi.app.data
 
 import kotlinx.serialization.Serializable
 

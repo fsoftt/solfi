@@ -1,4 +1,4 @@
-package com.melodia.app.platform
+package com.solfi.app.platform
 
 /** Reentrant mutual-exclusion lock usable from the audio thread and the UI thread. */
 expect class PlatformLock() {

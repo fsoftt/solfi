@@ -1,4 +1,4 @@
-package com.melodia.app.ui.screens
+package com.solfi.app.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -32,14 +32,14 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.melodia.app.AppState
-import com.melodia.app.audio.AudioEngine
-import com.melodia.app.audio.PlayOptions
-import com.melodia.app.content.MelodySpec
-import com.melodia.app.music.Melody
-import com.melodia.app.ui.notation.StaffView
-import com.melodia.app.ui.theme.LocalUi
-import com.melodia.app.ui.widgets.PressCard
+import com.solfi.app.AppState
+import com.solfi.app.audio.AudioEngine
+import com.solfi.app.audio.PlayOptions
+import com.solfi.app.content.MelodySpec
+import com.solfi.app.music.Melody
+import com.solfi.app.ui.notation.StaffView
+import com.solfi.app.ui.theme.LocalUi
+import com.solfi.app.ui.widgets.PressCard
 
 @Composable
 fun rememberMelody(spec: MelodySpec?): Melody? = remember(spec) { spec?.let { runCatching { it.toMelody() }.getOrNull() } }

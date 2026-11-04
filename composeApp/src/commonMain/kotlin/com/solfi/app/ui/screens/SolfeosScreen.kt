@@ -1,4 +1,4 @@
-package com.melodia.app.ui.screens
+package com.solfi.app.ui.screens
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -49,17 +49,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.melodia.app.AppState
-import com.melodia.app.Route
-import com.melodia.app.audio.AudioEngine
-import com.melodia.app.audio.PlayOptions
-import com.melodia.app.logic.ProgressRepository
-import com.melodia.app.platform.PlatformBackHandler
-import com.melodia.app.ui.notation.StaffView
-import com.melodia.app.ui.theme.LocalUi
-import com.melodia.app.ui.theme.parseHexColor
-import com.melodia.app.ui.widgets.PressCard
-import com.melodia.app.ui.widgets.ScreenTitle
+import com.solfi.app.AppState
+import com.solfi.app.Route
+import com.solfi.app.audio.AudioEngine
+import com.solfi.app.audio.PlayOptions
+import com.solfi.app.logic.ProgressRepository
+import com.solfi.app.platform.PlatformBackHandler
+import com.solfi.app.ui.notation.StaffView
+import com.solfi.app.ui.theme.LocalUi
+import com.solfi.app.ui.theme.parseHexColor
+import com.solfi.app.ui.widgets.PressCard
+import com.solfi.app.ui.widgets.ScreenTitle
 import kotlin.math.floor
 import kotlin.math.roundToInt
 

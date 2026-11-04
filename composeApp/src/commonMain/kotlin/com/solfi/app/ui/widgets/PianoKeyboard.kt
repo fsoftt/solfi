@@ -1,4 +1,4 @@
-package com.melodia.app.ui.widgets
+package com.solfi.app.ui.widgets
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ScrollState
@@ -28,8 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.melodia.app.music.Pitch
-import com.melodia.app.ui.theme.LocalUi
+import com.solfi.app.music.Pitch
+import com.solfi.app.ui.theme.LocalUi
 
 private val WHITE_PCS = setOf(0, 2, 4, 5, 7, 9, 11)
 

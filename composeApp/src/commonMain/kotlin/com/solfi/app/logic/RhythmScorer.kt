@@ -1,4 +1,4 @@
-package com.melodia.app.logic
+package com.solfi.app.logic
 
 import kotlin.math.abs
 

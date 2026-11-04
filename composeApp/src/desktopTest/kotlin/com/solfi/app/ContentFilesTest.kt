@@ -1,7 +1,7 @@
-package com.melodia.app
+package com.solfi.app
 
-import com.melodia.app.content.*
-import com.melodia.app.music.Melody
+import com.solfi.app.content.*
+import com.solfi.app.music.Melody
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals

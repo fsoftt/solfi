@@ -1,4 +1,4 @@
-package com.melodia.app.ui.screens
+package com.solfi.app.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -36,16 +36,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.melodia.app.AppState
-import com.melodia.app.Route
-import com.melodia.app.data.Profile
-import com.melodia.app.music.Lang
-import com.melodia.app.music.NoteNaming
-import com.melodia.app.platform.PlatformBackHandler
-import com.melodia.app.ui.theme.LocalUi
-import com.melodia.app.ui.widgets.AvatarCircle
-import com.melodia.app.ui.widgets.PressCard
-import com.melodia.app.ui.widgets.SecondaryButton
+import com.solfi.app.AppState
+import com.solfi.app.Route
+import com.solfi.app.data.Profile
+import com.solfi.app.music.Lang
+import com.solfi.app.music.NoteNaming
+import com.solfi.app.platform.PlatformBackHandler
+import com.solfi.app.ui.theme.LocalUi
+import com.solfi.app.ui.widgets.AvatarCircle
+import com.solfi.app.ui.widgets.PressCard
+import com.solfi.app.ui.widgets.SecondaryButton
 
 @Composable
 fun SettingsScreen(app: AppState) {
@@ -89,7 +89,7 @@ fun SettingsScreen(app: AppState) {
                 }
             }
             Section(s.volume) {
-                Slider(st.volume, { v -> app.updateSettings { copy(volume = v) } }, valueRange = 0f..1f, onValueChangeFinished = { app.engine.playPitch(com.melodia.app.music.Pitch.parse("C5"), 0.4) })
+                Slider(st.volume, { v -> app.updateSettings { copy(volume = v) } }, valueRange = 0f..1f, onValueChangeFinished = { app.engine.playPitch(com.solfi.app.music.Pitch.parse("C5"), 0.4) })
             }
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Text(s.haptics, Modifier.weight(1f), fontWeight = FontWeight.SemiBold, fontSize = 16.sp)

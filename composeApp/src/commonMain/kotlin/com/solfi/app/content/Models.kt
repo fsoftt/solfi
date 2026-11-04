@@ -1,7 +1,7 @@
-package com.melodia.app.content
+package com.solfi.app.content
 
-import com.melodia.app.music.Lang
-import com.melodia.app.music.Melody
+import com.solfi.app.music.Lang
+import com.solfi.app.music.Melody
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName

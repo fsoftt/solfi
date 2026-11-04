@@ -1,6 +1,6 @@
-package com.melodia.app
+package com.solfi.app
 
-import com.melodia.app.music.*
+import com.solfi.app.music.*
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals

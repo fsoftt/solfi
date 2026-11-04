@@ -1,4 +1,4 @@
-package com.melodia.app.ui.screens
+package com.solfi.app.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
@@ -45,24 +45,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.melodia.app.AppState
-import com.melodia.app.audio.AudioEngine
-import com.melodia.app.audio.PlayOptions
-import com.melodia.app.content.MelodySpec
-import com.melodia.app.content.Option
-import com.melodia.app.content.Step
-import com.melodia.app.logic.RhythmScorer
-import com.melodia.app.music.Clef
-import com.melodia.app.music.Melody
-import com.melodia.app.music.Pitch
-import com.melodia.app.ui.notation.StaffView
-import com.melodia.app.ui.theme.LocalUi
-import com.melodia.app.ui.theme.Palette
-import com.melodia.app.ui.widgets.BigButton
-import com.melodia.app.ui.widgets.FeedbackPanel
-import com.melodia.app.ui.widgets.PianoKeyboard
-import com.melodia.app.ui.widgets.PressCard
-import com.melodia.app.ui.widgets.SecondaryButton
+import com.solfi.app.AppState
+import com.solfi.app.audio.AudioEngine
+import com.solfi.app.audio.PlayOptions
+import com.solfi.app.content.MelodySpec
+import com.solfi.app.content.Option
+import com.solfi.app.content.Step
+import com.solfi.app.logic.RhythmScorer
+import com.solfi.app.music.Clef
+import com.solfi.app.music.Melody
+import com.solfi.app.music.Pitch
+import com.solfi.app.ui.notation.StaffView
+import com.solfi.app.ui.theme.LocalUi
+import com.solfi.app.ui.theme.Palette
+import com.solfi.app.ui.widgets.BigButton
+import com.solfi.app.ui.widgets.FeedbackPanel
+import com.solfi.app.ui.widgets.PianoKeyboard
+import com.solfi.app.ui.widgets.PressCard
+import com.solfi.app.ui.widgets.SecondaryButton
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 
@@ -326,7 +326,7 @@ private fun RhythmTapStep(app: AppState, step: Step.RhythmTap, onDone: (Double?)
     var phase by remember { mutableStateOf(RhythmPhase.READY) }
     val taps = remember { mutableStateListOf<Double>() }
     var finished by remember { mutableStateOf(false) }
-    var result by remember { mutableStateOf<com.melodia.app.logic.RhythmResult?>(null) }
+    var result by remember { mutableStateOf<com.solfi.app.logic.RhythmResult?>(null) }
     var attempts by remember { mutableIntStateOf(0) }
     val pos by app.engine.position.collectAsState()
     val running = phase == RhythmPhase.RUNNING

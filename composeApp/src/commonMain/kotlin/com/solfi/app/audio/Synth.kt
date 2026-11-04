@@ -1,4 +1,4 @@
-package com.melodia.app.audio
+package com.solfi.app.audio
 
 import kotlin.math.PI
 import kotlin.math.exp

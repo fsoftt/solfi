@@ -1,4 +1,4 @@
-package com.melodia.app
+package com.solfi.app
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -8,10 +8,10 @@ import androidx.compose.ui.ImageComposeScene
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import com.melodia.app.music.Melody
-import com.melodia.app.ui.notation.StaffView
-import com.melodia.app.ui.theme.MelodiaTheme
-import com.melodia.app.ui.widgets.Mascot
+import com.solfi.app.music.Melody
+import com.solfi.app.ui.notation.StaffView
+import com.solfi.app.ui.theme.SolfiTheme
+import com.solfi.app.ui.widgets.Mascot
 import org.jetbrains.skia.EncodedImageFormat
 import java.io.File
 import kotlin.test.Test
@@ -21,7 +21,7 @@ import kotlin.test.assertTrue
 class RenderSmokeTest {
     private fun render(name: String, w: Int, h: Int, content: @androidx.compose.runtime.Composable () -> Unit): ByteArray {
         val scene = ImageComposeScene(w, h, Density(2f)) {
-            MelodiaTheme("LIGHT", kid = true) { Surface(color = MaterialTheme.colorScheme.background) { content() } }
+            SolfiTheme("LIGHT", kid = true) { Surface(color = MaterialTheme.colorScheme.background) { content() } }
         }
         val img = scene.render(100_000_000L)
         scene.close()

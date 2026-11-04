@@ -1,4 +1,4 @@
-package com.melodia.app.ui.notation
+package com.solfi.app.ui.notation
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -33,11 +33,11 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.melodia.app.music.Clef
-import com.melodia.app.music.Melody
-import com.melodia.app.music.MelodyEvent
-import com.melodia.app.music.NoteValue
-import com.melodia.app.music.Pitch
+import com.solfi.app.music.Clef
+import com.solfi.app.music.Melody
+import com.solfi.app.music.MelodyEvent
+import com.solfi.app.music.NoteValue
+import com.solfi.app.music.Pitch
 import kotlin.math.max
 import kotlin.math.min
 

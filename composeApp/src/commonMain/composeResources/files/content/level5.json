@@ -696,7 +696,7 @@
   ],
   "badge": {
     "id": "badge-level5",
-    "name": { "es": "Experto Melodía", "en": "Melodía Expert", "pt": "Especialista Melodía" },
+    "name": { "es": "Experto Solfi", "en": "Solfi Expert", "pt": "Especialista Solfi" },
     "description": {
       "es": "Completaste el nivel Experto: compases compuestos, síncopa, intervalos, séptimas, funciones, modos y transposición.",
       "en": "You completed the Expert level: compound meters, syncopation, intervals, sevenths, functions, modes and transposition.",

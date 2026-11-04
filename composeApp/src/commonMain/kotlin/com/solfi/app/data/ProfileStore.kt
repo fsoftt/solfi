@@ -1,6 +1,6 @@
-package com.melodia.app.data
+package com.solfi.app.data
 
-import com.melodia.app.platform.KeyValueStore
+import com.solfi.app.platform.KeyValueStore
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 

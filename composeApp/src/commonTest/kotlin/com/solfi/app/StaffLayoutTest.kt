@@ -1,7 +1,7 @@
-package com.melodia.app
+package com.solfi.app
 
-import com.melodia.app.music.Melody
-import com.melodia.app.ui.notation.StaffLayout
+import com.solfi.app.music.Melody
+import com.solfi.app.ui.notation.StaffLayout
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

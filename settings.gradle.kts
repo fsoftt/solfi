@@ -11,5 +11,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Melodia"
+rootProject.name = "Solfi"
 include(":composeApp")

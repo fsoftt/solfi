@@ -1,8 +1,8 @@
-package com.melodia.app.audio
+package com.solfi.app.audio
 
-import com.melodia.app.music.Melody
-import com.melodia.app.music.Pitch
-import com.melodia.app.platform.AudioSink
+import com.solfi.app.music.Melody
+import com.solfi.app.music.Pitch
+import com.solfi.app.platform.AudioSink
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

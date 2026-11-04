@@ -1,4 +1,4 @@
-package com.melodia.app.platform
+package com.solfi.app.platform
 
 import android.content.Context
 import android.media.AudioAttributes
@@ -66,7 +66,7 @@ actual class AudioSink actual constructor() {
                 render(buf, chunk)
                 t.write(buf, 0, chunk, AudioTrack.WRITE_BLOCKING)
             }
-        }, "melodia-audio").also { it.isDaemon = true; it.start() }
+        }, "solfi-audio").also { it.isDaemon = true; it.start() }
     }
 
     actual fun stop() {

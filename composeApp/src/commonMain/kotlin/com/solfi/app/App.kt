@@ -1,4 +1,4 @@
-package com.melodia.app
+package com.solfi.app
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -23,35 +23,35 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
-import com.melodia.app.audio.AudioEngine
-import com.melodia.app.data.ProfileStore
-import com.melodia.app.platform.AudioSink
-import com.melodia.app.platform.Haptics
-import com.melodia.app.platform.KeyValueStore
-import com.melodia.app.platform.PlatformBackHandler
-import com.melodia.app.platform.systemLanguageCode
-import com.melodia.app.ui.screens.HomeScreen
-import com.melodia.app.ui.screens.LessonScreen
-import com.melodia.app.ui.screens.LevelMapScreen
-import com.melodia.app.ui.screens.OnboardingScreen
-import com.melodia.app.ui.screens.PianoScreen
-import com.melodia.app.ui.screens.ProgressScreen
-import com.melodia.app.ui.screens.SettingsScreen
-import com.melodia.app.ui.screens.SolfeoPlayerScreen
-import com.melodia.app.ui.screens.SolfeosScreen
-import com.melodia.app.ui.theme.LocalUi
-import com.melodia.app.ui.theme.MelodiaTheme
+import com.solfi.app.audio.AudioEngine
+import com.solfi.app.data.ProfileStore
+import com.solfi.app.platform.AudioSink
+import com.solfi.app.platform.Haptics
+import com.solfi.app.platform.KeyValueStore
+import com.solfi.app.platform.PlatformBackHandler
+import com.solfi.app.platform.systemLanguageCode
+import com.solfi.app.ui.screens.HomeScreen
+import com.solfi.app.ui.screens.LessonScreen
+import com.solfi.app.ui.screens.LevelMapScreen
+import com.solfi.app.ui.screens.OnboardingScreen
+import com.solfi.app.ui.screens.PianoScreen
+import com.solfi.app.ui.screens.ProgressScreen
+import com.solfi.app.ui.screens.SettingsScreen
+import com.solfi.app.ui.screens.SolfeoPlayerScreen
+import com.solfi.app.ui.screens.SolfeosScreen
+import com.solfi.app.ui.theme.LocalUi
+import com.solfi.app.ui.theme.SolfiTheme
 
 @Composable
 fun App() {
     val app = remember {
-        AppState(ProfileStore(KeyValueStore("melodia")), AudioEngine(AudioSink()), Haptics(), systemLanguageCode())
+        AppState(ProfileStore(KeyValueStore("solfi")), AudioEngine(AudioSink()), Haptics(), systemLanguageCode())
     }
     LaunchedEffect(Unit) { app.loadContent() }
     DisposableEffect(Unit) { onDispose { app.engine.shutdown() } }
 
     val settings = app.profile?.settings
-    MelodiaTheme(themeSetting = settings?.theme ?: "SYSTEM", kid = settings?.kidMode ?: true) {
+    SolfiTheme(themeSetting = settings?.theme ?: "SYSTEM", kid = settings?.kidMode ?: true) {
         CompositionLocalProvider(LocalUi provides app.ui) {
             Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                 if (app.profile == null) {

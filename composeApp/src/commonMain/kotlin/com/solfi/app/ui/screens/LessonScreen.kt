@@ -1,4 +1,4 @@
-package com.melodia.app.ui.screens
+package com.solfi.app.ui.screens
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
@@ -53,17 +53,17 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.melodia.app.AppState
-import com.melodia.app.logic.CompletionResult
-import com.melodia.app.platform.PlatformBackHandler
-import com.melodia.app.ui.theme.LocalUi
-import com.melodia.app.ui.theme.Palette
-import com.melodia.app.ui.theme.parseHexColor
-import com.melodia.app.ui.widgets.BigButton
-import com.melodia.app.ui.widgets.Confetti
-import com.melodia.app.ui.widgets.Mascot
-import com.melodia.app.ui.widgets.Mood
-import com.melodia.app.ui.widgets.SecondaryButton
+import com.solfi.app.AppState
+import com.solfi.app.logic.CompletionResult
+import com.solfi.app.platform.PlatformBackHandler
+import com.solfi.app.ui.theme.LocalUi
+import com.solfi.app.ui.theme.Palette
+import com.solfi.app.ui.theme.parseHexColor
+import com.solfi.app.ui.widgets.BigButton
+import com.solfi.app.ui.widgets.Confetti
+import com.solfi.app.ui.widgets.Mascot
+import com.solfi.app.ui.widgets.Mood
+import com.solfi.app.ui.widgets.SecondaryButton
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 

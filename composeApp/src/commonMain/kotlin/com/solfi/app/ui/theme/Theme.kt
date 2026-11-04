@@ -1,4 +1,4 @@
-package com.melodia.app.ui.theme
+package com.solfi.app.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,12 +11,12 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.melodia.app.i18n.Strings
-import com.melodia.app.i18n.EsStrings
-import com.melodia.app.music.Lang
-import com.melodia.app.music.NoteNaming
-import com.melodia.app.music.NoteNames
-import com.melodia.app.music.Pitch
+import com.solfi.app.i18n.Strings
+import com.solfi.app.i18n.EsStrings
+import com.solfi.app.music.Lang
+import com.solfi.app.music.NoteNaming
+import com.solfi.app.music.NoteNames
+import com.solfi.app.music.Pitch
 
 /** Everything the UI needs to know about the active profile's presentation settings. */
 data class UiContext(
@@ -76,7 +76,7 @@ private val Dark = darkColorScheme(
 )
 
 @Composable
-fun MelodiaTheme(themeSetting: String, kid: Boolean, content: @Composable () -> Unit) {
+fun SolfiTheme(themeSetting: String, kid: Boolean, content: @Composable () -> Unit) {
     val dark = when (themeSetting) { "DARK" -> true; "LIGHT" -> false; else -> isSystemInDarkTheme() }
     val r = if (kid) 28.dp else 14.dp
     val shapes = Shapes(

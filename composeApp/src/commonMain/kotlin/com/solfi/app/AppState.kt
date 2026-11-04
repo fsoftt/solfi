@@ -1,24 +1,24 @@
-package com.melodia.app
+package com.solfi.app
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.melodia.app.audio.AudioEngine
-import com.melodia.app.content.ContentRepository
-import com.melodia.app.content.LevelContent
-import com.melodia.app.data.Profile
-import com.melodia.app.data.ProfileSettings
-import com.melodia.app.data.ProfileStore
-import com.melodia.app.data.Progress
-import com.melodia.app.i18n.stringsFor
-import com.melodia.app.logic.CompletionResult
-import com.melodia.app.logic.ProgressRepository
-import com.melodia.app.music.Lang
-import com.melodia.app.music.NoteNaming
-import com.melodia.app.platform.Haptics
-import com.melodia.app.platform.todayEpochDay
-import com.melodia.app.ui.theme.UiContext
+import com.solfi.app.audio.AudioEngine
+import com.solfi.app.content.ContentRepository
+import com.solfi.app.content.LevelContent
+import com.solfi.app.data.Profile
+import com.solfi.app.data.ProfileSettings
+import com.solfi.app.data.ProfileStore
+import com.solfi.app.data.Progress
+import com.solfi.app.i18n.stringsFor
+import com.solfi.app.logic.CompletionResult
+import com.solfi.app.logic.ProgressRepository
+import com.solfi.app.music.Lang
+import com.solfi.app.music.NoteNaming
+import com.solfi.app.platform.Haptics
+import com.solfi.app.platform.todayEpochDay
+import com.solfi.app.ui.theme.UiContext
 
 enum class Tab { HOME, LEARN, SOLFEOS, PIANO, PROGRESS }
 
@@ -88,8 +88,8 @@ class AppState(
 
     fun createProfile(name: String, avatar: String, kid: Boolean, lang: Lang, naming: NoteNaming): Profile {
         val p = Profile(
-            id = "p" + com.melodia.app.platform.currentTimeMillis().toString(36) + profiles.size,
-            name = name.trim().ifEmpty { "Melodía" },
+            id = "p" + com.solfi.app.platform.currentTimeMillis().toString(36) + profiles.size,
+            name = name.trim().ifEmpty { "Solfi" },
             avatar = avatar,
             settings = ProfileSettings(language = lang.code, noteNaming = naming.name, kidMode = kid),
         )

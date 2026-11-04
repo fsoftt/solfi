@@ -1,8 +1,8 @@
-package com.melodia.app.content
+package com.solfi.app.content
 
-import com.melodia.app.music.Clef
-import com.melodia.app.music.Melody
-import com.melodia.app.music.Pitch
+import com.solfi.app.music.Clef
+import com.solfi.app.music.Melody
+import com.solfi.app.music.Pitch
 
 /** Validates a level file. Returns a list of human readable problems (empty = valid). */
 object ContentValidator {

@@ -1,4 +1,4 @@
-package com.melodia.app.ui.screens
+package com.solfi.app.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,15 +29,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.melodia.app.AppState
-import com.melodia.app.Route
-import com.melodia.app.content.ContentRepository
-import com.melodia.app.logic.ProgressRepository
-import com.melodia.app.ui.theme.LocalUi
-import com.melodia.app.ui.theme.Palette
-import com.melodia.app.ui.theme.parseHexColor
-import com.melodia.app.ui.widgets.PressCard
-import com.melodia.app.ui.widgets.StatChip
+import com.solfi.app.AppState
+import com.solfi.app.Route
+import com.solfi.app.content.ContentRepository
+import com.solfi.app.logic.ProgressRepository
+import com.solfi.app.ui.theme.LocalUi
+import com.solfi.app.ui.theme.Palette
+import com.solfi.app.ui.theme.parseHexColor
+import com.solfi.app.ui.widgets.PressCard
+import com.solfi.app.ui.widgets.StatChip
 
 @Composable
 fun ProgressScreen(app: AppState) {

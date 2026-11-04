@@ -1,7 +1,7 @@
-package com.melodia.app
+package com.solfi.app
 
-import com.melodia.app.audio.*
-import com.melodia.app.logic.RhythmScorer
+import com.solfi.app.audio.*
+import com.solfi.app.logic.RhythmScorer
 import kotlin.math.abs
 import kotlin.math.sqrt
 import kotlin.test.Test
@@ -53,7 +53,7 @@ class AudioTest {
 
     @Test fun engineSchedulesMelodyNotesAtBeatFrames() {
         val engine = AudioEngine(null)
-        val melody = com.melodia.app.music.Melody.parse("treble", "4/4", "C", 120, "C4:q D4:q E4:h")
+        val melody = com.solfi.app.music.Melody.parse("treble", "4/4", "C", 120, "C4:q D4:q E4:h")
         engine.mixer.logStarts = true
         engine.playMelody(melody, PlayOptions(tempo = 120))
         val buf = FloatArray(1024)
@@ -67,7 +67,7 @@ class AudioTest {
 
     @Test fun countInAndMetronomeClicks() {
         val engine = AudioEngine(null)
-        val melody = com.melodia.app.music.Melody.parse("treble", "4/4", "C", 120, "C4:w")
+        val melody = com.solfi.app.music.Melody.parse("treble", "4/4", "C", 120, "C4:w")
         engine.mixer.logStarts = true
         engine.playMelody(melody, PlayOptions(tempo = 120, metronome = true, countIn = true))
         val buf = FloatArray(1024)
@@ -78,7 +78,7 @@ class AudioTest {
 
     @Test fun outputIsBoundedAndNotSilent() {
         val mixer = Mixer()
-        for (m in listOf(60, 64, 67, 72)) mixer.startNow(PianoVoice(com.melodia.app.music.Pitch.frequencyOfMidi(m), 1f))
+        for (m in listOf(60, 64, 67, 72)) mixer.startNow(PianoVoice(com.solfi.app.music.Pitch.frequencyOfMidi(m), 1f))
         val buf = FloatArray(4096)
         mixer.render(buf, buf.size)
         assertTrue(buf.all { abs(it) <= 1f })
