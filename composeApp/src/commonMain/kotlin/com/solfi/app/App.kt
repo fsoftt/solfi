@@ -9,6 +9,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -22,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.solfi.app.audio.AudioEngine
 import com.solfi.app.data.ProfileStore
@@ -54,10 +56,15 @@ fun App() {
     SolfiTheme(themeSetting = settings?.theme ?: "SYSTEM", kid = settings?.kidMode ?: true) {
         CompositionLocalProvider(LocalUi provides app.ui) {
             Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                if (app.profile == null) {
-                    OnboardingScreen(app)
-                } else {
-                    Root(app)
+                // Large screens (tablets, landscape, desktop): keep a centered phone-width column.
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+                    Box(Modifier.widthIn(max = 600.dp).fillMaxSize()) {
+                        if (app.profile == null) {
+                            OnboardingScreen(app)
+                        } else {
+                            Root(app)
+                        }
+                    }
                 }
             }
         }
