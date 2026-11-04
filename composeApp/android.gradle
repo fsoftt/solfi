@@ -2,6 +2,7 @@
 android {
     namespace = "com.melodia.app"
     compileSdk = 35
+    buildToolsVersion = "36.0.0"
 
     defaultConfig {
         applicationId = "com.melodia.app"
