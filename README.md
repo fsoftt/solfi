@@ -125,6 +125,46 @@ No hace falta tocar código: el mapa de niveles, el progreso y las insignias se 
    todos los idiomas no vacíos).
 4. Añade el idioma al selector de `OnboardingScreen`/`SettingsScreen` (se recorre `Lang.entries`).
 
+## Publicación (release)
+
+La publicación en Google Play la hace el workflow `.github/workflows/release.yml`. La clave de release **NO está en el repositorio** (el repo es público): solo vive en los secretos de GitHub Actions.
+
+### Secretos necesarios (Settings > Secrets and variables > Actions)
+
+| Secreto | Contenido |
+|---|---|
+| `SOLFI_RELEASE_KEYSTORE_BASE64` | Keystore de release codificado en base64 (`base64 -w0 release.keystore`) |
+| `SOLFI_KEYSTORE_PASSWORD` | Contraseña del keystore |
+| `SOLFI_KEY_ALIAS` | Alias de la clave dentro del keystore |
+| `SOLFI_KEY_PASSWORD` | Contraseña de la clave |
+| `PLAY_SERVICE_ACCOUNT_JSON` | JSON completo de la cuenta de servicio de Google Play (texto plano) |
+
+Si `PLAY_SERVICE_ACCOUNT_JSON` está vacío, el workflow compila y firma pero omite la subida a Play.
+
+### Cómo publicar
+
+```
+git tag v1.0.0 && git push origin v1.0.0
+```
+
+O manualmente: Actions > Release > Run workflow, eligiendo `track` (internal, alpha, beta, production) y `status`. Los tags suben a `internal` como `draft` y además crean un GitHub Release con el APK y el AAB firmados. El `versionCode` es el número de ejecución + 100 y el `versionName` es el tag sin la `v`.
+
+### Primera subida manual (una sola vez)
+
+La API de Play no puede crear la app. Crea la app en Play Console, completa la ficha y sube a mano el primer AAB firmado (por ejemplo a pruebas internas), activando Play App Signing. Desde entonces el workflow puede subir versiones.
+
+Primera vez: ejecuta el workflow manualmente con `upload_to_play=false`, descarga el artefacto `solfi-release-<versionName>` (AAB y APK firmados, se sube en todas las ejecuciones) y sube el AAB a mano en Play Console.
+
+### Permisos de la cuenta de servicio
+
+En Play Console > Usuarios y permisos, invita el correo de la cuenta de servicio con acceso a la app y permisos de "Publicar versiones en pruebas / producción" y "Gestionar versiones" (releases). La API de Android Publisher debe estar habilitada en el proyecto de Google Cloud.
+
+### Draft vs completed
+
+Mientras la app nunca se haya publicado, Play solo acepta versiones en estado `draft`: hay que revisarlas y lanzarlas a mano en Play Console. Con `completed` la versión se lanza directamente al track (solo funciona cuando la app ya está publicada).
+
+Localmente, `./gradlew :composeApp:assembleRelease` sin las variables `SOLFI_KEYSTORE_FILE`, `SOLFI_KEYSTORE_PASSWORD`, `SOLFI_KEY_ALIAS` y `SOLFI_KEY_PASSWORD` genera un APK sin firmar y muestra un aviso. R8/minify está desactivado por ahora.
+
 ## Estado conocido
 
 * El target Android se ha escrito completo pero **no se ha podido compilar en el entorno de desarrollo inicial**

@@ -6,3 +6,9 @@ local.properties
 .kotlin/
 .DS_Store
 captures/
+
+# Secrets (never commit)
+*.jks
+*release*.keystore
+*service-account*.json
+play-*.json

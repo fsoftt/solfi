@@ -8,8 +8,8 @@ android {
         applicationId = "com.solfi.app"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = (System.getenv("SOLFI_VERSION_CODE") ?: "1").toInteger()
+        versionName = System.getenv("SOLFI_VERSION_NAME") ?: "1.0.0"
     }
     packaging {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -23,9 +23,31 @@ android {
             keyPassword "android"
         }
     }
+    // Release signing: only from env vars or Gradle properties. Never commit the key.
+    def releaseProp = { String n -> System.getenv(n) ?: (project.findProperty(n)?.toString()) }
+    def relFile = releaseProp("SOLFI_KEYSTORE_FILE")
+    def relStorePass = releaseProp("SOLFI_KEYSTORE_PASSWORD")
+    def relAlias = releaseProp("SOLFI_KEY_ALIAS")
+    def relKeyPass = releaseProp("SOLFI_KEY_PASSWORD")
+    def hasReleaseSigning = [relFile, relStorePass, relAlias, relKeyPass].every { it }
+    if (hasReleaseSigning) {
+        signingConfigs {
+            release {
+                storeFile file(relFile)
+                storePassword relStorePass
+                keyAlias relAlias
+                keyPassword relKeyPass
+            }
+        }
+    } else {
+        logger.warn("WARNING: SOLFI_KEYSTORE_FILE/SOLFI_KEYSTORE_PASSWORD/SOLFI_KEY_ALIAS/SOLFI_KEY_PASSWORD not all set; release build will be UNSIGNED.")
+    }
     buildTypes {
         debug { signingConfig signingConfigs.debug }
-        release { minifyEnabled false }
+        release {
+            minifyEnabled false // R8 intentionally off for now
+            if (hasReleaseSigning) signingConfig signingConfigs.release
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
