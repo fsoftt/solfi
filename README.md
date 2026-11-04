@@ -1,4 +1,5 @@
 # Solfi
+n**Sitio web:** https://fsoftt.github.io/solfi/
 
 Aplicación nativa para **aprender música desde cero**, pensada para niños y adultos. Escrita en Kotlin con
 Compose Multiplatform (Android, iOS y escritorio JVM), sin backend: todo funciona sin conexión y el progreso
@@ -130,3 +131,7 @@ No hace falta tocar código: el mapa de niveles, el progreso y las insignias se 
 * El código de iOS no se ha compilado (solo es posible en macOS).
 * La latencia de entrada táctil no se compensa en el puntaje de ritmo (se usa el reloj de audio sin calibración).
 * Solo existe el nivel 1; los demás muestran «Próximamente».
+
+## Licencia
+
+MIT. Consulta el archivo [LICENSE](LICENSE).
