@@ -1,6 +1,6 @@
 # Solfi
-n**Sitio web:** https://fsoftt.github.io/solfi/
 
+**Sitio web:** https://fsoftt.github.io/solfi/
 Aplicación nativa para **aprender música desde cero**, pensada para niños y adultos. Escrita en Kotlin con
 Compose Multiplatform (Android, iOS y escritorio JVM), sin backend: todo funciona sin conexión y el progreso
 se guarda en el dispositivo.
