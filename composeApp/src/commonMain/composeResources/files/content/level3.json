@@ -1,0 +1,663 @@
+{
+  "level": 3,
+  "title": { "es": "Intermedio", "en": "Intermediate", "pt": "Intermediário" },
+  "description": {
+    "es": "Corcheas y silencios, puntillo y ligadura, sostenidos y bemoles, tonos y semitonos, la escala de Do mayor y los intervalos.",
+    "en": "Eighth notes and rests, dots and ties, sharps and flats, tones and semitones, the C major scale and intervals.",
+    "pt": "Colcheias e pausas, ponto de aumento e ligadura, sustenidos e bemóis, tons e semitons, a escala de Dó maior e os intervalos."
+  },
+  "color": "#E84393",
+  "lessons": [
+    {
+      "id": "l3-eighths",
+      "title": { "es": "Las corcheas", "en": "Eighth Notes", "pt": "As colcheias" },
+      "emoji": "🎶",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Dos por pulso", "en": "Two per beat", "pt": "Duas por tempo" },
+          "text": {
+            "es": "La corchea dura medio pulso: caben dos en cada negra. Se escribe con plica y corchete, o unidas por una barra cuando van juntas. Cuenta «1 y 2 y»: los números son los pulsos y la «y» es la mitad.",
+            "en": "The eighth note lasts half a beat: two fit in every quarter note. It is written with a stem and a flag, or joined by a beam when they go together. Count «1 and 2 and»: the numbers are the beats and the «and» is the half.",
+            "pt": "A colcheia dura meio tempo: cabem duas em cada semínima. Escreve-se com haste e colchete, ou ligadas por uma barra quando andam juntas. Conte «1 e 2 e»: os números são os tempos e o «e» é a metade."
+          },
+          "emoji": "🎶",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "C4:q C4:8 C4:8 D4:q D4:8 D4:8" },
+          "play": true
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Escucha las corcheas: van el doble de rápido que las negras.",
+            "en": "Listen to the eighth notes: they move twice as fast as quarter notes.",
+            "pt": "Escute as colcheias: elas andam o dobro da velocidade das semínimas."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "E4:8 F4:8 G4:q E4:8 F4:8 G4:q | A4:8 G4:8 F4:8 E4:8 D4:h" }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuántas corcheas caben en una negra?",
+            "en": "How many eighth notes fit in one quarter note?",
+            "pt": "Quantas colcheias cabem em uma semínima?"
+          },
+          "options": [
+            { "text": { "es": "1", "en": "1", "pt": "1" } },
+            { "text": { "es": "2", "en": "2", "pt": "2" } },
+            { "text": { "es": "4", "en": "4", "pt": "4" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Una negra vale 1 pulso y una corchea medio pulso, así que caben 2.",
+            "en": "A quarter note is 1 beat and an eighth note is half a beat, so 2 fit.",
+            "pt": "Uma semínima vale 1 tempo e uma colcheia meio tempo, então cabem 2."
+          }
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca este ritmo con corcheas. ¡Dos toques rápidos por pulso!",
+            "en": "Tap this rhythm with eighth notes. Two quick taps per beat!",
+            "pt": "Toque este ritmo com colcheias. Dois toques rápidos por tempo!"
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 70, "notes": "x:q x:8 x:8 x:q x:q | x:8 x:8 x:8 x:8 x:h" },
+          "toleranceMs": 220,
+          "countIn": true,
+          "passScore": 0.6
+        }
+      ]
+    },
+    {
+      "id": "l3-eighth-rests",
+      "title": { "es": "Silencio de corchea", "en": "The Eighth Rest", "pt": "A pausa de colcheia" },
+      "emoji": "🤫",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Medio pulso de silencio", "en": "Half a beat of silence", "pt": "Meio tempo de silêncio" },
+          "text": {
+            "es": "El silencio de corchea dura lo mismo que una corchea: medio pulso sin sonido. Parece un pequeño 7 con una bolita. Escucha cómo la música «respira» entre las notas.",
+            "en": "The eighth rest lasts as long as an eighth note: half a beat without sound. It looks like a small 7 with a little dot. Listen to how the music «breathes» between the notes.",
+            "pt": "A pausa de colcheia dura o mesmo que uma colcheia: meio tempo sem som. Parece um pequeno 7 com uma bolinha. Escute como a música «respira» entre as notas."
+          },
+          "emoji": "🤫",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "C4:8 r:8 D4:q E4:8 r:8 F4:q" },
+          "play": true
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuánto dura un silencio de corchea?",
+            "en": "How long does an eighth rest last?",
+            "pt": "Quanto dura uma pausa de colcheia?"
+          },
+          "options": [
+            { "text": { "es": "Medio pulso", "en": "Half a beat", "pt": "Meio tempo" } },
+            { "text": { "es": "1 pulso", "en": "1 beat", "pt": "1 tempo" } },
+            { "text": { "es": "2 pulsos", "en": "2 beats", "pt": "2 tempos" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Cada silencio dura lo mismo que su nota: la corchea y su silencio valen medio pulso.",
+            "en": "Each rest lasts as long as its note: the eighth note and its rest are both half a beat.",
+            "pt": "Cada pausa dura o mesmo que sua nota: a colcheia e sua pausa valem meio tempo."
+          }
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Escucha y nota los pequeños huecos entre las notas.",
+            "en": "Listen and notice the small gaps between the notes.",
+            "pt": "Escute e perceba os pequenos vazios entre as notas."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "G4:8 r:8 G4:8 r:8 A4:q G4:q | E4:8 r:8 E4:8 r:8 C4:h" }
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca el ritmo. En los silencios, ¡no toques!",
+            "en": "Tap the rhythm. On the rests, do not tap!",
+            "pt": "Toque o ritmo. Nas pausas, não toque!"
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 70, "notes": "x:8 r:8 x:8 x:8 x:q x:q | x:q r:q x:h" },
+          "toleranceMs": 220,
+          "countIn": true,
+          "passScore": 0.6
+        }
+      ]
+    },
+    {
+      "id": "l3-dot-tie",
+      "title": { "es": "Puntillo y ligadura", "en": "Dots and Ties", "pt": "Ponto e ligadura" },
+      "emoji": "🔗",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "El puntillo", "en": "The dot", "pt": "O ponto de aumento" },
+          "text": {
+            "es": "Un punto junto a una nota le suma la mitad de su valor. Una negra con puntillo dura 1 + ½ = 1½ pulsos. Una blanca con puntillo dura 2 + 1 = 3 pulsos.",
+            "en": "A dot next to a note adds half of its value. A dotted quarter note lasts 1 + ½ = 1½ beats. A dotted half note lasts 2 + 1 = 3 beats.",
+            "pt": "Um ponto ao lado de uma nota soma metade do seu valor. Uma semínima pontuada dura 1 + ½ = 1½ tempo. Uma mínima pontuada dura 2 + 1 = 3 tempos."
+          },
+          "emoji": "⚫",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "C4:q. D4:8 E4:q F4:q | G4:h. G4:q" },
+          "play": true
+        },
+        {
+          "type": "explain",
+          "title": { "es": "La ligadura", "en": "The tie", "pt": "A ligadura" },
+          "text": {
+            "es": "La ligadura es una curva que une dos notas de la misma altura. No vuelves a tocar la segunda: sumas las duraciones y la nota suena más tiempo. Aquí, blanca + negra = 3 pulsos.",
+            "en": "A tie is a curve joining two notes of the same pitch. You do not play the second one again: you add the durations and the note sounds longer. Here, half note + quarter note = 3 beats.",
+            "pt": "A ligadura é uma curva que une duas notas da mesma altura. Você não toca a segunda de novo: soma as durações e a nota soa por mais tempo. Aqui, mínima + semínima = 3 tempos."
+          },
+          "emoji": "🔗",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "G4:h ~ G4:q A4:q | G4:w" },
+          "play": true
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuántos pulsos dura una negra con puntillo?",
+            "en": "How many beats does a dotted quarter note last?",
+            "pt": "Quantos tempos dura uma semínima pontuada?"
+          },
+          "options": [
+            { "text": { "es": "1 pulso", "en": "1 beat", "pt": "1 tempo" } },
+            { "text": { "es": "1 pulso y medio", "en": "1½ beats", "pt": "1 tempo e meio" } },
+            { "text": { "es": "2 pulsos", "en": "2 beats", "pt": "2 tempos" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "La negra vale 1 y el puntillo suma la mitad (½): total 1½ pulsos.",
+            "en": "The quarter note is worth 1 and the dot adds half (½): total 1½ beats.",
+            "pt": "A semínima vale 1 e o ponto soma a metade (½): total 1½ tempo."
+          }
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca el ritmo con puntillo: «larga-corta» en el primer compás.",
+            "en": "Tap the dotted rhythm: «long-short» in the first measure.",
+            "pt": "Toque o ritmo pontuado: «longa-curta» no primeiro compasso."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 70, "notes": "x:q. x:8 x:q x:q | x:h. x:q" },
+          "toleranceMs": 220,
+          "countIn": true,
+          "passScore": 0.6
+        }
+      ]
+    },
+    {
+      "id": "l3-accidentals",
+      "title": { "es": "Sostenidos y bemoles", "en": "Sharps and Flats", "pt": "Sustenidos e bemóis" },
+      "emoji": "♯",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Sostenido ♯", "en": "Sharp ♯", "pt": "Sustenido ♯" },
+          "text": {
+            "es": "El sostenido (♯) sube la nota un semitono: la deja un poquito más aguda. Va antes de la nota y vale para todo el compás. Fa (F) → Fa sostenido (F♯).",
+            "en": "The sharp (♯) raises a note by a semitone: it makes it slightly higher. It goes before the note and lasts for the whole measure. Fa (F) → Fa sharp (F♯).",
+            "pt": "O sustenido (♯) sobe a nota um semitom: deixa-a um pouquinho mais aguda. Vem antes da nota e vale para todo o compasso. Fá (F) → Fá sustenido (F♯)."
+          },
+          "emoji": "♯",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "F4:q F#4:q G4:h" },
+          "play": true
+        },
+        {
+          "type": "explain",
+          "title": { "es": "Bemol ♭ y becuadro ♮", "en": "Flat ♭ and natural ♮", "pt": "Bemol ♭ e bequadro ♮" },
+          "text": {
+            "es": "El bemol (♭) baja la nota un semitono: la deja más grave. El becuadro (♮) cancela un sostenido o un bemol y devuelve la nota a su sonido natural. Escucha Si (B), Si bemol (B♭) y La (A).",
+            "en": "The flat (♭) lowers a note by a semitone: it makes it lower. The natural (♮) cancels a sharp or a flat and brings the note back to its natural sound. Listen to Si (B), Si flat (B♭) and La (A).",
+            "pt": "O bemol (♭) desce a nota um semitom: deixa-a mais grave. O bequadro (♮) cancela um sustenido ou um bemol e devolve a nota ao seu som natural. Escute Si (B), Si bemol (B♭) e Lá (A)."
+          },
+          "emoji": "♭",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "B4:q Bb4:q B4:q A4:q" },
+          "play": true
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué hace un sostenido?",
+            "en": "What does a sharp do?",
+            "pt": "O que faz um sustenido?"
+          },
+          "options": [
+            { "text": { "es": "Sube la nota un semitono", "en": "Raises the note by a semitone", "pt": "Sobe a nota um semitom" } },
+            { "text": { "es": "Baja la nota un semitono", "en": "Lowers the note by a semitone", "pt": "Desce a nota um semitom" } },
+            { "text": { "es": "Cancela la alteración", "en": "Cancels the accidental", "pt": "Cancela a alteração" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Sostenido sube, bemol baja y becuadro cancela. Recuerda: ♯ = más agudo.",
+            "en": "Sharp raises, flat lowers and natural cancels. Remember: ♯ = higher.",
+            "pt": "Sustenido sobe, bemol desce e bequadro cancela. Lembre: ♯ = mais agudo."
+          }
+        },
+        {
+          "type": "identifyNote",
+          "prompt": {
+            "es": "¿Qué nota es esta?",
+            "en": "Which note is this?",
+            "pt": "Que nota é esta?"
+          },
+          "clef": "treble",
+          "note": "F#4",
+          "choices": ["F4", "F#4", "Gb4", "G4"],
+          "explanation": {
+            "es": "Es un Fa con sostenido: la nota Fa subida un semitono.",
+            "en": "It is an F with a sharp: the note F raised by a semitone.",
+            "pt": "É um Fá com sustenido: a nota Fá subida um semitom."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca Do, Do sostenido y Re: son tres teclas vecinas.",
+            "en": "Play C, C sharp and D: three neighboring keys.",
+            "pt": "Toque Dó, Dó sustenido e Ré: são três teclas vizinhas."
+          },
+          "targets": ["C4", "C#4", "D4"],
+          "showStaff": true,
+          "showLabels": true,
+          "clef": "treble"
+        }
+      ]
+    },
+    {
+      "id": "l3-semitones",
+      "title": { "es": "Tonos y semitonos", "en": "Tones and Semitones", "pt": "Tons e semitons" },
+      "emoji": "📏",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "La distancia entre sonidos", "en": "The distance between sounds", "pt": "A distância entre os sons" },
+          "text": {
+            "es": "El semitono es la distancia más pequeña del piano: de una tecla a la vecina, sea blanca o negra. Un tono son dos semitonos. Entre Do (C) y Re (D) hay un tono; entre Mi (E) y Fa (F) hay solo un semitono, porque no hay tecla negra en medio.",
+            "en": "The semitone is the smallest distance on the piano: from one key to its neighbor, white or black. A tone is two semitones. Between Do (C) and Re (D) there is a tone; between Mi (E) and Fa (F) there is only a semitone, because there is no black key in between.",
+            "pt": "O semitom é a menor distância do piano: de uma tecla à vizinha, branca ou preta. Um tom são dois semitons. Entre Dó (C) e Ré (D) há um tom; entre Mi (E) e Fá (F) há só um semitom, pois não há tecla preta no meio."
+          },
+          "emoji": "📏",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 70, "notes": "C4:h D4:h | E4:h F4:h" },
+          "play": true
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué distancia hay entre Mi (E) y Fa (F)?",
+            "en": "What is the distance between Mi (E) and Fa (F)?",
+            "pt": "Qual é a distância entre Mi (E) e Fá (F)?"
+          },
+          "options": [
+            { "text": { "es": "Un semitono", "en": "A semitone", "pt": "Um semitom" } },
+            { "text": { "es": "Un tono", "en": "A tone", "pt": "Um tom" } },
+            { "text": { "es": "Dos tonos", "en": "Two tones", "pt": "Dois tons" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Mi y Fa son teclas blancas pegadas, sin tecla negra en medio: un semitono.",
+            "en": "Mi and Fa are adjacent white keys with no black key between them: a semitone.",
+            "pt": "Mi e Fá são teclas brancas coladas, sem tecla preta no meio: um semitom."
+          }
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha las dos notas. ¿La distancia es un tono o un semitono?",
+            "en": "Listen to the two notes. Is the distance a tone or a semitone?",
+            "pt": "Escute as duas notas. A distância é um tom ou um semitom?"
+          },
+          "sound": { "notes": ["C4", "D4"], "together": false, "tempo": 80 },
+          "options": [
+            { "text": { "es": "Un tono", "en": "A tone", "pt": "Um tom" } },
+            { "text": { "es": "Un semitono", "en": "A semitone", "pt": "Um semitom" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "De Do a Re hay dos semitonos (Do–Do♯–Re): es un tono.",
+            "en": "From Do to Re there are two semitones (Do–Do♯–Re): it is a tone.",
+            "pt": "De Dó a Ré há dois semitons (Dó–Dó♯–Ré): é um tom."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca un semitono: Mi y luego Fa.",
+            "en": "Play a semitone: Mi, then Fa.",
+            "pt": "Toque um semitom: Mi e depois Fá."
+          },
+          "targets": ["E4", "F4"],
+          "showStaff": true,
+          "showLabels": true,
+          "clef": "treble"
+        }
+      ]
+    },
+    {
+      "id": "l3-cmajor",
+      "title": { "es": "Escala de Do mayor", "en": "The C Major Scale", "pt": "A escala de Dó maior" },
+      "emoji": "🪜",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Ocho escalones", "en": "Eight steps", "pt": "Oito degraus" },
+          "text": {
+            "es": "Una escala es una escalera de notas. La de Do mayor usa solo teclas blancas: Do Re Mi Fa Sol La Si Do. Su patrón es tono, tono, semitono, tono, tono, tono, semitono. Los semitonos caen entre Mi–Fa y Si–Do.",
+            "en": "A scale is a staircase of notes. C major uses only white keys: Do Re Mi Fa Sol La Si Do. Its pattern is tone, tone, semitone, tone, tone, tone, semitone. The semitones fall between Mi–Fa and Si–Do.",
+            "pt": "Uma escala é uma escada de notas. A de Dó maior usa só teclas brancas: Dó Ré Mi Fá Sol Lá Si Dó. Seu padrão é tom, tom, semitom, tom, tom, tom, semitom. Os semitons caem entre Mi–Fá e Si–Dó."
+          },
+          "emoji": "🪜",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "C4:q D4:q E4:q F4:q | G4:q A4:q B4:q C5:q" },
+          "play": true
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Escucha la escala bajando: del Do agudo al Do grave.",
+            "en": "Listen to the scale going down: from the high Do to the low Do.",
+            "pt": "Escute a escala descendo: do Dó agudo ao Dó grave."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "C5:q B4:q A4:q G4:q | F4:q E4:q D4:q C4:q" }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Entre qué grados de la escala de Do mayor hay semitonos?",
+            "en": "Between which degrees of the C major scale are the semitones?",
+            "pt": "Entre quais graus da escala de Dó maior estão os semitons?"
+          },
+          "options": [
+            { "text": { "es": "3º–4º y 7º–8º", "en": "3rd–4th and 7th–8th", "pt": "3º–4º e 7º–8º" } },
+            { "text": { "es": "1º–2º y 5º–6º", "en": "1st–2nd and 5th–6th", "pt": "1º–2º e 5º–6º" } },
+            { "text": { "es": "2º–3º y 6º–7º", "en": "2nd–3rd and 6th–7th", "pt": "2º–3º e 6º–7º" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Los semitonos son Mi–Fa (3º–4º) y Si–Do (7º–8º). Los demás pasos son tonos.",
+            "en": "The semitones are Mi–Fa (3rd–4th) and Si–Do (7th–8th). The other steps are tones.",
+            "pt": "Os semitons são Mi–Fá (3º–4º) e Si–Dó (7º–8º). Os outros passos são tons."
+          }
+        },
+        {
+          "type": "identifyNote",
+          "prompt": {
+            "es": "Esta nota cierra la escala. ¿Cuál es?",
+            "en": "This note closes the scale. Which is it?",
+            "pt": "Esta nota fecha a escala. Qual é?"
+          },
+          "clef": "treble",
+          "note": "C5",
+          "choices": ["A4", "B4", "C5", "D5"],
+          "explanation": {
+            "es": "Es el Do agudo, una octava sobre el Do central.",
+            "en": "It is the high Do, one octave above middle Do.",
+            "pt": "É o Dó agudo, uma oitava acima do Dó central."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca toda la escala de Do mayor subiendo.",
+            "en": "Play the whole C major scale going up.",
+            "pt": "Toque toda a escala de Dó maior subindo."
+          },
+          "targets": ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        }
+      ]
+    },
+    {
+      "id": "l3-intervals",
+      "title": { "es": "Intervalos simples", "en": "Simple Intervals", "pt": "Intervalos simples" },
+      "emoji": "↔️",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Contar notas", "en": "Counting notes", "pt": "Contar notas" },
+          "text": {
+            "es": "Un intervalo es la distancia entre dos notas. Se nombra con un número: cuenta las dos notas y las que hay en medio. De Do a Mi son tres notas (Do, Re, Mi): una tercera (3ª). De Do a Sol: una quinta (5ª). De Do a Do agudo: una octava (8ª).",
+            "en": "An interval is the distance between two notes. It is named with a number: count both notes and the ones in between. From Do to Mi there are three notes (Do, Re, Mi): a third (3rd). From Do to Sol: a fifth (5th). From Do to the high Do: an octave (8th).",
+            "pt": "Um intervalo é a distância entre duas notas. Recebe um número: conte as duas notas e as que estão no meio. De Dó a Mi são três notas (Dó, Ré, Mi): uma terça (3ª). De Dó a Sol: uma quinta (5ª). De Dó ao Dó agudo: uma oitava (8ª)."
+          },
+          "emoji": "↔️",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 70, "notes": "C4:h E4:h | C4:h G4:h | C4:h C5:h" },
+          "play": true
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué intervalo hay de Do a Fa?",
+            "en": "What interval is there from Do to Fa?",
+            "pt": "Que intervalo há de Dó a Fá?"
+          },
+          "options": [
+            { "text": { "es": "Tercera (3ª)", "en": "Third (3rd)", "pt": "Terça (3ª)" } },
+            { "text": { "es": "Cuarta (4ª)", "en": "Fourth (4th)", "pt": "Quarta (4ª)" } },
+            { "text": { "es": "Quinta (5ª)", "en": "Fifth (5th)", "pt": "Quinta (5ª)" } },
+            { "text": { "es": "Sexta (6ª)", "en": "Sixth (6th)", "pt": "Sexta (6ª)" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Do, Re, Mi, Fa: cuatro notas, así que es una cuarta.",
+            "en": "Do, Re, Mi, Fa: four notes, so it is a fourth.",
+            "pt": "Dó, Ré, Mi, Fá: quatro notas, então é uma quarta."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 70, "notes": "C4:h F4:h" }
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha las dos notas juntas. ¿Qué intervalo es?",
+            "en": "Listen to the two notes together. Which interval is it?",
+            "pt": "Escute as duas notas juntas. Que intervalo é?"
+          },
+          "sound": { "notes": ["C4", "C5"], "together": true, "tempo": 80 },
+          "options": [
+            { "text": { "es": "Segunda (2ª)", "en": "Second (2nd)", "pt": "Segunda (2ª)" } },
+            { "text": { "es": "Quinta (5ª)", "en": "Fifth (5th)", "pt": "Quinta (5ª)" } },
+            { "text": { "es": "Octava (8ª)", "en": "Octave (8th)", "pt": "Oitava (8ª)" } }
+          ],
+          "answer": 2,
+          "explanation": {
+            "es": "Las dos notas son Do, una aguda y otra grave: suenan casi como una sola. Es una octava.",
+            "en": "Both notes are Do, one high and one low: they sound almost like one. It is an octave.",
+            "pt": "As duas notas são Dó, uma aguda e outra grave: soam quase como uma só. É uma oitava."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca una tercera desde Re: Re y luego Fa.",
+            "en": "Play a third from Re: Re, then Fa.",
+            "pt": "Toque uma terça a partir de Ré: Ré e depois Fá."
+          },
+          "targets": ["D4", "F4"],
+          "showStaff": true,
+          "showLabels": true,
+          "clef": "treble"
+        }
+      ]
+    },
+    {
+      "id": "l3-exam",
+      "title": { "es": "Examen del nivel 3", "en": "Level 3 Exam", "pt": "Exame do nível 3" },
+      "emoji": "🏆",
+      "isExam": true,
+      "steps": [
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuánto dura una blanca con puntillo?",
+            "en": "How long does a dotted half note last?",
+            "pt": "Quanto dura uma mínima pontuada?"
+          },
+          "options": [
+            { "text": { "es": "2 pulsos", "en": "2 beats", "pt": "2 tempos" } },
+            { "text": { "es": "3 pulsos", "en": "3 beats", "pt": "3 tempos" } },
+            { "text": { "es": "4 pulsos", "en": "4 beats", "pt": "4 tempos" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "La blanca vale 2 y el puntillo suma 1: total 3 pulsos.",
+            "en": "The half note is worth 2 and the dot adds 1: total 3 beats.",
+            "pt": "A mínima vale 2 e o ponto soma 1: total 3 tempos."
+          }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué signo baja una nota un semitono?",
+            "en": "Which sign lowers a note by a semitone?",
+            "pt": "Qual sinal desce uma nota um semitom?"
+          },
+          "options": [
+            { "text": { "es": "Sostenido ♯", "en": "Sharp ♯", "pt": "Sustenido ♯" } },
+            { "text": { "es": "Bemol ♭", "en": "Flat ♭", "pt": "Bemol ♭" } },
+            { "text": { "es": "Becuadro ♮", "en": "Natural ♮", "pt": "Bequadro ♮" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "El bemol baja; el sostenido sube; el becuadro cancela.",
+            "en": "The flat lowers; the sharp raises; the natural cancels.",
+            "pt": "O bemol desce; o sustenido sobe; o bequadro cancela."
+          }
+        },
+        {
+          "type": "identifyNote",
+          "prompt": {
+            "es": "¿Qué nota es esta?",
+            "en": "Which note is this?",
+            "pt": "Que nota é esta?"
+          },
+          "clef": "treble",
+          "note": "Bb4",
+          "choices": ["A4", "Bb4", "B4", "C5"],
+          "explanation": {
+            "es": "Es Si bemol: la nota Si bajada un semitono.",
+            "en": "It is Si flat: the note Si lowered by a semitone.",
+            "pt": "É Si bemol: a nota Si descida um semitom."
+          }
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha: ¿es un tono o un semitono?",
+            "en": "Listen: is it a tone or a semitone?",
+            "pt": "Escute: é um tom ou um semitom?"
+          },
+          "sound": { "notes": ["B4", "C5"], "together": false, "tempo": 80 },
+          "options": [
+            { "text": { "es": "Un tono", "en": "A tone", "pt": "Um tom" } },
+            { "text": { "es": "Un semitono", "en": "A semitone", "pt": "Um semitom" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "De Si a Do no hay tecla negra en medio: es un semitono.",
+            "en": "From Si to Do there is no black key in between: it is a semitone.",
+            "pt": "De Si a Dó não há tecla preta no meio: é um semitom."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca una quinta: Do y luego Sol.",
+            "en": "Play a fifth: Do, then Sol.",
+            "pt": "Toque uma quinta: Dó e depois Sol."
+          },
+          "targets": ["C4", "G4"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca este ritmo con corcheas, puntillo y silencio.",
+            "en": "Tap this rhythm with eighth notes, a dot and a rest.",
+            "pt": "Toque este ritmo com colcheias, ponto e pausa."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 70, "notes": "x:q. x:8 x:8 r:8 x:q | x:8 x:8 x:8 x:8 x:h" },
+          "toleranceMs": 200,
+          "countIn": true,
+          "passScore": 0.6
+        }
+      ]
+    }
+  ],
+  "solfeos": [
+    {
+      "id": "s3-eighths",
+      "title": { "es": "Corcheas saltarinas", "en": "Bouncy Eighths", "pt": "Colcheias saltitantes" },
+      "description": {
+        "es": "Lee con calma y cuenta «1 y 2 y». Sube y baja por grados con corcheas.",
+        "en": "Read calmly and count «1 and 2 and». Step up and down with eighth notes.",
+        "pt": "Leia com calma e conte «1 e 2 e». Suba e desça por graus com colcheias."
+      },
+      "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 76, "notes": "C4:q C4:8 D4:8 E4:q E4:8 D4:8 | C4:8 D4:8 E4:8 F4:8 G4:h | G4:8 F4:8 E4:8 D4:8 C4:h" }
+    },
+    {
+      "id": "s3-rests",
+      "title": { "es": "Respiros de corchea", "en": "Eighth-Rest Breaths", "pt": "Respiros de colcheia" },
+      "description": {
+        "es": "En compás de 2/4, cada silencio de corchea es medio pulso de aire. ¡No lo toques!",
+        "en": "In 2/4, each eighth rest is half a beat of air. Do not play it!",
+        "pt": "Em compasso 2/4, cada pausa de colcheia é meio tempo de ar. Não toque!"
+      },
+      "melody": { "clef": "treble", "time": "2/4", "key": "C", "tempo": 76, "notes": "C4:8 r:8 E4:8 r:8 | G4:q G4:8 r:8 | A4:8 r:8 F4:8 r:8 | E4:q D4:8 r:8 | C4:h" }
+    },
+    {
+      "id": "s3-dotted",
+      "title": { "es": "Puntillo en marcha", "en": "Dotted March", "pt": "Ponto em marcha" },
+      "description": {
+        "es": "Una marcha con negras con puntillo: «larga-corta» y un final tranquilo.",
+        "en": "A march with dotted quarter notes: «long-short» and a calm ending.",
+        "pt": "Uma marcha com semínimas pontuadas: «longa-curta» e um final tranquilo."
+      },
+      "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 84, "notes": "E4:q. F4:8 G4:q G4:q | A4:q. G4:8 E4:h | F4:q. E4:8 D4:q D4:q | C4:w" }
+    },
+    {
+      "id": "s3-tie",
+      "title": { "es": "Vals con ligadura", "en": "Tied Waltz", "pt": "Valsa com ligadura" },
+      "description": {
+        "es": "En 3/4, una nota larga ligada llena todo el segundo compás. Mantén el Do sonando.",
+        "en": "In 3/4, a long tied note fills the whole second measure. Keep the Do ringing.",
+        "pt": "Em 3/4, uma nota longa ligada preenche todo o segundo compasso. Mantenha o Dó soando."
+      },
+      "melody": { "clef": "treble", "time": "3/4", "key": "C", "tempo": 90, "notes": "G4:q A4:q B4:q | C5:h ~ C5:q | B4:q A4:q G4:q | G4:h." }
+    },
+    {
+      "id": "s3-chromatic",
+      "title": { "es": "Escalera de semitonos", "en": "Semitone Staircase", "pt": "Escada de semitons" },
+      "description": {
+        "es": "Sostenidos al subir y una bajada por semitonos. Cada alteración vale hasta el final del compás.",
+        "en": "Sharps going up and a descent by semitones. Each accidental lasts until the end of the measure.",
+        "pt": "Sustenidos na subida e uma descida por semitons. Cada alteração vale até o fim do compasso."
+      },
+      "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 76, "notes": "C4:q C#4:q D4:q D#4:q | E4:q F4:q F#4:q G4:q | G4:q F#4:q F4:q E4:q | C4:w" }
+    },
+    {
+      "id": "s3-cmajor",
+      "title": { "es": "Gran escala de Do", "en": "Grand C Scale", "pt": "Grande escala de Dó" },
+      "description": {
+        "es": "Sube la escala de Do mayor con corcheas y baja con negras.",
+        "en": "Go up the C major scale in eighth notes and come down in quarter notes.",
+        "pt": "Suba a escala de Dó maior com colcheias e desça com semínimas."
+      },
+      "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "C4:8 D4:8 E4:8 F4:8 G4:8 A4:8 B4:8 C5:8 | C5:q B4:q A4:q G4:q | F4:q E4:q D4:q C4:q" }
+    }
+  ],
+  "badge": {
+    "id": "badge-level3",
+    "name": { "es": "Músico Intermedio", "en": "Intermediate Musician", "pt": "Músico Intermediário" },
+    "description": {
+      "es": "Dominas corcheas, puntillos, alteraciones, la escala de Do mayor y los intervalos.",
+      "en": "You have mastered eighth notes, dots, accidentals, the C major scale and intervals.",
+      "pt": "Você dominou colcheias, pontos, alterações, a escala de Dó maior e os intervalos."
+    },
+    "emoji": "🎼"
+  }
+}
