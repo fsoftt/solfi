@@ -41,12 +41,12 @@ import com.melodia.app.music.Pitch
 import kotlin.math.max
 import kotlin.math.min
 
-data class StaffColors(val ink: Color, val staff: Color, val highlight: Color, val label: Color)
+data class StaffColors(val ink: Color, val staff: Color, val highlight: Color, val label: Color, val paper: Color = Color.White)
 
 @Composable
 fun defaultStaffColors(): StaffColors {
     val c = MaterialTheme.colorScheme
-    return StaffColors(ink = c.onSurface, staff = c.onSurface.copy(alpha = 0.55f), highlight = c.primary, label = c.onSurfaceVariant)
+    return StaffColors(ink = c.onSurface, staff = c.onSurface.copy(alpha = 0.55f), highlight = c.primary, label = c.onSurfaceVariant, paper = c.surface)
 }
 
 /**
@@ -121,7 +121,7 @@ private fun DrawScope.drawStaff(
             val style = TextStyle(fontSize = (g * 2.0f).toSp(), fontWeight = FontWeight.Bold, color = colors.ink)
             val num = tm.measure(melody.time.beats.toString(), style)
             val den = tm.measure(melody.time.unit.toString(), style)
-            val cx = x + 0.6f * g
+            val cx = x + 1.2f * g
             drawText(num, topLeft = Offset(cx - num.size.width / 2f, top + 1f * g - num.size.height / 2f))
             drawText(den, topLeft = Offset(cx - den.size.width / 2f, top + 3f * g - den.size.height / 2f))
         }
@@ -143,7 +143,7 @@ private fun DrawScope.drawStaff(
                     val p = gl.heads.last().pitch
                     val style = TextStyle(fontSize = (g * 0.95f).toSp().let { if (it.value < 10f) 10.sp else it }, fontWeight = if (active) FontWeight.Bold else FontWeight.Medium, color = if (active) colors.highlight else colors.label)
                     val r = tm.measure(labelFor(p), style)
-                    drawText(r, topLeft = Offset(gl.x - r.size.width / 2f, bottom + 3.5f * g))
+                    drawText(r, topLeft = Offset(gl.x - r.size.width / 2f, bottom + 3.0f * g))
                 }
             }
             // beams
@@ -185,8 +185,8 @@ private fun DrawScope.drawNote(gl: NoteGlyph, m: MeasureLayout, melody: Melody, 
         val w = headW * sc
         val hh = headH * sc
         if (whole) {
-            drawOval(color, Offset(cx - w / 2, cy - hh / 2), Size(w, hh), style = Stroke(g * 0.26f))
-            rotate(-30f, Offset(cx, cy)) { drawOval(color, Offset(cx - w * 0.2f, cy - hh * 0.36f), Size(w * 0.4f, hh * 0.72f), style = Stroke(g * 0.2f)) }
+            drawOval(color, Offset(cx - w / 2, cy - hh / 2), Size(w, hh))
+            rotate(-40f, Offset(cx, cy)) { drawOval(colors.paper, Offset(cx - w * 0.17f, cy - hh * 0.34f), Size(w * 0.34f, hh * 0.68f)) }
         } else if (hollow) {
             rotate(-22f, Offset(cx, cy)) {
                 drawOval(color, Offset(cx - w / 2, cy - hh / 2), Size(w, hh), style = Stroke(g * 0.24f))

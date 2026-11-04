@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Mascot: a smiling music note, inside the 66dp adaptive-icon safe zone of a 108dp canvas. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- soft shadow under the head -->
+    <path
+        android:fillColor="#33000000"
+        android:pathData="M32,68 a18,14 0 1,0 36,0 a18,14 0 1,0 -36,0 z" />
+    <!-- head -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,64 a18,14 0 1,0 36,0 a18,14 0 1,0 -36,0 z" />
+    <!-- stem -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:pathData="M65,62 L65,30" />
+    <!-- flag -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M65,30 C71,36 79,38 77,49" />
+    <!-- eyes -->
+    <path
+        android:fillColor="#2B2250"
+        android:pathData="M41,60 a2.6,2.6 0 1,0 5.2,0 a2.6,2.6 0 1,0 -5.2,0 z" />
+    <path
+        android:fillColor="#2B2250"
+        android:pathData="M54,60 a2.6,2.6 0 1,0 5.2,0 a2.6,2.6 0 1,0 -5.2,0 z" />
+    <!-- cheeks -->
+    <path
+        android:fillColor="#99FF8FD0"
+        android:pathData="M36,66 a2.8,2.8 0 1,0 5.6,0 a2.8,2.8 0 1,0 -5.6,0 z" />
+    <path
+        android:fillColor="#99FF8FD0"
+        android:pathData="M58.4,66 a2.8,2.8 0 1,0 5.6,0 a2.8,2.8 0 1,0 -5.6,0 z" />
+    <!-- smile -->
+    <path
+        android:strokeColor="#2B2250"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M44,67 Q50,73 56,67" />
+</vector>

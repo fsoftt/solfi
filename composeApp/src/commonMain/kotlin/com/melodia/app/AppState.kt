@@ -66,7 +66,12 @@ class AppState(
     val availableLevels: List<LevelContent> get() = levels.filterNotNull()
 
     suspend fun loadContent() {
-        levels = ContentRepository.loadAll()
+        useLevels(ContentRepository.loadAll())
+    }
+
+    /** Sets the loaded levels (index 0 = level 1; null = missing level). */
+    fun useLevels(list: List<LevelContent?>) {
+        levels = list
         contentLoaded = true
     }
 

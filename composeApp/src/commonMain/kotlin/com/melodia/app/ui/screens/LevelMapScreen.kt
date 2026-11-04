@@ -130,7 +130,7 @@ private fun LessonNode(level: LevelContent, index: Int, app: AppState, levelInde
     val completed = result != null && result.completions > 0
     val current = unlocked && !completed
     val nodeSize = (if (ui.kid) 84.dp else 72.dp) + (if (lesson.isExam) 8.dp else 0.dp)
-    val rowH = 124.dp
+    val rowH = nodeSize + 66.dp
     fun xf(i: Int) = 0.5f + 0.26f * sin(i * 1.15f)
     val density = LocalDensity.current
 

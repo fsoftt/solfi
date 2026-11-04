@@ -71,7 +71,7 @@ class StaffLayout(
         return base + if (accidental) 1.2f else 0f
     }
 
-    private fun headerUnits(first: Boolean): Float = 3.6f + keyAccCount * 1.0f + (if (first && showTime) 2.6f else 0f) + 0.6f
+    private fun headerUnits(first: Boolean): Float = 3.6f + keyAccCount * 1.0f + (if (first && showTime) 3.1f else 0f) + 0.6f
 
     private fun build(width: Float) {
         // accidentals to show per event head (needs running state per measure)
@@ -91,6 +91,11 @@ class StaffLayout(
         val maxMeasure = raw.maxOf { it.natural }
         val needed = headerUnits(true) + maxMeasure
         gap = min(desiredGap, width / needed)
+        if (raw.size >= 2) {
+            // prefer two measures per line when that only needs a modest reduction of the staff size
+            val two = width / (headerUnits(true) + 2 * maxMeasure)
+            if (two >= desiredGap * 0.8f) gap = min(desiredGap, two)
+        }
 
         // greedy wrap, in units
         val availUnits = width / gap
@@ -109,7 +114,7 @@ class StaffLayout(
         val g = gap
         val topPad = 4.2f * g
         val staffH = 4f * g
-        val below = 3.4f * g + (if (showLabels) 1.9f * g else 0f)
+        val below = 3.0f * g + (if (showLabels) 1.7f * g else 0f)
         val sysH = topPad + staffH + below
         var y = 0f
         rows.forEachIndexed { si, idxs ->
