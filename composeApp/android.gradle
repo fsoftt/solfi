@@ -16,7 +16,7 @@ android {
     }
     signingConfigs {
         debug {
-            // Committed debug-only key (private repo), same as PiccoloReader's.
+            // Debug-only key, the same one PiccoloReader uses for debug builds. Release builds are not signed with it.
             storeFile rootProject.file("keystore/debug.keystore")
             storePassword "android"
             keyAlias "androiddebugkey"
