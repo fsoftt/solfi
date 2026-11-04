@@ -17,7 +17,7 @@ data class CompletionResult(
 
 /** Pure progression rules: XP, stars, sequential unlock, exams and daily streak. */
 object ProgressRepository {
-    const val EXAM_PASS = 0.6
+    const val EXAM_PASS = 0.7
     const val XP_PER_XPLEVEL = 100
 
     fun starsFor(accuracy: Double): Int = when {
@@ -46,6 +46,13 @@ object ProgressRepository {
     fun isLessonCompleted(level: LevelContent, index: Int, p: Progress): Boolean {
         val l = level.lessons.getOrNull(index) ?: return false
         return p.result(level.level, l.id)?.let { it.completions > 0 } == true
+    }
+
+    /** Single guard for every entry point (map, home, deep state): a lesson opens only when its level and predecessor are done. */
+    fun canOpenLesson(levels: List<LevelContent?>, levelIndex: Int, lessonIndex: Int, p: Progress): Boolean {
+        val level = levels.getOrNull(levelIndex) ?: return false
+        if (lessonIndex !in level.lessons.indices) return false
+        return isLessonUnlocked(level, lessonIndex, p)
     }
 
     fun isLessonUnlocked(level: LevelContent, index: Int, p: Progress): Boolean {

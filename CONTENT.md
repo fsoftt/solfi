@@ -72,7 +72,7 @@ Los nombres que **genera la app** (opciones `note`, etiquetas del pentagrama, te
 ```
 
 Reglas: 6–8 lecciones; 3–6 pasos por lección; solo la última es examen; el examen debe tener al menos
-3 pasos puntuables (todos menos `explain` y `listen`). Un examen se aprueba con ≥ 60 % de precisión.
+3 pasos puntuables (todos menos `explain` y `listen`). Un examen se aprueba con ≥ 70 % de precisión.
 
 ### Solfeo
 

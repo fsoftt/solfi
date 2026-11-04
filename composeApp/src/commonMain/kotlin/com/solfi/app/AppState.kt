@@ -13,6 +13,7 @@ import com.solfi.app.data.ProfileStore
 import com.solfi.app.data.Progress
 import com.solfi.app.i18n.stringsFor
 import com.solfi.app.logic.CompletionResult
+import com.solfi.app.logic.LessonSession
 import com.solfi.app.logic.ProgressRepository
 import com.solfi.app.music.ClefPolicy
 import com.solfi.app.music.ClefPreference
@@ -89,7 +90,15 @@ class AppState(
 
     // ------------------------------------------------------------- navigation
 
-    fun push(r: Route) { stack.add(r) }
+    /** Pushes [r]; locked lessons are refused (returns false). */
+    fun push(r: Route): Boolean {
+        if (r is Route.Lesson && !canOpenLesson(r.levelIndex, r.lessonIndex)) return false
+        stack.add(r)
+        return true
+    }
+
+    fun canOpenLesson(levelIndex: Int, lessonIndex: Int): Boolean =
+        ProgressRepository.canOpenLesson(levels, levelIndex, lessonIndex, progress)
     fun pop(): Boolean = if (stack.isNotEmpty()) { stack.removeAt(stack.lastIndex); engine.stop(); true } else false
 
     // ------------------------------------------------------------- profiles
@@ -157,9 +166,12 @@ class AppState(
         currentId?.let { store.saveProgress(it, p) }
     }
 
-    fun completeLesson(levelIndex: Int, lessonIndex: Int, accuracy: Double): CompletionResult? {
+    /** The only way lesson progress is written: needs an unlocked lesson and a [session] of that lesson that ran to the end. */
+    fun completeLesson(levelIndex: Int, lessonIndex: Int, session: LessonSession): CompletionResult? {
         val level = levels.getOrNull(levelIndex) ?: return null
-        val r = ProgressRepository.complete(progress, level, lessonIndex, accuracy, todayEpochDay())
+        if (!canOpenLesson(levelIndex, lessonIndex)) return null
+        if (!session.isFinished || session.lesson.id != level.lessons[lessonIndex].id) return null
+        val r = ProgressRepository.complete(progress, level, lessonIndex, session.accuracy, todayEpochDay())
         saveProgress(r.progress)
         return r
     }
