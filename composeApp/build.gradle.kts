@@ -108,6 +108,6 @@ compose.desktop {
 tasks.register<Sync>("publishWebApp") {
     group = "distribution"
     description = "Builds the browser app and copies it to docs/app"
-    from(tasks.named("wasmJsBrowserDistribution"))
+    from(tasks.named("wasmJsBrowserDistribution")) { exclude("*.map") }
     into(rootProject.layout.projectDirectory.dir("docs/app"))
 }

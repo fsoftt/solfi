@@ -1,6 +1,6 @@
 # Solfi
 
-**Sitio web:** https://fsoftt.github.io/solfi/
+**Sitio web:** https://fsoftt.github.io/solfi/ · **App en el navegador:** https://fsoftt.github.io/solfi/app/
 
 Aplicación nativa para **aprender música desde cero**, pensada para niños y adultos. Escrita en Kotlin con
 Compose Multiplatform (Android, iOS y escritorio JVM), sin backend: todo funciona sin conexión y el progreso
@@ -57,6 +57,22 @@ Requisitos: JDK 17 o superior. El wrapper de Gradle ya está incluido.
 ./gradlew :composeApp:desktopTest      # ejecuta los tests
 ./gradlew :composeApp:compileKotlinDesktop
 ```
+
+### Web (navegador)
+
+La misma app compilada a WebAssembly (Kotlin/Wasm) con la misma interfaz Compose, contenido, sintetizador y
+progreso (guardado en `localStorage`). Necesita un navegador con WebAssembly GC: Chrome/Edge 119+, Firefox 120+,
+Safari 18.2+.
+
+```bash
+./gradlew :composeApp:wasmJsBrowserDevelopmentRun   # servidor local con recarga
+./gradlew :composeApp:publishWebApp                 # build de producción copiado a docs/app/
+```
+
+El workflow `.github/workflows/web.yml` recompila y hace commit de `docs/app/` en cada push que toque el código,
+así GitHub Pages la sirve en `/solfi/app/`. El código específico está en `composeApp/src/wasmJsMain/`: audio con
+Web Audio (`ScriptProcessorNode`, con remuestreo si el navegador no acepta 44,1 kHz), botón «atrás» del navegador,
+vibración y fuentes incluidas (Roboto y subconjuntos de Noto Color Emoji / Noto Music / Noto Sans Symbols).
 
 ### Android
 
