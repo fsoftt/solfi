@@ -70,7 +70,7 @@ Safari 18.2+.
 ```
 
 El workflow `.github/workflows/web.yml` recompila y hace commit de `docs/app/` en cada push que toque el código,
-así GitHub Pages la sirve en `/solfi/app/`. El código específico está en `composeApp/src/wasmJsMain/`: audio con
+y `.github/workflows/pages.yml` publica `docs/` en GitHub Pages (Settings → Pages → Source: «GitHub Actions»), que la sirve en `/solfi/app/`. El código específico está en `composeApp/src/wasmJsMain/`: audio con
 Web Audio (`ScriptProcessorNode`, con remuestreo si el navegador no acepta 44,1 kHz), botón «atrás» del navegador,
 vibración y fuentes incluidas (Roboto y subconjuntos de Noto Color Emoji / Noto Music / Noto Sans Symbols).
 
