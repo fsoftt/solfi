@@ -60,7 +60,7 @@ object EnStrings : Strings {
     override val levelLockedHint = "Pass the previous level's exam to unlock it."
     override val skipLevelButton = "Test out of this level"
     override fun skipLevelTitle(n: Int) = "Skip level $n?"
-    override fun skipLevelText(n: Int, percent: Int) = "You'll take the level $n exam without doing its lessons. Score at least $percent% and its lessons and those of earlier levels will be completed, and the next level will unlock. If not, you lose nothing."
+    override fun skipLevelText(n: Int, percent: Int) = "You'll take the level $n exam without doing its lessons. Score at least $percent% and its lessons${if (n > 1) " and those of earlier levels" else ""} will be completed, and the next level will unlock. If not, you lose nothing."
     override val startSkipTest = "Start test"
     override fun skipTestLabel(n: Int) = "Test to skip level $n"
     override fun levelSkipped(n: Int) = "Level $n completed through the test"

@@ -60,7 +60,7 @@ object EsStrings : Strings {
     override val levelLockedHint = "Aprueba el examen del nivel anterior para desbloquearlo."
     override val skipLevelButton = "Examen para saltar este nivel"
     override fun skipLevelTitle(n: Int) = "¿Saltar el nivel $n?"
-    override fun skipLevelText(n: Int, percent: Int) = "Harás el examen del nivel $n sin pasar por sus lecciones. Si aciertas al menos $percent %, sus lecciones y las de los niveles anteriores quedarán completadas y se desbloqueará el siguiente nivel. Si no, no pierdes nada."
+    override fun skipLevelText(n: Int, percent: Int) = "Harás el examen del nivel $n sin pasar por sus lecciones. Si aciertas al menos $percent %, sus lecciones${if (n > 1) " y las de los niveles anteriores" else ""} quedarán completadas y se desbloqueará el siguiente nivel. Si no, no pierdes nada."
     override val startSkipTest = "Empezar examen"
     override fun skipTestLabel(n: Int) = "Examen para saltar el nivel $n"
     override fun levelSkipped(n: Int) = "Nivel $n completado con el examen"
