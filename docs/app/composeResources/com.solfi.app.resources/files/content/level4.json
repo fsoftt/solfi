@@ -1,0 +1,728 @@
+{
+  "level": 4,
+  "title": { "es": "Avanzado", "en": "Advanced", "pt": "Avançado" },
+  "description": {
+    "es": "La clave de fa, escalas mayores y menores con sus armaduras, semicorcheas, tríadas, dinámica y tempo.",
+    "en": "The bass clef, major and minor scales with their key signatures, sixteenth notes, triads, dynamics and tempo.",
+    "pt": "A clave de fá, escalas maiores e menores com suas armaduras, semicolcheias, tríades, dinâmica e andamento."
+  },
+  "color": "#E17055",
+  "lessons": [
+    {
+      "id": "l4-bass",
+      "clefLocked": true,
+      "title": { "es": "La clave de fa", "en": "The Bass Clef", "pt": "A clave de fá" },
+      "emoji": "🎼",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Para los sonidos graves", "en": "For low sounds", "pt": "Para os sons graves" },
+          "text": {
+            "es": "La clave de fa se usa para los sonidos graves: la mano izquierda del piano, el contrabajo o la tuba. Sus dos puntos rodean la cuarta línea, que es el Fa (F) de abajo del Do central. Las líneas, de abajo arriba, son Sol, Si, Re, Fa, La.",
+            "en": "The bass clef is used for low sounds: the left hand on the piano, the double bass or the tuba. Its two dots surround the fourth line, which is the Fa (F) below middle C. The lines, from bottom to top, are Sol (G), Si (B), Re (D), Fa (F), La (A).",
+            "pt": "A clave de fá é usada para os sons graves: a mão esquerda do piano, o contrabaixo ou a tuba. Seus dois pontos rodeiam a quarta linha, que é o Fá (F) abaixo do Dó central. As linhas, de baixo para cima, são Sol, Si, Ré, Fá, Lá."
+          },
+          "emoji": "🎼",
+          "melody": { "clef": "bass", "time": "4/4", "key": "C", "tempo": 80, "notes": "C3:q D3:q E3:q F3:q | G3:h F3:h" },
+          "play": true
+        },
+        {
+          "type": "identifyNote",
+          "prompt": {
+            "es": "En clave de fa, ¿qué nota es esta (cuarta línea)?",
+            "en": "In bass clef, which note is this (fourth line)?",
+            "pt": "Na clave de fá, qual é esta nota (quarta linha)?"
+          },
+          "clef": "bass",
+          "note": "F3",
+          "choices": ["D3", "E3", "F3", "G3"],
+          "explanation": {
+            "es": "Los dos puntos de la clave de fa marcan la cuarta línea: Fa (F).",
+            "en": "The two dots of the bass clef mark the fourth line: Fa (F).",
+            "pt": "Os dois pontos da clave de fá marcam a quarta linha: Fá (F)."
+          }
+        },
+        {
+          "type": "identifyNote",
+          "prompt": {
+            "es": "¿Y esta, en la primera línea de abajo?",
+            "en": "And this one, on the bottom line?",
+            "pt": "E esta, na primeira linha de baixo?"
+          },
+          "clef": "bass",
+          "note": "G2",
+          "choices": ["F2", "G2", "A2", "B2"],
+          "explanation": {
+            "es": "La primera línea en clave de fa es Sol (G). Truco: «Sol Si Re Fa La».",
+            "en": "The bottom line in bass clef is Sol (G). Trick: «G B D F A».",
+            "pt": "A primeira linha na clave de fá é Sol (G). Truque: «Sol Si Ré Fá Lá»."
+          }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "El Do central (Do4) se escribe en clave de fa...",
+            "en": "Middle C (C4) is written in bass clef...",
+            "pt": "O Dó central (Dó4) é escrito na clave de fá..."
+          },
+          "options": [
+            { "text": { "es": "En una línea adicional encima del pentagrama", "en": "On a ledger line above the staff", "pt": "Em uma linha suplementar acima da pauta" } },
+            { "text": { "es": "En la tercera línea", "en": "On the third line", "pt": "Na terceira linha" } },
+            { "text": { "es": "En una línea adicional debajo del pentagrama", "en": "On a ledger line below the staff", "pt": "Em uma linha suplementar abaixo da pauta" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "En clave de fa el Do central cuelga encima del pentagrama; en clave de sol cuelga debajo. Es la misma tecla del piano.",
+            "en": "In bass clef middle C sits above the staff; in treble clef it sits below. It is the same piano key.",
+            "pt": "Na clave de fá o Dó central fica acima da pauta; na clave de sol fica abaixo. É a mesma tecla do piano."
+          },
+          "melody": { "clef": "bass", "time": "4/4", "key": "C", "tempo": 70, "notes": "C4:w" }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca estas notas graves: Do, Mi, Sol (clave de fa).",
+            "en": "Play these low notes: Do, Mi, Sol (C, E, G) in bass clef.",
+            "pt": "Toque estas notas graves: Dó, Mi, Sol (clave de fá)."
+          },
+          "targets": ["C3", "E3", "G3"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "bass"
+        }
+      ]
+    },
+    {
+      "id": "l4-major-keys",
+      "title": { "es": "Escalas mayores y armaduras", "en": "Major Scales and Key Signatures", "pt": "Escalas maiores e armaduras" },
+      "emoji": "🔑",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Sol mayor: un sostenido", "en": "G major: one sharp", "pt": "Sol maior: um sustenido" },
+          "text": {
+            "es": "Toda escala mayor sigue el patrón de tonos y semitonos T-T-S-T-T-T-S. Para que Sol mayor lo cumpla, el Fa (F) debe subir a Fa#. En lugar de escribir el sostenido en cada nota, se pone una vez al inicio: es la armadura.",
+            "en": "Every major scale follows the pattern of tones and semitones T-T-S-T-T-T-S. For G major to fit it, Fa (F) must rise to Fa# (F#). Instead of writing the sharp on every note, we write it once at the start: the key signature.",
+            "pt": "Toda escala maior segue o padrão de tons e semitons T-T-S-T-T-T-S. Para Sol maior cumpri-lo, o Fá (F) precisa subir para Fá# (F#). Em vez de escrever o sustenido em cada nota, ele é escrito uma vez no início: a armadura."
+          },
+          "emoji": "🔑",
+          "melody": { "clef": "treble", "time": "4/4", "key": "G", "tempo": 90, "notes": "G4:q A4:q B4:q C5:q | D5:q E5:q F#5:q G5:q" },
+          "play": true
+        },
+        {
+          "type": "explain",
+          "title": { "es": "El círculo de quintas", "en": "The circle of fifths", "pt": "O círculo de quintas" },
+          "text": {
+            "es": "Si subes una quinta desde Do, llegas a Sol (1 sostenido), luego Re (2), La (3), Mi (4)... Los sostenidos aparecen en este orden: Fa, Do, Sol, Re, La, Mi, Si. Hacia el otro lado salen los bemoles: Fa (1 bemol), Si bemol (2), Mi bemol (3), La bemol (4). Truco para sostenidos: la última alteración está un semitono debajo de la tónica.",
+            "en": "Go up a fifth from Do (C) and you reach Sol (G, 1 sharp), then Re (D, 2), La (A, 3), Mi (E, 4)... Sharps appear in this order: F, C, G, D, A, E, B. In the other direction come the flats: Fa (F, 1 flat), B-flat (2), E-flat (3), A-flat (4). Trick for sharps: the last sharp is a semitone below the tonic.",
+            "pt": "Subindo uma quinta a partir de Dó, chega-se a Sol (1 sustenido), depois Ré (2), Lá (3), Mi (4)... Os sustenidos aparecem nesta ordem: Fá, Dó, Sol, Ré, Lá, Mi, Si. Para o outro lado vêm os bemóis: Fá (1 bemol), Si bemol (2), Mi bemol (3), Lá bemol (4). Truque para sustenidos: o último sustenido fica um semitom abaixo da tônica."
+          },
+          "emoji": "⭕"
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuántos sostenidos tiene la armadura de Re mayor?",
+            "en": "How many sharps does the key signature of D major have?",
+            "pt": "Quantos sustenidos tem a armadura de Ré maior?"
+          },
+          "options": [
+            { "text": { "es": "Ninguno", "en": "None", "pt": "Nenhum" } },
+            { "text": { "es": "Uno (Fa#)", "en": "One (F#)", "pt": "Um (Fá#)" } },
+            { "text": { "es": "Dos (Fa# y Do#)", "en": "Two (F# and C#)", "pt": "Dois (Fá# e Dó#)" } },
+            { "text": { "es": "Tres", "en": "Three", "pt": "Três" } }
+          ],
+          "answer": 2,
+          "explanation": {
+            "es": "Re mayor tiene dos sostenidos: Fa# y Do#. Do# está un semitono debajo de Re.",
+            "en": "D major has two sharps: F# and C#. C# is a semitone below D.",
+            "pt": "Ré maior tem dois sustenidos: Fá# e Dó#. Dó# fica um semitom abaixo de Ré."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "D", "tempo": 90, "notes": "D4:q E4:q F#4:q G4:q | A4:q B4:q C#5:q D5:q" }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué escala mayor tiene un solo bemol (Si bemol)?",
+            "en": "Which major scale has just one flat (B-flat)?",
+            "pt": "Qual escala maior tem apenas um bemol (Si bemol)?"
+          },
+          "options": [
+            { "text": { "es": "Sol mayor", "en": "G major", "pt": "Sol maior" } },
+            { "text": { "es": "Fa mayor", "en": "F major", "pt": "Fá maior" } },
+            { "text": { "es": "Re mayor", "en": "D major", "pt": "Ré maior" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Fa mayor: Fa Sol La Si♭ Do Re Mi. El Si♭ coloca el primer semitono entre la 3.ª y la 4.ª nota, como pide el patrón mayor.",
+            "en": "F major: F G A B♭ C D E. The B♭ puts the first semitone in the right place, between the 3rd and 4th notes.",
+            "pt": "Fá maior: Fá Sol Lá Si♭ Dó Ré Mi. O Si♭ coloca o primeiro semitom no lugar certo, entre a 3.ª e a 4.ª nota."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "F", "tempo": 90, "notes": "F4:q G4:q A4:q Bb4:q | C5:q D5:q E5:q F5:q" }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca la escala de Sol mayor: Sol, La, Si, Do, Re, Mi, Fa#, Sol.",
+            "en": "Play the G major scale: Sol, La, Si, Do, Re, Mi, Fa#, Sol (G A B C D E F# G).",
+            "pt": "Toque a escala de Sol maior: Sol, Lá, Si, Dó, Ré, Mi, Fá#, Sol."
+          },
+          "targets": ["G4", "A4", "B4", "C5", "D5", "E5", "F#5", "G5"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        }
+      ]
+    },
+    {
+      "id": "l4-minor",
+      "title": { "es": "Escalas menores", "en": "Minor Scales", "pt": "Escalas menores" },
+      "emoji": "🌙",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "La menor natural", "en": "A natural minor", "pt": "Lá menor natural" },
+          "text": {
+            "es": "Cada tonalidad mayor tiene una relativa menor que comparte su armadura y empieza tres semitonos más abajo. La relativa de Do mayor es La menor. La escala menor natural usa solo las teclas blancas de La a La y suena más seria o triste.",
+            "en": "Every major key has a relative minor that shares its key signature and starts three semitones lower. The relative of C major is A minor. The natural minor scale uses only the white keys from A to A and sounds more serious or sad.",
+            "pt": "Cada tonalidade maior tem uma relativa menor que compartilha sua armadura e começa três semitons abaixo. A relativa de Dó maior é Lá menor. A escala menor natural usa apenas as teclas brancas de Lá a Lá e soa mais séria ou triste."
+          },
+          "emoji": "🌙",
+          "melody": { "clef": "treble", "time": "4/4", "key": "Am", "tempo": 90, "notes": "A4:q B4:q C5:q D5:q | E5:q F5:q G5:q A5:q" },
+          "play": true
+        },
+        {
+          "type": "explain",
+          "title": { "es": "Armónica y melódica", "en": "Harmonic and melodic", "pt": "Harmônica e melódica" },
+          "text": {
+            "es": "En resumen, hay tres formas. Natural: sin cambios. Armónica: sube el 7.º grado (Sol#), lo que crea un salto de tono y medio. Melódica: al subir se elevan el 6.º y el 7.º (Fa# y Sol#) y al bajar se vuelve a la natural.",
+            "en": "In short, there are three forms. Natural: no changes. Harmonic: raises the 7th note (G#), creating a step of a tone and a half. Melodic: going up, the 6th and 7th are raised (F# and G#); going down, it returns to natural.",
+            "pt": "Em resumo, há três formas. Natural: sem alterações. Harmônica: sobe o 7.º grau (Sol#), criando um salto de tom e meio. Melódica: ao subir, elevam-se o 6.º e o 7.º (Fá# e Sol#); ao descer, volta à natural."
+          },
+          "emoji": "🎢",
+          "melody": { "clef": "treble", "time": "4/4", "key": "Am", "tempo": 90, "notes": "A4:q B4:q C5:q D5:q | E5:q F#5:q G#5:q A5:q | G5:q F5:q E5:q D5:q | C5:q B4:q A4:h" },
+          "play": true
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha esta escala de cuatro notas. ¿Suena mayor o menor?",
+            "en": "Listen to this four-note scale. Does it sound major or minor?",
+            "pt": "Escute esta escala de quatro notas. Soa maior ou menor?"
+          },
+          "sound": { "notes": ["A4", "B4", "C5", "D5"], "together": false, "tempo": 80 },
+          "options": [
+            { "text": { "es": "Mayor", "en": "Major", "pt": "Maior" } },
+            { "text": { "es": "Menor", "en": "Minor", "pt": "Menor" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "La-Si-Do: el tercer sonido está a un tono y medio del primero y eso da el color menor.",
+            "en": "A-B-C: the third note is a tone and a half above the first, which gives the minor color.",
+            "pt": "Lá-Si-Dó: o terceiro som está a um tom e meio do primeiro, e isso dá a cor menor."
+          }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué nota se eleva en la escala de La menor armónica?",
+            "en": "Which note is raised in the A harmonic minor scale?",
+            "pt": "Qual nota é elevada na escala de Lá menor harmônica?"
+          },
+          "options": [
+            { "text": { "es": "El 3.º grado (Do#)", "en": "The 3rd note (C#)", "pt": "O 3.º grau (Dó#)" } },
+            { "text": { "es": "El 7.º grado (Sol#)", "en": "The 7th note (G#)", "pt": "O 7.º grau (Sol#)" } },
+            { "text": { "es": "El 5.º grado (Mi#)", "en": "The 5th note (E#)", "pt": "O 5.º grau (Mi#)" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "La armónica sube el 7.º grado para que haya sensible: Sol# está a un semitono de La.",
+            "en": "The harmonic form raises the 7th note to create a leading tone: G# is a semitone below A.",
+            "pt": "A harmônica sobe o 7.º grau para criar a sensível: Sol# fica a um semitom de Lá."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "Am", "tempo": 80, "notes": "A4:q B4:q C5:q D5:q | E5:q F5:q G#5:q A5:q" }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca La menor armónica: La, Si, Do, Re, Mi, Fa, Sol#, La.",
+            "en": "Play A harmonic minor: La, Si, Do, Re, Mi, Fa, Sol#, La (A B C D E F G# A).",
+            "pt": "Toque Lá menor harmônica: Lá, Si, Dó, Ré, Mi, Fá, Sol#, Lá."
+          },
+          "targets": ["A4", "B4", "C5", "D5", "E5", "F5", "G#5", "A5"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        }
+      ]
+    },
+    {
+      "id": "l4-sixteenth",
+      "title": { "es": "Semicorcheas", "en": "Sixteenth Notes", "pt": "Semicolcheias" },
+      "emoji": "⚡",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Cuatro por pulso", "en": "Four per beat", "pt": "Quatro por tempo" },
+          "text": {
+            "es": "La semicorchea dura la mitad de una corchea: cuatro semicorcheas llenan una negra. Se escribe con dos barras o corchetes. Cuenta «1 i-y a» para sentir las cuatro. ¡Mucha velocidad en poco espacio!",
+            "en": "A sixteenth note lasts half an eighth note: four sixteenths fill one quarter note. It is written with two beams or flags. Count «1-e-and-a» to feel the four. Lots of speed in little space!",
+            "pt": "A semicolcheia dura metade de uma colcheia: quatro semicolcheias preenchem uma semínima. É escrita com duas barras ou colchetes. Conte «1-e-e-a» para sentir as quatro. Muita velocidade em pouco espaço!"
+          },
+          "emoji": "⚡",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 70, "notes": "C4:q C4:8 C4:8 C4:16 C4:16 C4:16 C4:16 C4:q" },
+          "play": true
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuántas semicorcheas caben en una blanca?",
+            "en": "How many sixteenth notes fit in a half note?",
+            "pt": "Quantas semicolcheias cabem em uma mínima?"
+          },
+          "options": [
+            { "text": { "es": "4", "en": "4", "pt": "4" } },
+            { "text": { "es": "8", "en": "8", "pt": "8" } },
+            { "text": { "es": "16", "en": "16", "pt": "16" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Una blanca vale 2 pulsos y cada pulso tiene 4 semicorcheas: 2 × 4 = 8.",
+            "en": "A half note is 2 beats and each beat holds 4 sixteenths: 2 × 4 = 8.",
+            "pt": "Uma mínima vale 2 tempos e cada tempo tem 4 semicolcheias: 2 × 4 = 8."
+          }
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Escucha: corcheas, semicorcheas y negras se mezclan.",
+            "en": "Listen: eighths, sixteenths and quarters mix together.",
+            "pt": "Escute: colcheias, semicolcheias e semínimas se misturam."
+          },
+          "melody": { "clef": "treble", "time": "2/4", "key": "C", "tempo": 70, "notes": "E4:8 E4:8 F4:16 G4:16 A4:16 G4:16 | F4:16 E4:16 D4:16 C4:16 E4:q" }
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca este ritmo con semicorcheas. Empieza lento y firme.",
+            "en": "Tap this rhythm with sixteenth notes. Start slow and steady.",
+            "pt": "Toque este ritmo com semicolcheias. Comece devagar e com firmeza."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 60, "notes": "x:q x:8 x:8 x:16 x:16 x:16 x:16 x:q | x:q x:q x:8 x:8 x:q" },
+          "toleranceMs": 170,
+          "countIn": true,
+          "passScore": 0.6
+        }
+      ]
+    },
+    {
+      "id": "l4-triads",
+      "title": { "es": "Tríadas mayores y menores", "en": "Major and Minor Triads", "pt": "Tríades maiores e menores" },
+      "emoji": "🏛️",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Tres notas apiladas", "en": "Three stacked notes", "pt": "Três notas empilhadas" },
+          "text": {
+            "es": "Una tríada se forma con tres notas apiladas de tercera en tercera: fundamental, tercera y quinta. En Do mayor: Do-Mi-Sol. La tríada mayor lleva una tercera mayor (4 semitonos) y suena alegre. La menor lleva tercera menor (3 semitonos): Do-Mib-Sol suena más oscura.",
+            "en": "A triad is built from three notes stacked in thirds: root, third and fifth. In C major: Do-Mi-Sol (C-E-G). A major triad has a major third (4 semitones) and sounds bright. A minor triad has a minor third (3 semitones): Do-Mib-Sol (C-Eb-G) sounds darker.",
+            "pt": "Uma tríade é formada por três notas empilhadas de terça em terça: fundamental, terça e quinta. Em Dó maior: Dó-Mi-Sol. A tríade maior tem terça maior (4 semitons) e soa alegre. A menor tem terça menor (3 semitons): Dó-Mib-Sol soa mais escura."
+          },
+          "emoji": "🏛️",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 70, "notes": "[C4 E4 G4]:h [C4 Eb4 G4]:h" },
+          "play": true
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha esta tríada. ¿Es mayor o menor?",
+            "en": "Listen to this triad. Is it major or minor?",
+            "pt": "Escute esta tríade. É maior ou menor?"
+          },
+          "sound": { "notes": ["C4", "E4", "G4"], "together": true, "tempo": 70 },
+          "options": [
+            { "text": { "es": "Mayor", "en": "Major", "pt": "Maior" } },
+            { "text": { "es": "Menor", "en": "Minor", "pt": "Menor" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Do-Mi-Sol tiene tercera mayor: suena luminosa, de modo mayor.",
+            "en": "C-E-G has a major third: it sounds bright, major.",
+            "pt": "Dó-Mi-Sol tem terça maior: soa luminosa, de modo maior."
+          }
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Y esta otra, ¿mayor o menor?",
+            "en": "And this one, major or minor?",
+            "pt": "E esta outra, maior ou menor?"
+          },
+          "sound": { "notes": ["D4", "F4", "A4"], "together": true, "tempo": 70 },
+          "options": [
+            { "text": { "es": "Mayor", "en": "Major", "pt": "Maior" } },
+            { "text": { "es": "Menor", "en": "Minor", "pt": "Menor" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Re-Fa-La: de Re a Fa hay 3 semitonos (tercera menor), así que es una tríada menor.",
+            "en": "D-F-A: from D to F there are 3 semitones (a minor third), so it is a minor triad.",
+            "pt": "Ré-Fá-Lá: de Ré a Fá há 3 semitons (terça menor), então é uma tríade menor."
+          }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué notas forman la tríada de Sol mayor?",
+            "en": "Which notes make up the G major triad?",
+            "pt": "Quais notas formam a tríade de Sol maior?"
+          },
+          "options": [
+            { "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 70, "notes": "[G4 B4 D5]:w" } },
+            { "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 70, "notes": "[G4 Bb4 D5]:w" } },
+            { "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 70, "notes": "[G4 B4 E5]:w" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Sol-Si-Re: tercera mayor (Sol a Si) y quinta justa (Sol a Re). Con Si♭ sería menor.",
+            "en": "G-B-D: major third (G to B) and perfect fifth (G to D). With B♭ it would be minor.",
+            "pt": "Sol-Si-Ré: terça maior (Sol a Si) e quinta justa (Sol a Ré). Com Si♭ seria menor."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca la tríada de Mi menor, nota por nota: Mi, Sol, Si.",
+            "en": "Play the E minor triad, one note at a time: Mi, Sol, Si (E, G, B).",
+            "pt": "Toque a tríade de Mi menor, nota por nota: Mi, Sol, Si."
+          },
+          "targets": ["E4", "G4", "B4"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        }
+      ]
+    },
+    {
+      "id": "l4-dynamics",
+      "title": { "es": "Dinámica", "en": "Dynamics", "pt": "Dinâmica" },
+      "emoji": "📢",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Suave y fuerte", "en": "Soft and loud", "pt": "Suave e forte" },
+          "text": {
+            "es": "La dinámica indica cuán fuerte o suave se toca. Las letras vienen del italiano: p (piano) es suave, f (forte) es fuerte, mp y mf son intermedios, pp es muy suave y ff muy fuerte. Imagina susurrar o gritar con tu instrumento.",
+            "en": "Dynamics tell how loud or soft to play. The letters come from Italian: p (piano) is soft, f (forte) is loud, mp and mf are in between, pp is very soft and ff very loud. Imagine whispering or shouting with your instrument.",
+            "pt": "A dinâmica indica o quanto tocar forte ou suave. As letras vêm do italiano: p (piano) é suave, f (forte) é forte, mp e mf são intermediárias, pp é muito suave e ff muito forte. Imagine sussurrar ou gritar com seu instrumento."
+          },
+          "emoji": "📢"
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué significa la letra f en una partitura?",
+            "en": "What does the letter f mean on a score?",
+            "pt": "O que significa a letra f em uma partitura?"
+          },
+          "options": [
+            { "text": { "es": "Suave", "en": "Soft", "pt": "Suave" } },
+            { "text": { "es": "Fuerte", "en": "Loud", "pt": "Forte" } },
+            { "text": { "es": "Rápido", "en": "Fast", "pt": "Rápido" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "f viene de forte: fuerte.",
+            "en": "f comes from forte: loud.",
+            "pt": "f vem de forte: forte."
+          }
+        },
+        {
+          "type": "explain",
+          "title": { "es": "Crescendo y diminuendo", "en": "Crescendo and diminuendo", "pt": "Crescendo e diminuendo" },
+          "text": {
+            "es": "Crescendo (cresc. o una «horquilla» que se abre <) significa ir aumentando poco a poco el volumen. Diminuendo o decrescendo (dim. o >) es ir bajándolo poco a poco. Escucha cómo sube la melodía: aquí iría un crescendo.",
+            "en": "Crescendo (cresc. or an opening «hairpin» <) means gradually getting louder. Diminuendo or decrescendo (dim. or >) means gradually getting softer. Listen to the rising melody: a crescendo would fit here.",
+            "pt": "Crescendo (cresc. ou uma «forquilha» que se abre <) significa aumentar o volume aos poucos. Diminuendo ou decrescendo (dim. ou >) é diminuí-lo aos poucos. Escute a melodia subindo: aqui caberia um crescendo."
+          },
+          "emoji": "📈",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "C4:q E4:q G4:q C5:q | C5:q G4:q E4:q C4:q" },
+          "play": true
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "Ordena de más suave a más fuerte: ¿cuál es la secuencia correcta?",
+            "en": "Order from softest to loudest: which sequence is correct?",
+            "pt": "Ordene do mais suave ao mais forte: qual é a sequência correta?"
+          },
+          "options": [
+            { "text": { "es": "pp – mp – f – ff", "en": "pp – mp – f – ff", "pt": "pp – mp – f – ff" } },
+            { "text": { "es": "f – mp – pp – ff", "en": "f – mp – pp – ff", "pt": "f – mp – pp – ff" } },
+            { "text": { "es": "ff – pp – mp – f", "en": "ff – pp – mp – f", "pt": "ff – pp – mp – f" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "De menos a más: pp, p, mp, mf, f, ff.",
+            "en": "From least to most: pp, p, mp, mf, f, ff.",
+            "pt": "Do menos ao mais: pp, p, mp, mf, f, ff."
+          }
+        }
+      ]
+    },
+    {
+      "id": "l4-tempo",
+      "title": { "es": "Tempo y carácter", "en": "Tempo and Character", "pt": "Andamento e caráter" },
+      "emoji": "⏱️",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Palabras para la velocidad", "en": "Words for speed", "pt": "Palavras para a velocidade" },
+          "text": {
+            "es": "El tempo es la velocidad del pulso. Se indica con palabras italianas al inicio: Largo (muy lento), Adagio (lento), Andante (al paso, caminando), Moderato (moderado), Allegro (rápido y alegre) y Presto (muy rápido). También se mide en pulsos por minuto (BPM).",
+            "en": "Tempo is the speed of the pulse. It is shown with Italian words at the start: Largo (very slow), Adagio (slow), Andante (at a walking pace), Moderato (moderate), Allegro (fast and cheerful) and Presto (very fast). It is also measured in beats per minute (BPM).",
+            "pt": "O andamento é a velocidade da pulsação. É indicado com palavras italianas no início: Largo (muito lento), Adagio (lento), Andante (caminhando), Moderato (moderado), Allegro (rápido e alegre) e Presto (muito rápido). Também é medido em batidas por minuto (BPM)."
+          },
+          "emoji": "⏱️"
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Escucha esta melodía en tempo Andante, a paso tranquilo.",
+            "en": "Listen to this melody at an Andante tempo, at a calm walking pace.",
+            "pt": "Escute esta melodia em andamento Andante, em passo tranquilo."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 76, "notes": "C4:q D4:q E4:q C4:q | E4:q F4:q G4:h" }
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Ahora la misma melodía en Allegro: ¿notas la diferencia?",
+            "en": "Now the same melody at Allegro: can you hear the difference?",
+            "pt": "Agora a mesma melodia em Allegro: percebe a diferença?"
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 132, "notes": "C4:q D4:q E4:q C4:q | E4:q F4:q G4:h" }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué indicación es la más lenta?",
+            "en": "Which marking is the slowest?",
+            "pt": "Qual indicação é a mais lenta?"
+          },
+          "options": [
+            { "text": { "es": "Allegro", "en": "Allegro", "pt": "Allegro" } },
+            { "text": { "es": "Presto", "en": "Presto", "pt": "Presto" } },
+            { "text": { "es": "Adagio", "en": "Adagio", "pt": "Adagio" } },
+            { "text": { "es": "Moderato", "en": "Moderato", "pt": "Moderato" } }
+          ],
+          "answer": 2,
+          "explanation": {
+            "es": "Adagio es lento (unos 66-76 BPM); los otros tres son más rápidos.",
+            "en": "Adagio is slow (about 66-76 BPM); the other three are faster.",
+            "pt": "Adagio é lento (cerca de 66-76 BPM); os outros três são mais rápidos."
+          }
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha esta melodía grave a ritmo Moderato. ¿Sube o baja?",
+            "en": "Listen to this low melody at a Moderato pace. Does it go up or down?",
+            "pt": "Escute esta melodia grave em andamento Moderato. Ela sobe ou desce?"
+          },
+          "sound": { "notes": ["G3", "E3", "C3"], "together": false, "tempo": 110 },
+          "options": [
+            { "text": { "es": "Sube", "en": "Goes up", "pt": "Sobe" } },
+            { "text": { "es": "Baja", "en": "Goes down", "pt": "Desce" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Sol-Mi-Do: cada nota es más grave que la anterior; la melodía baja.",
+            "en": "G-E-C: each note is lower than the previous one; the melody goes down.",
+            "pt": "Sol-Mi-Dó: cada nota é mais grave que a anterior; a melodia desce."
+          }
+        }
+      ]
+    },
+    {
+      "id": "l4-exam",
+      "title": { "es": "Examen del nivel Avanzado", "en": "Advanced Level Exam", "pt": "Exame do nível Avançado" },
+      "emoji": "🏆",
+      "isExam": true,
+      "steps": [
+        {
+          "type": "identifyNote",
+          "clefLocked": true,
+          "prompt": {
+            "es": "Clave de fa: ¿qué nota es esta?",
+            "en": "Bass clef: which note is this?",
+            "pt": "Clave de fá: qual é esta nota?"
+          },
+          "clef": "bass",
+          "note": "A3",
+          "choices": ["F3", "G3", "A3", "B3"],
+          "explanation": {
+            "es": "La quinta línea en clave de fa es La (A).",
+            "en": "The top line in bass clef is La (A).",
+            "pt": "A quinta linha na clave de fá é Lá (A)."
+          }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué armadura tiene La mayor?",
+            "en": "What is the key signature of A major?",
+            "pt": "Qual é a armadura de Lá maior?"
+          },
+          "options": [
+            { "text": { "es": "2 sostenidos", "en": "2 sharps", "pt": "2 sustenidos" } },
+            { "text": { "es": "3 sostenidos (Fa#, Do#, Sol#)", "en": "3 sharps (F#, C#, G#)", "pt": "3 sustenidos (Fá#, Dó#, Sol#)" } },
+            { "text": { "es": "1 bemol", "en": "1 flat", "pt": "1 bemol" } },
+            { "text": { "es": "4 sostenidos", "en": "4 sharps", "pt": "4 sustenidos" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "La mayor: 3 sostenidos. El último, Sol#, está un semitono debajo de La.",
+            "en": "A major has 3 sharps. The last one, G#, is a semitone below A.",
+            "pt": "Lá maior tem 3 sustenidos. O último, Sol#, fica um semitom abaixo de Lá."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "A", "tempo": 90, "notes": "A4:q B4:q C#5:q D5:q | E5:q F#5:q G#5:q A5:q" }
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha la tríada. ¿Es mayor o menor?",
+            "en": "Listen to the triad. Is it major or minor?",
+            "pt": "Escute a tríade. É maior ou menor?"
+          },
+          "sound": { "notes": ["A3", "C4", "E4"], "together": true, "tempo": 70 },
+          "options": [
+            { "text": { "es": "Mayor", "en": "Major", "pt": "Maior" } },
+            { "text": { "es": "Menor", "en": "Minor", "pt": "Menor" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "La-Do-Mi: La a Do es tercera menor, por lo tanto es La menor.",
+            "en": "A-C-E: A to C is a minor third, so this is A minor.",
+            "pt": "Lá-Dó-Mi: de Lá a Dó é terça menor, portanto é Lá menor."
+          }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "Un compositor escribe «Presto, ff». ¿Cómo hay que tocar?",
+            "en": "A composer writes «Presto, ff». How should it be played?",
+            "pt": "Um compositor escreve «Presto, ff». Como se deve tocar?"
+          },
+          "options": [
+            { "text": { "es": "Muy rápido y muy fuerte", "en": "Very fast and very loud", "pt": "Muito rápido e muito forte" } },
+            { "text": { "es": "Lento y suave", "en": "Slow and soft", "pt": "Lento e suave" } },
+            { "text": { "es": "Muy rápido y muy suave", "en": "Very fast and very soft", "pt": "Muito rápido e muito suave" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Presto es muy rápido y ff (fortissimo) es muy fuerte.",
+            "en": "Presto is very fast and ff (fortissimo) is very loud.",
+            "pt": "Presto é muito rápido e ff (fortissimo) é muito forte."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca la tríada de Fa mayor, nota por nota: Fa, La, Do.",
+            "en": "Play the F major triad, one note at a time: Fa, La, Do (F, A, C).",
+            "pt": "Toque a tríade de Fá maior, nota por nota: Fá, Lá, Dó."
+          },
+          "targets": ["F4", "A4", "C5"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca el ritmo con semicorcheas.",
+            "en": "Tap the rhythm with sixteenth notes.",
+            "pt": "Toque o ritmo com semicolcheias."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 64, "notes": "x:q x:16 x:16 x:8 x:q x:q | x:8 x:8 x:16 x:16 x:16 x:16 x:h" },
+          "toleranceMs": 160,
+          "countIn": true,
+          "passScore": 0.6
+        }
+      ]
+    }
+  ],
+  "solfeos": [
+    {
+      "id": "s4-bass-steps",
+      "title": { "es": "Pasos graves", "en": "Low Steps", "pt": "Passos graves" },
+      "description": {
+        "es": "Lectura en clave de fa: sube y baja por grados conjuntos de Do a Sol.",
+        "en": "Bass clef reading: step up and down from Do to Sol (C to G).",
+        "pt": "Leitura na clave de fá: sobe e desce por graus conjuntos de Dó a Sol."
+      },
+      "melody": { "clef": "bass", "time": "4/4", "key": "C", "tempo": 80, "notes": "C3:q D3:q E3:q F3:q | G3:h E3:h | F3:q E3:q D3:q C3:q | C3:w" }
+    },
+    {
+      "id": "s4-g-major",
+      "title": { "es": "Valsa en Sol", "en": "Waltz in G", "pt": "Valsa em Sol" },
+      "description": {
+        "es": "Un vals en Sol mayor con armadura de un sostenido: no olvides el Fa#.",
+        "en": "A waltz in G major with a one-sharp key signature: do not forget the Fa# (F#).",
+        "pt": "Uma valsa em Sol maior com armadura de um sustenido: não esqueça o Fá#."
+      },
+      "melody": { "clef": "treble", "time": "3/4", "key": "G", "tempo": 96, "notes": "G4:q B4:q D5:q | D5:q. C5:8 B4:q | A4:q F#4:q A4:q | G4:h." }
+    },
+    {
+      "id": "s4-a-minor",
+      "title": { "es": "Sombra en La menor", "en": "Shadow in A minor", "pt": "Sombra em Lá menor" },
+      "description": {
+        "es": "Melodía en La menor armónica con arpegio y Sol# como sensible.",
+        "en": "A melody in A harmonic minor with an arpeggio and G# as the leading tone.",
+        "pt": "Melodia em Lá menor harmônica com arpejo e Sol# como sensível."
+      },
+      "melody": { "clef": "treble", "time": "4/4", "key": "Am", "tempo": 76, "notes": "A4:q C5:q E5:q C5:q | B4:q G#4:q A4:h | D5:q C5:q B4:q G#4:q | A4:w" }
+    },
+    {
+      "id": "s4-sixteenths",
+      "title": { "es": "Chispas", "en": "Sparks", "pt": "Faíscas" },
+      "description": {
+        "es": "Un estudio corto con semicorcheas en compás de 2/4.",
+        "en": "A short study with sixteenth notes in 2/4.",
+        "pt": "Um estudo curto com semicolcheias em compasso 2/4."
+      },
+      "melody": { "clef": "treble", "time": "2/4", "key": "C", "tempo": 72, "notes": "C4:8 E4:8 G4:8 E4:8 | C4:16 D4:16 E4:16 F4:16 G4:q | A4:16 G4:16 F4:16 E4:16 D4:8 F4:8 | C4:h" }
+    },
+    {
+      "id": "s4-f-major",
+      "title": { "es": "Camino en Fa", "en": "Path in F", "pt": "Caminho em Fá" },
+      "description": {
+        "es": "Fa mayor con un bemol: la tríada y la escala con Si♭.",
+        "en": "F major with one flat: the triad and the scale with B♭.",
+        "pt": "Fá maior com um bemol: a tríade e a escala com Si♭."
+      },
+      "melody": { "clef": "treble", "time": "4/4", "key": "F", "tempo": 84, "notes": "F4:q A4:q C5:q A4:q | Bb4:q A4:q G4:q F4:q | G4:q A4:q Bb4:q G4:q | F4:w" }
+    },
+    {
+      "id": "s4-bass-triads",
+      "title": { "es": "Arpegio en el bajo", "en": "Bass Arpeggio", "pt": "Arpejo no baixo" },
+      "description": {
+        "es": "Tríadas de Do, Fa y Sol en clave de fa, como un acompañamiento de mano izquierda.",
+        "en": "Do, Fa and Sol (C, F and G) triads in bass clef, like a left-hand accompaniment.",
+        "pt": "Tríades de Dó, Fá e Sol na clave de fá, como um acompanhamento de mão esquerda."
+      },
+      "melody": { "clef": "bass", "time": "3/4", "key": "C", "tempo": 88, "notes": "C3:q E3:q G3:q | G3:q E3:q C3:q | F2:q A2:q C3:q | G2:q B2:q D3:q | C3:h." }
+    }
+  ],
+  "badge": {
+    "id": "badge-level4",
+    "name": { "es": "Maestro Avanzado", "en": "Advanced Maestro", "pt": "Maestro Avançado" },
+    "description": {
+      "es": "Dominaste la clave de fa, las escalas y armaduras, las semicorcheas, las tríadas, la dinámica y el tempo.",
+      "en": "You mastered the bass clef, scales and key signatures, sixteenth notes, triads, dynamics and tempo.",
+      "pt": "Você dominou a clave de fá, as escalas e armaduras, as semicolcheias, as tríades, a dinâmica e o andamento."
+    },
+    "emoji": "🎖️"
+  }
+}
