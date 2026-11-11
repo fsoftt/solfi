@@ -108,4 +108,64 @@ class ProgressTest {
     @Test fun xpRank() {
         assertEquals(1, PR.xpLevel(0)); assertEquals(1, PR.xpLevel(99)); assertEquals(2, PR.xpLevel(100))
     }
+
+    // ------------------------------------------------------------- skip test
+
+    @Test fun skipTestAvailableUntilExamReachableOrPassed() {
+        val lv1 = level(1); val lv2 = level(2)
+        var p = Progress()
+        assertTrue(PR.canTakeSkipTest(lv1, p), "current level")
+        assertTrue(PR.canTakeSkipTest(lv2, p), "locked level")
+        p = PR.complete(p, lv1, 0, 1.0, 1).progress
+        p = PR.complete(p, lv1, 1, 1.0, 1).progress
+        assertFalse(PR.canTakeSkipTest(lv1, p), "exam already reachable: take the regular exam")
+        p = PR.complete(p, lv1, 2, 1.0, 1).progress
+        assertFalse(PR.canTakeSkipTest(lv1, p), "passed")
+        assertTrue(PR.canTakeSkipTest(lv2, p))
+    }
+
+    @Test fun failedSkipTestChangesNothingButXp() {
+        val lv2 = level(2)
+        val r = PR.completeSkipTest(Progress(), lv2, 0.5, 1)
+        assertFalse(r.passed)
+        assertTrue(r.progress.examsPassed.isEmpty())
+        assertTrue(r.progress.skippedLevels.isEmpty())
+        assertFalse(PR.isLevelUnlocked(2, r.progress))
+        assertTrue(PR.canTakeSkipTest(lv2, r.progress))
+    }
+
+    @Test fun passedSkipTestCompletesLevelAndEarlierOnes() {
+        val lv1 = level(1); val lv2 = level(2); val lv3 = level(3)
+        var p = PR.complete(Progress(), lv1, 0, 1.0, 1).progress
+        val r = PR.completeSkipTest(p, lv2, 0.8, 1)
+        assertTrue(r.passed)
+        assertEquals(3, r.unlockedLevel)
+        assertEquals(lv2.badge, r.newBadge)
+        assertEquals(PR.xpFor(true, 2), r.xpGained)
+        p = r.progress
+        assertEquals(listOf(1, 2), p.examsPassed)
+        assertEquals(listOf(1, 2), p.skippedLevels)
+        assertEquals(listOf("badge2"), p.badges, "only the tested level gives its badge")
+        assertEquals(3 to 3, PR.levelProgress(lv1, p))
+        assertEquals(3 to 3, PR.levelProgress(lv2, p))
+        assertTrue(PR.isLevelUnlocked(3, p))
+        assertTrue(PR.isLessonUnlocked(lv3, 0, p))
+        assertFalse(PR.canTakeSkipTest(lv1, p)); assertFalse(PR.canTakeSkipTest(lv2, p))
+        assertTrue(PR.canTakeSkipTest(lv3, p))
+        assertEquals(2 to 0, PR.nextLesson(listOf(lv1, lv2, lv3), p))
+        // real results are kept and lessons can still be replayed for stars
+        assertEquals(3, p.result(1, "a")!!.stars)
+        assertEquals(2, p.result(2, "c")!!.stars)
+        val again = PR.complete(p, lv1, 1, 1.0, 1)
+        assertEquals(3, again.progress.result(1, "b")!!.stars)
+    }
+
+    @Test fun skipTestKeepsAlreadyPassedLevelsAsTheyAre() {
+        val lv1 = level(1); val lv2 = level(2)
+        var p = Progress()
+        for (i in 0..2) p = PR.complete(p, lv1, i, 1.0, 1).progress
+        p = PR.completeSkipTest(p, lv2, 1.0, 1).progress
+        assertEquals(listOf(2), p.skippedLevels)
+        assertEquals(listOf("badge1", "badge2"), p.badges)
+    }
 }

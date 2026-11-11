@@ -58,6 +58,12 @@ object PtStrings : Strings {
     override fun lessonsDone(done: Int, total: Int) = "$done de $total lições"
     override val examLabel = "Prova"
     override val levelLockedHint = "Passe na prova do nível anterior para desbloquear."
+    override val skipLevelButton = "Prova para pular este nível"
+    override fun skipLevelTitle(n: Int) = "Pular o nível $n?"
+    override fun skipLevelText(n: Int, percent: Int) = "Você fará a prova do nível $n sem passar pelas lições. Se acertar pelo menos $percent%, as lições dele e dos níveis anteriores ficarão concluídas e o próximo nível será desbloqueado. Se não, você não perde nada."
+    override val startSkipTest = "Começar prova"
+    override fun skipTestLabel(n: Int) = "Prova para pular o nível $n"
+    override fun levelSkipped(n: Int) = "Nível $n concluído com a prova"
 
     override fun stepOf(current: Int, total: Int) = "$current de $total"
     override val check = "Verificar"

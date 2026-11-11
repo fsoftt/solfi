@@ -40,6 +40,8 @@ data class Progress(
     val lessons: Map<String, LessonResult> = emptyMap(),
     val badges: List<String> = emptyList(),
     val examsPassed: List<Int> = emptyList(),
+    /** Levels completed by passing a skip test (their lessons count as completed without results). */
+    val skippedLevels: List<Int> = emptyList(),
     val solfeosPlayed: Int = 0,
     /** Epoch day the random-exercise XP counter below refers to, -1 when none. */
     val randomXpDay: Int = -1,

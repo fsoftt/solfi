@@ -45,6 +45,7 @@ object ProgressRepository {
 
     fun isLessonCompleted(level: LevelContent, index: Int, p: Progress): Boolean {
         val l = level.lessons.getOrNull(index) ?: return false
+        if (level.level in p.skippedLevels) return true
         return p.result(level.level, l.id)?.let { it.completions > 0 } == true
     }
 
@@ -113,6 +114,35 @@ object ProgressRepository {
             examsPassed = exams,
         )
         return CompletionResult(np, true, stars, xp, newBadge, unlocked, streak)
+    }
+
+    // ---------------------------------------------------------------- skip test
+
+    /**
+     * A level can be skipped by taking its exam directly while it is not passed yet and its exam is not already
+     * reachable through the normal path (then the regular exam is taken instead). Works for locked levels too.
+     */
+    fun canTakeSkipTest(level: LevelContent, p: Progress): Boolean {
+        val last = level.lessons.lastIndex
+        if (last < 0 || !level.lessons[last].isExam) return false
+        if (level.level in p.examsPassed) return false
+        return !isLessonUnlocked(level, last, p)
+    }
+
+    /**
+     * Outcome of a skip test (the level's exam taken directly). Below [EXAM_PASS] it counts like a failed exam.
+     * Passing records the exam like [complete] (XP, stars, badge, next level unlocked) and also marks this level and
+     * every earlier level that was not passed yet as completed, so the sequential rules stay consistent.
+     */
+    fun completeSkipTest(p: Progress, level: LevelContent, accuracy: Double, today: Int): CompletionResult {
+        val r = complete(p, level, level.lessons.lastIndex, accuracy, today)
+        if (!r.passed) return r
+        val skipped = (1..level.level).filter { it !in p.examsPassed && it !in p.skippedLevels }
+        val np = r.progress.copy(
+            examsPassed = (r.progress.examsPassed + (1..level.level)).distinct().sorted(),
+            skippedLevels = (p.skippedLevels + skipped).distinct().sorted(),
+        )
+        return r.copy(progress = np)
     }
 
     fun recordSolfeo(p: Progress, today: Int): Progress {
