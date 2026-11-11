@@ -1,4 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.util.Properties
 
@@ -37,6 +38,15 @@ kotlin {
     }
     jvm("desktop") {
         compilerOptions { jvmTarget.set(JvmTarget.JVM_17) }
+    }
+    // Browser build (Kotlin/Wasm), published at https://fsoftt.github.io/solfi/app/
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        outputModuleName = "composeApp"
+        browser {
+            commonWebpackConfig { outputFileName = "composeApp.js" }
+        }
+        binaries.executable()
     }
     listOf(iosArm64(), iosSimulatorArm64()).forEach {
         it.binaries.framework {
@@ -92,4 +102,12 @@ compose.desktop {
             packageVersion = "1.0.0"
         }
     }
+}
+
+// Copies the production web build to docs/app/ (served by GitHub Pages at /solfi/app/).
+tasks.register<Sync>("publishWebApp") {
+    group = "distribution"
+    description = "Builds the browser app and copies it to docs/app"
+    from(tasks.named("wasmJsBrowserDistribution")) { exclude("*.map") }
+    into(rootProject.layout.projectDirectory.dir("docs/app"))
 }

@@ -12,7 +12,7 @@
     'meta.desc': 'Solfi is a native app to learn music from scratch, written in Kotlin and Compose Multiplatform. Portfolio project.',
     'hero.eyebrow': 'Portfolio project · Kotlin Multiplatform', 'hero.tagline': 'Learn music from scratch',
     'hero.lead': 'A native app for kids and adults: short lessons, solfeges that play, and a staff drawn by hand on Canvas. Android, iOS and desktop from a single Kotlin codebase, offline and with no account.',
-    'hero.gh': 'View on GitHub', 'hero.how': 'How it is built',
+    'hero.gh': 'View on GitHub', 'hero.web': 'Try it in the browser', 'nav.app': 'Open the app', 'hero.how': 'How it is built',
     'alt.solfeo': 'Solfege player showing "Ode to Joy" on the staff', 'alt.home': 'Home screen with streak, XP, stars and the current lesson',
     'alt.map': 'Lesson map of level 1, Getting Started',
     'what.eyebrow': 'Features', 'what.title': 'What does it do?',

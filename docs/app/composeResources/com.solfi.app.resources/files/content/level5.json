@@ -1,0 +1,708 @@
+{
+  "level": 5,
+  "title": { "es": "Experto", "en": "Expert", "pt": "Especialista" },
+  "description": {
+    "es": "Compases compuestos, síncopa, intervalos, acordes de séptima, funciones armónicas, modos y transposición.",
+    "en": "Compound meters, syncopation, intervals, seventh chords, harmonic functions, modes and transposition.",
+    "pt": "Compassos compostos, síncope, intervalos, acordes de sétima, funções harmônicas, modos e transposição."
+  },
+  "color": "#C2185B",
+  "lessons": [
+    {
+      "id": "l5-compuesto",
+      "title": { "es": "Compás compuesto 6/8", "en": "Compound meter 6/8", "pt": "Compasso composto 6/8" },
+      "emoji": "🎡",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Pulsos de tres", "en": "Beats of three", "pt": "Tempos de três" },
+          "text": {
+            "es": "En 6/8 hay seis corcheas por compás, pero se sienten como DOS pulsos grandes. Cada pulso es una negra con puntillo y se divide en tres corcheas: UN-dos-tres, DOS-dos-tres. Es el balanceo de una barcarola o de una cuna.",
+            "en": "In 6/8 there are six eighth notes per bar, but they feel like TWO big beats. Each beat is a dotted quarter note split into three eighths: ONE-two-three, TWO-two-three. It is the rocking feel of a barcarolle or a lullaby.",
+            "pt": "No 6/8 há seis colcheias por compasso, mas elas são sentidas como DOIS tempos grandes. Cada tempo é uma semínima pontuada dividida em três colcheias: UM-dois-três, DOIS-dois-três. É o balanço de uma barcarola ou de uma canção de ninar."
+          },
+          "emoji": "🎡",
+          "melody": { "time": "6/8", "tempo": 90, "notes": "x:q. x:q. | x:8 x:8 x:8 x:8 x:8 x:8" },
+          "play": true
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Escucha y siente el balanceo de dos pulsos grandes.",
+            "en": "Listen and feel the rocking of two big beats.",
+            "pt": "Escute e sinta o balanço de dois tempos grandes."
+          },
+          "melody": { "time": "6/8", "tempo": 90, "notes": "C4:q. E4:q. | G4:8 F4:8 E4:8 D4:q. | E4:8 G4:8 C5:8 G4:q. | C4:h." }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuántas corcheas forman cada pulso en 6/8?",
+            "en": "How many eighth notes make up each beat in 6/8?",
+            "pt": "Quantas colcheias formam cada tempo no 6/8?"
+          },
+          "options": [
+            { "text": { "es": "2", "en": "2", "pt": "2" } },
+            { "text": { "es": "3", "en": "3", "pt": "3" } },
+            { "text": { "es": "4", "en": "4", "pt": "4" } },
+            { "text": { "es": "6", "en": "6", "pt": "6" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Seis corcheas entre dos pulsos dan tres corcheas por pulso. Por eso se llama compás de subdivisión ternaria.",
+            "en": "Six eighths shared between two beats gives three eighths per beat. That is why it is called a ternary-subdivision meter.",
+            "pt": "Seis colcheias divididas em dois tempos dão três colcheias por tempo. Por isso é chamado de compasso de subdivisão ternária."
+          }
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca este ritmo en 6/8: siente dos pulsos grandes.",
+            "en": "Tap this 6/8 rhythm: feel two big beats.",
+            "pt": "Toque este ritmo em 6/8: sinta dois tempos grandes."
+          },
+          "melody": { "time": "6/8", "tempo": 80, "notes": "x:q. x:q. | x:q x:8 x:q x:8 | x:8 x:8 x:8 x:q. | x:h." },
+          "toleranceMs": 200,
+          "countIn": true,
+          "passScore": 0.6
+        }
+      ]
+    },
+    {
+      "id": "l5-sincopa",
+      "title": { "es": "Síncopa y contratiempo", "en": "Syncopation and off-beat", "pt": "Síncope e contratempo" },
+      "emoji": "🔀",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Acentos fuera de lugar", "en": "Accents out of place", "pt": "Acentos fora do lugar" },
+          "text": {
+            "es": "La síncopa pone el acento en un tiempo débil o en una parte débil del tiempo, y lo prolonga sobre el tiempo fuerte siguiente. El contratiempo es un caso especial: el sonido cae entre los pulsos y el silencio cae justo sobre el pulso. Es el motor del jazz, el reggae y la salsa.",
+            "en": "Syncopation puts the accent on a weak beat or a weak part of the beat and carries it over the next strong beat. Off-beat is a special case: the sound falls between the pulses and the rest falls right on the pulse. It is the engine of jazz, reggae and salsa.",
+            "pt": "A síncope coloca o acento em um tempo fraco ou em uma parte fraca do tempo e o prolonga sobre o tempo forte seguinte. O contratempo é um caso especial: o som cai entre os pulsos e a pausa cai exatamente sobre o pulso. É o motor do jazz, do reggae e da salsa."
+          },
+          "emoji": "🔀",
+          "melody": { "time": "4/4", "tempo": 90, "notes": "r:8 C4:8 r:8 C4:8 r:8 C4:8 r:8 C4:8" },
+          "play": true
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Escucha: las notas largas empiezan entre los pulsos.",
+            "en": "Listen: the long notes start between the beats.",
+            "pt": "Escute: as notas longas começam entre os tempos."
+          },
+          "melody": { "tempo": 84, "notes": "C4:8 E4:q G4:q E4:q C4:8 | D4:8 F4:q A4:q F4:q D4:8 | C4:w" }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuál de estos ritmos es un contratiempo (sonido entre pulsos, silencio en el pulso)?",
+            "en": "Which of these rhythms is an off-beat (sound between beats, rest on the beat)?",
+            "pt": "Qual destes ritmos é um contratempo (som entre os tempos, pausa no tempo)?"
+          },
+          "options": [
+            { "melody": { "notes": "C4:q C4:q C4:q C4:q" } },
+            { "melody": { "notes": "r:8 C4:8 r:8 C4:8 r:8 C4:8 r:8 C4:8" } },
+            { "melody": { "notes": "C4:h C4:h" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "En la segunda opción cada pulso empieza con un silencio de corchea y el sonido llega justo después, a contratiempo.",
+            "en": "In the second option every beat starts with an eighth rest and the sound comes right after it, off the beat.",
+            "pt": "Na segunda opção cada tempo começa com uma pausa de colcheia e o som chega logo depois, a contratempo."
+          }
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca este ritmo sincopado. Cuenta 1-2-3-4 por dentro.",
+            "en": "Tap this syncopated rhythm. Count 1-2-3-4 in your head.",
+            "pt": "Toque este ritmo sincopado. Conte 1-2-3-4 por dentro."
+          },
+          "melody": { "tempo": 76, "notes": "x:8 x:q x:q x:q x:8 | x:q x:8 x:q x:8 x:q | x:8 x:q x:8 x:h | x:w" },
+          "toleranceMs": 180,
+          "countIn": true,
+          "passScore": 0.6
+        }
+      ]
+    },
+    {
+      "id": "l5-intervalos",
+      "title": { "es": "Intervalos con cualidad", "en": "Intervals with quality", "pt": "Intervalos com qualidade" },
+      "emoji": "📏",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Número y cualidad", "en": "Number and quality", "pt": "Número e qualidade" },
+          "text": {
+            "es": "Un intervalo tiene un número (contando las notas, la primera incluida) y una cualidad. Las 2ª, 3ª, 6ª y 7ª pueden ser mayores o menores. Las 1ª, 4ª, 5ª y 8ª son justas. Si agrandas un semitono un intervalo mayor o justo, es aumentado. Si achicas un semitono uno menor o justo, es disminuido.",
+            "en": "An interval has a number (counting the notes, the first one included) and a quality. 2nds, 3rds, 6ths and 7ths can be major or minor. Unisons, 4ths, 5ths and octaves are perfect. Widen a major or perfect interval by a semitone and it is augmented. Narrow a minor or perfect one by a semitone and it is diminished.",
+            "pt": "Um intervalo tem um número (contando as notas, incluindo a primeira) e uma qualidade. As 2ªs, 3ªs, 6ªs e 7ªs podem ser maiores ou menores. As 1ªs, 4ªs, 5ªs e 8ªs são justas. Se você aumenta um semitom em um intervalo maior ou justo, ele é aumentado. Se diminui um semitom em um menor ou justo, é diminuído."
+          },
+          "emoji": "📏",
+          "melody": { "tempo": 70, "notes": "C4:q E4:q C4:q Eb4:q" },
+          "play": true
+        },
+        {
+          "type": "explain",
+          "title": { "es": "Medir en semitonos", "en": "Measuring in semitones", "pt": "Medir em semitons" },
+          "text": {
+            "es": "Desde Do (C): 2ª menor = 1 semitono, 2ª mayor = 2, 3ª menor = 3, 3ª mayor = 4, 4ª justa = 5, 4ª aumentada (tritono) = 6, 5ª justa = 7, 6ª menor = 8, 6ª mayor = 9, 7ª menor = 10, 7ª mayor = 11, 8ª justa = 12.",
+            "en": "From Do (C): minor 2nd = 1 semitone, major 2nd = 2, minor 3rd = 3, major 3rd = 4, perfect 4th = 5, augmented 4th (tritone) = 6, perfect 5th = 7, minor 6th = 8, major 6th = 9, minor 7th = 10, major 7th = 11, perfect octave = 12.",
+            "pt": "A partir de Dó (C): 2ª menor = 1 semitom, 2ª maior = 2, 3ª menor = 3, 3ª maior = 4, 4ª justa = 5, 4ª aumentada (trítono) = 6, 5ª justa = 7, 6ª menor = 8, 6ª maior = 9, 7ª menor = 10, 7ª maior = 11, 8ª justa = 12."
+          },
+          "emoji": "🧮"
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué intervalo hay entre Do (C) y Mi (E)?",
+            "en": "Which interval is there between Do (C) and Mi (E)?",
+            "pt": "Qual é o intervalo entre Dó (C) e Mi (E)?"
+          },
+          "options": [
+            { "text": { "es": "3ª menor", "en": "Minor 3rd", "pt": "3ª menor" } },
+            { "text": { "es": "3ª mayor", "en": "Major 3rd", "pt": "3ª maior" } },
+            { "text": { "es": "4ª justa", "en": "Perfect 4th", "pt": "4ª justa" } },
+            { "text": { "es": "5ª justa", "en": "Perfect 5th", "pt": "5ª justa" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Do, Re, Mi: es una 3ª y mide 4 semitonos, por eso es mayor.",
+            "en": "Do, Re, Mi: it is a 3rd and spans 4 semitones, so it is major.",
+            "pt": "Dó, Ré, Mi: é uma 3ª e mede 4 semitons, por isso é maior."
+          },
+          "melody": { "notes": "C4:h E4:h" }
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha el intervalo. ¿Cuál es?",
+            "en": "Listen to the interval. Which one is it?",
+            "pt": "Escute o intervalo. Qual é?"
+          },
+          "sound": { "notes": ["C4", "Eb4"], "together": false, "tempo": 70 },
+          "options": [
+            { "text": { "es": "3ª menor", "en": "Minor 3rd", "pt": "3ª menor" } },
+            { "text": { "es": "3ª mayor", "en": "Major 3rd", "pt": "3ª maior" } },
+            { "text": { "es": "5ª justa", "en": "Perfect 5th", "pt": "5ª justa" } },
+            { "text": { "es": "2ª mayor", "en": "Major 2nd", "pt": "2ª maior" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Do a Mi bemol (E♭) son 3 semitonos: 3ª menor. Suena más oscura y triste que la mayor.",
+            "en": "Do to E flat is 3 semitones: a minor 3rd. It sounds darker and sadder than the major one.",
+            "pt": "De Dó a Mi bemol (E♭) são 3 semitons: 3ª menor. Soa mais escura e triste que a maior."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca una 3ª mayor sobre Re (D): Re (D) y Fa sostenido (F#).",
+            "en": "Play a major 3rd above Re (D): Re (D) then Fa sharp (F#).",
+            "pt": "Toque uma 3ª maior sobre Ré (D): Ré (D) e Fá sustenido (F#)."
+          },
+          "targets": ["D4", "F#4"],
+          "showStaff": true,
+          "showLabels": true,
+          "clef": "treble"
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cómo se llama el intervalo de Do (C) a Fa sostenido (F#), de 6 semitonos?",
+            "en": "What is the interval from Do (C) to Fa sharp (F#), spanning 6 semitones?",
+            "pt": "Como se chama o intervalo de Dó (C) a Fá sustenido (F#), com 6 semitons?"
+          },
+          "options": [
+            { "text": { "es": "4ª justa", "en": "Perfect 4th", "pt": "4ª justa" } },
+            { "text": { "es": "4ª aumentada (tritono)", "en": "Augmented 4th (tritone)", "pt": "4ª aumentada (trítono)" } },
+            { "text": { "es": "5ª justa", "en": "Perfect 5th", "pt": "5ª justa" } },
+            { "text": { "es": "5ª aumentada", "en": "Augmented 5th", "pt": "5ª aumentada" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Do a Fa es una 4ª justa (5 semitonos). Con el sostenido crece un semitono y se vuelve aumentada: el tritono.",
+            "en": "Do to Fa is a perfect 4th (5 semitones). The sharp widens it by a semitone and makes it augmented: the tritone.",
+            "pt": "De Dó a Fá é uma 4ª justa (5 semitons). Com o sustenido cresce um semitom e se torna aumentada: o trítono."
+          },
+          "melody": { "notes": "C4:h F#4:h" }
+        }
+      ]
+    },
+    {
+      "id": "l5-septimas",
+      "title": { "es": "Acordes de séptima", "en": "Seventh chords", "pt": "Acordes de sétima" },
+      "emoji": "🎷",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Una nota más", "en": "One more note", "pt": "Mais uma nota" },
+          "text": {
+            "es": "Un acorde de séptima es una tríada con una nota más, una 7ª sobre la fundamental. Sobre Do (C): Do mayor 7 = Do-Mi-Sol-Si (tríada mayor + 7ª mayor); Do 7, el acorde de dominante = Do-Mi-Sol-Si♭ (tríada mayor + 7ª menor); Do menor 7 = Do-Mi♭-Sol-Si♭ (tríada menor + 7ª menor).",
+            "en": "A seventh chord is a triad with one more note, a 7th above the root. On Do (C): C major 7 = C-E-G-B (major triad + major 7th); C7, the dominant chord = C-E-G-B flat (major triad + minor 7th); C minor 7 = C-E flat-G-B flat (minor triad + minor 7th).",
+            "pt": "Um acorde de sétima é uma tríade com mais uma nota, uma 7ª sobre a fundamental. Sobre Dó (C): Dó maior 7 = Dó-Mi-Sol-Si (tríade maior + 7ª maior); Dó 7, o acorde de dominante = Dó-Mi-Sol-Si♭ (tríade maior + 7ª menor); Dó menor 7 = Dó-Mi♭-Sol-Si♭ (tríade menor + 7ª menor)."
+          },
+          "emoji": "🎷"
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Escucha tres acordes: mayor 7, dominante 7 y menor 7.",
+            "en": "Listen to three chords: major 7, dominant 7 and minor 7.",
+            "pt": "Escute três acordes: maior 7, dominante 7 e menor 7."
+          },
+          "melody": { "tempo": 60, "notes": "[C4 E4 G4 B4]:h [C4 E4 G4 Bb4]:h | [C4 Eb4 G4 Bb4]:w" }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué notas forman el acorde de Do 7 (dominante)?",
+            "en": "Which notes form the C7 (dominant) chord?",
+            "pt": "Quais notas formam o acorde de Dó 7 (dominante)?"
+          },
+          "options": [
+            { "text": { "es": "Do-Mi-Sol-Si♭", "en": "C-E-G-B♭", "pt": "Dó-Mi-Sol-Si♭" } },
+            { "text": { "es": "Do-Mi-Sol-Si", "en": "C-E-G-B", "pt": "Dó-Mi-Sol-Si" } },
+            { "text": { "es": "Do-Mi♭-Sol-Si♭", "en": "C-E♭-G-B♭", "pt": "Dó-Mi♭-Sol-Si♭" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "El dominante 7 mezcla una tríada mayor con una 7ª menor (Si♭, a 10 semitonos de Do).",
+            "en": "The dominant 7 mixes a major triad with a minor 7th (B flat, 10 semitones above Do).",
+            "pt": "O dominante 7 mistura uma tríade maior com uma 7ª menor (Si♭, a 10 semitons de Dó)."
+          }
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha el acorde. ¿Qué tipo de séptima es?",
+            "en": "Listen to the chord. What kind of seventh is it?",
+            "pt": "Escute o acorde. Que tipo de sétima é?"
+          },
+          "sound": { "notes": ["C4", "E4", "G4", "Bb4"], "together": true, "tempo": 60 },
+          "options": [
+            { "text": { "es": "Mayor 7", "en": "Major 7", "pt": "Maior 7" } },
+            { "text": { "es": "Dominante 7", "en": "Dominant 7", "pt": "Dominante 7" } },
+            { "text": { "es": "Menor 7", "en": "Minor 7", "pt": "Menor 7" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Tiene la tercera mayor (Mi) y la séptima menor (Si♭): es un dominante 7, con una tensión que pide resolver.",
+            "en": "It has a major third (E) and a minor seventh (B flat): a dominant 7, with a tension that asks to resolve.",
+            "pt": "Tem a terça maior (Mi) e a sétima menor (Si♭): é um dominante 7, com uma tensão que pede resolução."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca el arpegio de Do 7 de abajo hacia arriba: Do, Mi, Sol, Si♭.",
+            "en": "Play the C7 arpeggio from bottom to top: Do, Mi, Sol, B flat.",
+            "pt": "Toque o arpejo de Dó 7 de baixo para cima: Dó, Mi, Sol, Si♭."
+          },
+          "targets": ["C4", "E4", "G4", "Bb4"],
+          "showStaff": true,
+          "showLabels": true,
+          "clef": "treble"
+        }
+      ]
+    },
+    {
+      "id": "l5-funciones",
+      "title": { "es": "Funciones y progresión I–IV–V–I", "en": "Functions and the I–IV–V–I progression", "pt": "Funções e progressão I–IV–V–I" },
+      "emoji": "🏛️",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Tónica, subdominante, dominante", "en": "Tonic, subdominant, dominant", "pt": "Tônica, subdominante, dominante" },
+          "text": {
+            "es": "Cada acorde de una tonalidad cumple una función. I (tónica) es casa y reposo. IV (subdominante) se aleja de casa. V (dominante) crea tensión y pide volver. La progresión I–IV–V–I cuenta esta historia; en Do mayor son Do, Fa, Sol, Do.",
+            "en": "Every chord in a key has a function. I (tonic) is home and rest. IV (subdominant) leaves home. V (dominant) builds tension and asks to go back. The I–IV–V–I progression tells this story; in C major it is Do, Fa, Sol, Do.",
+            "pt": "Cada acorde de uma tonalidade cumpre uma função. I (tônica) é a casa e o repouso. IV (subdominante) se afasta de casa. V (dominante) cria tensão e pede para voltar. A progressão I–IV–V–I conta essa história; em Dó maior são Dó, Fá, Sol, Dó."
+          },
+          "emoji": "🏛️",
+          "melody": { "tempo": 60, "notes": "[C4 E4 G4]:w | [C4 F4 A4]:w | [B3 D4 G4]:w | [C4 E4 G4]:w" },
+          "play": true
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Escucha la cadencia: sale de casa, se tensa y regresa.",
+            "en": "Listen to the cadence: it leaves home, tenses up and comes back.",
+            "pt": "Escute a cadência: sai de casa, fica tensa e volta."
+          },
+          "melody": { "tempo": 56, "notes": "[C4 E4 G4]:h [C4 F4 A4]:h | [B3 D4 G4]:h [B3 D4 F4 G4]:h | [C4 E4 G4]:w" }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "En Do mayor, el acorde Sol-Si-Re (G-B-D) es el grado...",
+            "en": "In C major, the chord Sol-Si-Re (G-B-D) is degree...",
+            "pt": "Em Dó maior, o acorde Sol-Si-Ré (G-B-D) é o grau..."
+          },
+          "options": [
+            { "text": { "es": "I (tónica)", "en": "I (tonic)", "pt": "I (tônica)" } },
+            { "text": { "es": "IV (subdominante)", "en": "IV (subdominant)", "pt": "IV (subdominante)" } },
+            { "text": { "es": "V (dominante)", "en": "V (dominant)", "pt": "V (dominante)" } }
+          ],
+          "answer": 2,
+          "explanation": {
+            "es": "Sol es el quinto grado de Do mayor, así que su acorde es el V: el dominante.",
+            "en": "Sol is the fifth degree of C major, so its chord is V: the dominant.",
+            "pt": "Sol é o quinto grau de Dó maior, então seu acorde é o V: o dominante."
+          }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué sensación da el paso V–I al final de una frase?",
+            "en": "What feeling does the V–I move give at the end of a phrase?",
+            "pt": "Que sensação o movimento V–I dá no final de uma frase?"
+          },
+          "options": [
+            { "text": { "es": "De reposo, como un punto final", "en": "Rest, like a full stop", "pt": "De repouso, como um ponto final" } },
+            { "text": { "es": "De suspenso, como una pregunta", "en": "Suspense, like a question", "pt": "De suspense, como uma pergunta" } },
+            { "text": { "es": "De cambio de compás", "en": "A change of meter", "pt": "De mudança de compasso" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "El dominante tensa y la tónica resuelve: se llama cadencia perfecta y suena a final.",
+            "en": "The dominant tenses and the tonic resolves: it is called a perfect cadence and sounds like an ending.",
+            "pt": "O dominante tensiona e a tônica resolve: chama-se cadência perfeita e soa como um final."
+          },
+          "melody": { "tempo": 60, "notes": "[B3 D4 G4]:h [C4 E4 G4]:h" }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca las fundamentales de I–IV–V–I en Do mayor: Do, Fa, Sol, Do.",
+            "en": "Play the roots of I–IV–V–I in C major: Do, Fa, Sol, Do.",
+            "pt": "Toque as fundamentais de I–IV–V–I em Dó maior: Dó, Fá, Sol, Dó."
+          },
+          "targets": ["C4", "F4", "G4", "C4"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        }
+      ]
+    },
+    {
+      "id": "l5-modos",
+      "title": { "es": "Modos griegos (breve)", "en": "Greek modes (brief)", "pt": "Modos gregos (breve)" },
+      "emoji": "🌈",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Siete escalas, un mismo material", "en": "Seven scales, one material", "pt": "Sete escalas, um mesmo material" },
+          "text": {
+            "es": "Si tocas solo teclas blancas y empiezas en cada nota, obtienes un modo. Do: jónico (es la escala mayor). Re: dórico. Mi: frigio. Fa: lidio. Sol: mixolidio. La: eólico (es la menor natural). Si: locrio. Cada uno tiene su color; por ejemplo, el dórico suena a menor pero con la 6ª mayor.",
+            "en": "Play only white keys and start on each note and you get a mode. Do: Ionian (the major scale). Re: Dorian. Mi: Phrygian. Fa: Lydian. Sol: Mixolydian. La: Aeolian (the natural minor). Si: Locrian. Each has its own color; for example, Dorian sounds minor but with a major 6th.",
+            "pt": "Se você tocar só teclas brancas e começar em cada nota, obtém um modo. Dó: jônio (é a escala maior). Ré: dórico. Mi: frígio. Fá: lídio. Sol: mixolídio. Lá: eólio (é a menor natural). Si: lócrio. Cada um tem sua cor; por exemplo, o dórico soa menor, mas com a 6ª maior."
+          },
+          "emoji": "🌈"
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Escucha la escala de Re dórico: Re a Re, solo teclas blancas.",
+            "en": "Listen to the D Dorian scale: Re to Re, white keys only.",
+            "pt": "Escute a escala de Ré dórico: de Ré a Ré, só teclas brancas."
+          },
+          "melody": { "tempo": 80, "notes": "D4:q E4:q F4:q G4:q | A4:q B4:q C5:q D5:q" }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué modo se obtiene tocando las teclas blancas de Sol (G) a Sol?",
+            "en": "Which mode do you get by playing the white keys from Sol (G) to Sol?",
+            "pt": "Que modo se obtém tocando as teclas brancas de Sol (G) a Sol?"
+          },
+          "options": [
+            { "text": { "es": "Lidio", "en": "Lydian", "pt": "Lídio" } },
+            { "text": { "es": "Mixolidio", "en": "Mixolydian", "pt": "Mixolídio" } },
+            { "text": { "es": "Frigio", "en": "Phrygian", "pt": "Frígio" } },
+            { "text": { "es": "Locrio", "en": "Locrian", "pt": "Lócrio" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Sol es el quinto grado de Do mayor, y el modo del quinto grado es el mixolidio: suena mayor, con la 7ª menor.",
+            "en": "Sol is the fifth degree of C major, and the mode on the fifth degree is Mixolydian: it sounds major, with a minor 7th.",
+            "pt": "Sol é o quinto grau de Dó maior, e o modo do quinto grau é o mixolídio: soa maior, com a 7ª menor."
+          },
+          "melody": { "tempo": 80, "notes": "G4:q A4:q B4:q C5:q | D5:q E5:q F5:q G5:q" }
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha esta escala que empieza en Re. ¿Qué modo es?",
+            "en": "Listen to this scale starting on Re. Which mode is it?",
+            "pt": "Escute esta escala que começa em Ré. Que modo é?"
+          },
+          "sound": { "notes": ["D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5"], "together": false, "tempo": 100 },
+          "options": [
+            { "text": { "es": "Jónico (mayor)", "en": "Ionian (major)", "pt": "Jônio (maior)" } },
+            { "text": { "es": "Dórico", "en": "Dorian", "pt": "Dórico" } },
+            { "text": { "es": "Eólico (menor natural)", "en": "Aeolian (natural minor)", "pt": "Eólio (menor natural)" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Tercera menor (Fa) pero sexta mayor (Si natural): es el dórico. El eólico tendría Si♭.",
+            "en": "Minor third (Fa) but major sixth (B natural): that is Dorian. Aeolian would have B flat.",
+            "pt": "Terça menor (Fá) mas sexta maior (Si natural): é o dórico. O eólio teria Si♭."
+          }
+        }
+      ]
+    },
+    {
+      "id": "l5-transposicion",
+      "title": { "es": "Transposición", "en": "Transposition", "pt": "Transposição" },
+      "emoji": "🔁",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "La misma melodía, otro lugar", "en": "The same melody, another place", "pt": "A mesma melodia, outro lugar" },
+          "text": {
+            "es": "Transponer es mover toda una melodía el mismo intervalo, conservando las distancias entre las notas. De Do mayor a Sol mayor se sube una 5ª justa: Do, Mi, Sol pasan a ser Sol, Si, Re. Como Sol mayor tiene Fa sostenido en la armadura, el Fa cambia a Fa♯.",
+            "en": "To transpose is to move a whole melody by the same interval, keeping the distances between notes. From C major to G major you go up a perfect 5th: Do, Mi, Sol become Sol, Si, Re. Since G major has an F sharp in its key signature, Fa becomes F sharp.",
+            "pt": "Transpor é mover toda uma melodia pelo mesmo intervalo, mantendo as distâncias entre as notas. De Dó maior para Sol maior sobe-se uma 5ª justa: Dó, Mi, Sol passam a ser Sol, Si, Ré. Como Sol maior tem Fá sustenido na armadura, o Fá passa a Fá♯."
+          },
+          "emoji": "🔁",
+          "melody": { "key": "G", "tempo": 80, "notes": "G4:q B4:q D5:q B4:q | A4:q C5:q E5:h" },
+          "play": true
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "Sube la melodía Do-Re-Mi una 5ª justa. ¿Cómo queda?",
+            "en": "Move the melody Do-Re-Mi up a perfect 5th. What do you get?",
+            "pt": "Suba a melodia Dó-Ré-Mi uma 5ª justa. Como fica?"
+          },
+          "options": [
+            { "text": { "es": "Sol-La-Si", "en": "Sol-La-Si", "pt": "Sol-Lá-Si" } },
+            { "text": { "es": "Sol-La-Do", "en": "Sol-La-Do", "pt": "Sol-Lá-Dó" } },
+            { "text": { "es": "Fa-Sol-La", "en": "Fa-Sol-La", "pt": "Fá-Sol-Lá" } },
+            { "text": { "es": "Re-Mi-Fa", "en": "Re-Mi-Fa", "pt": "Ré-Mi-Fá" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Do sube una 5ª a Sol, Re a La y Mi a Si. Se conserva la forma: tono, tono.",
+            "en": "Do goes up a 5th to Sol, Re to La and Mi to Si. The shape is kept: tone, tone.",
+            "pt": "Dó sobe uma 5ª para Sol, Ré para Lá e Mi para Si. A forma se mantém: tom, tom."
+          },
+          "melody": { "notes": "C4:q D4:q E4:h" }
+        },
+        {
+          "type": "identifyNote",
+          "prompt": {
+            "es": "Al transponer a Sol mayor, el Fa se vuelve esta nota. ¿Cuál es?",
+            "en": "When transposing to G major, Fa becomes this note. Which is it?",
+            "pt": "Ao transpor para Sol maior, o Fá vira esta nota. Qual é?"
+          },
+          "clef": "treble",
+          "note": "F#4",
+          "choices": ["E4", "F4", "F#4", "G4"],
+          "explanation": {
+            "es": "Es el Fa sostenido (F#): la séptima nota de Sol mayor, la sensible.",
+            "en": "It is F sharp (F#): the seventh note of G major, the leading tone.",
+            "pt": "É o Fá sustenido (F#): a sétima nota de Sol maior, a sensível."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca Do-Re-Mi transpuesto una 5ª arriba: Sol, La, Si.",
+            "en": "Play Do-Re-Mi transposed a 5th up: Sol, La, Si.",
+            "pt": "Toque Dó-Ré-Mi transposto uma 5ª acima: Sol, Lá, Si."
+          },
+          "targets": ["G4", "A4", "B4"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        }
+      ]
+    },
+    {
+      "id": "l5-examen",
+      "title": { "es": "Examen final", "en": "Final exam", "pt": "Exame final" },
+      "emoji": "🏆",
+      "isExam": true,
+      "steps": [
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuántos pulsos principales se sienten en un compás de 6/8?",
+            "en": "How many main beats do you feel in a 6/8 bar?",
+            "pt": "Quantos tempos principais se sentem em um compasso de 6/8?"
+          },
+          "options": [
+            { "text": { "es": "2", "en": "2", "pt": "2" } },
+            { "text": { "es": "3", "en": "3", "pt": "3" } },
+            { "text": { "es": "4", "en": "4", "pt": "4" } },
+            { "text": { "es": "6", "en": "6", "pt": "6" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Dos pulsos de negra con puntillo, cada uno dividido en tres corcheas.",
+            "en": "Two dotted-quarter beats, each divided into three eighths.",
+            "pt": "Dois tempos de semínima pontuada, cada um dividido em três colcheias."
+          },
+          "melody": { "time": "6/8", "tempo": 90, "notes": "C4:q. G4:q. | E4:8 E4:8 E4:8 C4:q." }
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha el intervalo. ¿Cuál es?",
+            "en": "Listen to the interval. Which one is it?",
+            "pt": "Escute o intervalo. Qual é?"
+          },
+          "sound": { "notes": ["C4", "G4"], "together": false, "tempo": 70 },
+          "options": [
+            { "text": { "es": "4ª justa", "en": "Perfect 4th", "pt": "4ª justa" } },
+            { "text": { "es": "5ª justa", "en": "Perfect 5th", "pt": "5ª justa" } },
+            { "text": { "es": "6ª mayor", "en": "Major 6th", "pt": "6ª maior" } },
+            { "text": { "es": "3ª mayor", "en": "Major 3rd", "pt": "3ª maior" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Do a Sol son 7 semitonos: una 5ª justa, un intervalo abierto y estable.",
+            "en": "Do to Sol is 7 semitones: a perfect 5th, an open and stable interval.",
+            "pt": "De Dó a Sol são 7 semitons: uma 5ª justa, um intervalo aberto e estável."
+          }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuál es la progresión I–IV–V–I en Do mayor?",
+            "en": "Which one is the I–IV–V–I progression in C major?",
+            "pt": "Qual é a progressão I–IV–V–I em Dó maior?"
+          },
+          "options": [
+            { "text": { "es": "Do – Fa – Sol – Do", "en": "C – F – G – C", "pt": "Dó – Fá – Sol – Dó" } },
+            { "text": { "es": "Do – Sol – Fa – Do", "en": "C – G – F – C", "pt": "Dó – Sol – Fá – Dó" } },
+            { "text": { "es": "Do – Re – Sol – La", "en": "C – D – G – A", "pt": "Dó – Ré – Sol – Lá" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "I = Do, IV = Fa, V = Sol y de vuelta a I = Do.",
+            "en": "I = C, IV = F, V = G and back to I = C.",
+            "pt": "I = Dó, IV = Fá, V = Sol e de volta ao I = Dó."
+          }
+        },
+        {
+          "type": "identifyNote",
+          "clefLocked": true,
+          "prompt": {
+            "es": "¿Qué nota es esta en clave de Fa?",
+            "en": "Which note is this in the bass clef?",
+            "pt": "Que nota é esta na clave de Fá?"
+          },
+          "clef": "bass",
+          "note": "D3",
+          "choices": ["B2", "C3", "D3", "E3"],
+          "explanation": {
+            "es": "En clave de Fa, la tercera línea es Re (D).",
+            "en": "In the bass clef, the middle line is Re (D).",
+            "pt": "Na clave de Fá, a terceira linha é Ré (D)."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca el arpegio de Re menor 7: Re, Fa, La, Do.",
+            "en": "Play the D minor 7 arpeggio: Re, Fa, La, Do.",
+            "pt": "Toque o arpejo de Ré menor 7: Ré, Fá, Lá, Dó."
+          },
+          "targets": ["D4", "F4", "A4", "C5"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca este ritmo con síncopa.",
+            "en": "Tap this syncopated rhythm.",
+            "pt": "Toque este ritmo com síncope."
+          },
+          "melody": { "tempo": 72, "notes": "x:q x:8 x:q x:q x:8 | x:8 x:q x:8 x:q x:q | x:w" },
+          "toleranceMs": 160,
+          "countIn": true,
+          "passScore": 0.6
+        }
+      ]
+    }
+  ],
+  "solfeos": [
+    {
+      "id": "s5-barcarola",
+      "title": { "es": "Barcarola del río", "en": "River barcarolle", "pt": "Barcarola do rio" },
+      "description": {
+        "es": "Melodía original en 6/8. Siente dos pulsos grandes por compás.",
+        "en": "Original melody in 6/8. Feel two big beats per bar.",
+        "pt": "Melodia original em 6/8. Sinta dois tempos grandes por compasso."
+      },
+      "melody": { "time": "6/8", "tempo": 90, "notes": "C4:q. E4:q. | G4:8 F4:8 E4:8 D4:q. | E4:8 G4:8 C5:8 G4:q. | C4:h." }
+    },
+    {
+      "id": "s5-sincopa",
+      "title": { "es": "Paso sincopado", "en": "Syncopated step", "pt": "Passo sincopado" },
+      "description": {
+        "es": "Notas largas que empiezan entre los pulsos. Cuenta 1-2-3-4.",
+        "en": "Long notes that start between the beats. Count 1-2-3-4.",
+        "pt": "Notas longas que começam entre os tempos. Conte 1-2-3-4."
+      },
+      "melody": { "tempo": 84, "notes": "C4:8 E4:q G4:q E4:q C4:8 | D4:8 F4:q A4:q F4:q D4:8 | E4:8 G4:q C5:q G4:q E4:8 | D4:q B3:q C4:h" }
+    },
+    {
+      "id": "s5-cadencia",
+      "title": { "es": "Cadencia I–IV–V–I", "en": "I–IV–V–I cadence", "pt": "Cadência I–IV–V–I" },
+      "description": {
+        "es": "Acordes de Do mayor: tónica, subdominante, dominante y vuelta a casa.",
+        "en": "C major chords: tonic, subdominant, dominant and back home.",
+        "pt": "Acordes de Dó maior: tônica, subdominante, dominante e volta para casa."
+      },
+      "melody": { "tempo": 60, "notes": "[C4 E4 G4]:w | [C4 F4 A4]:w | [B3 D4 G4]:w | [C4 E4 G4]:w" }
+    },
+    {
+      "id": "s5-dorico",
+      "title": { "es": "Camino dórico", "en": "Dorian path", "pt": "Caminho dórico" },
+      "description": {
+        "es": "Escala de Re dórico subiendo y bajando, solo teclas blancas.",
+        "en": "D Dorian scale going up and down, white keys only.",
+        "pt": "Escala de Ré dórico subindo e descendo, só teclas brancas."
+      },
+      "melody": { "tempo": 80, "notes": "D4:q E4:q F4:q G4:q | A4:q B4:q C5:h | A4:q G4:q F4:q E4:q | D4:w" }
+    },
+    {
+      "id": "s5-transpuesta",
+      "title": { "es": "Transpuesta a Sol", "en": "Transposed to G", "pt": "Transposta para Sol" },
+      "description": {
+        "es": "Una melodía en Sol mayor. Atento al Fa sostenido de la armadura.",
+        "en": "A melody in G major. Watch for the F sharp in the key signature.",
+        "pt": "Uma melodia em Sol maior. Atenção ao Fá sustenido da armadura."
+      },
+      "melody": { "key": "G", "tempo": 84, "notes": "G4:q B4:q D5:q B4:q | A4:q C5:q E5:h | D5:q B4:q G4:q F#4:q | G4:w" }
+    },
+    {
+      "id": "s5-dominante",
+      "title": { "es": "Del dominante a casa", "en": "From dominant to home", "pt": "Do dominante para casa" },
+      "description": {
+        "es": "Arpegio de Sol 7 y resolución en Do mayor.",
+        "en": "G7 arpeggio resolving to C major.",
+        "pt": "Arpejo de Sol 7 resolvendo em Dó maior."
+      },
+      "melody": { "tempo": 72, "notes": "G3:q B3:q D4:q F4:q | [G3 B3 D4 F4]:h [C4 E4 G4]:h" }
+    }
+  ],
+  "badge": {
+    "id": "badge-level5",
+    "name": { "es": "Experto Solfi", "en": "Solfi Expert", "pt": "Especialista Solfi" },
+    "description": {
+      "es": "Completaste el nivel Experto: compases compuestos, síncopa, intervalos, séptimas, funciones, modos y transposición.",
+      "en": "You completed the Expert level: compound meters, syncopation, intervals, sevenths, functions, modes and transposition.",
+      "pt": "Você completou o nível Especialista: compassos compostos, síncope, intervalos, sétimas, funções, modos e transposição."
+    },
+    "emoji": "🏆"
+  }
+}

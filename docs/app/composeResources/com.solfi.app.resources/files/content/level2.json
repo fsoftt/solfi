@@ -1,0 +1,734 @@
+{
+  "level": 2,
+  "title": { "es": "Básico", "en": "Basics", "pt": "Básico" },
+  "description": {
+    "es": "La clave de sol en detalle, las notas Do a Do agudo en el pentagrama, los silencios, los compases, las líneas adicionales y el teclado del piano.",
+    "en": "The treble clef in detail, the notes from Do to high Do on the staff, rests, time signatures, ledger lines and the piano keyboard.",
+    "pt": "A clave de sol em detalhe, as notas Dó a Dó agudo na pauta, as pausas, os compassos, as linhas suplementares e o teclado do piano."
+  },
+  "color": "#00B8A9",
+  "lessons": [
+    {
+      "id": "l1-treble-clef",
+      "clefLocked": true,
+      "title": { "es": "La clave de sol", "en": "The Treble Clef", "pt": "A clave de sol" },
+      "emoji": "𝄞",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Una clave con historia", "en": "A clef with a story", "pt": "Uma clave com história" },
+          "text": {
+            "es": "La clave de sol se dibuja al principio del pentagrama. Su espiral gira alrededor de la segunda línea (contando desde abajo) y marca ahí la nota Sol (G). Desde esa nota se pueden encontrar todas las demás.",
+            "en": "The treble clef is drawn at the start of the staff. Its spiral curls around the second line (counting from the bottom) and marks the note Sol (G) there. From that note you can find all the others.",
+            "pt": "A clave de sol é desenhada no início da pauta. Sua espiral gira em torno da segunda linha (contando de baixo para cima) e marca ali a nota Sol (G). A partir dessa nota é possível encontrar todas as outras."
+          },
+          "emoji": "𝄞",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "G4:w" },
+          "play": true
+        },
+        {
+          "type": "identifyNote",
+          "prompt": {
+            "es": "La clave de sol rodea esta línea. ¿Qué nota es?",
+            "en": "The treble clef circles this line. Which note is it?",
+            "pt": "A clave de sol envolve esta linha. Que nota é?"
+          },
+          "clef": "treble",
+          "note": "G4",
+          "choices": ["E4", "G4", "B4", "D5"],
+          "explanation": {
+            "es": "Es Sol (G): la segunda línea, la que rodea la clave de sol.",
+            "en": "It is Sol (G): the second line, the one the treble clef curls around.",
+            "pt": "É Sol (G): a segunda linha, aquela que a clave de sol envolve."
+          }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuántas líneas y cuántos espacios tiene el pentagrama?",
+            "en": "How many lines and how many spaces does the staff have?",
+            "pt": "Quantas linhas e quantos espaços tem a pauta?"
+          },
+          "options": [
+            { "text": { "es": "5 líneas y 4 espacios", "en": "5 lines and 4 spaces", "pt": "5 linhas e 4 espaços" } },
+            { "text": { "es": "4 líneas y 5 espacios", "en": "4 lines and 5 spaces", "pt": "4 linhas e 5 espaços" } },
+            { "text": { "es": "5 líneas y 5 espacios", "en": "5 lines and 5 spaces", "pt": "5 linhas e 5 espaços" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Cinco líneas dejan cuatro espacios entre ellas. Líneas y espacios se cuentan de abajo hacia arriba.",
+            "en": "Five lines leave four spaces between them. Lines and spaces are counted from the bottom up.",
+            "pt": "Cinco linhas deixam quatro espaços entre elas. Linhas e espaços são contados de baixo para cima."
+          }
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha: la clave de sol se usa para sonidos medios y agudos. ¿Esta melodía sube o baja?",
+            "en": "Listen: the treble clef is used for middle and high sounds. Does this melody go up or down?",
+            "pt": "Escute: a clave de sol é usada para sons médios e agudos. Esta melodia sobe ou desce?"
+          },
+          "sound": { "notes": ["G4", "A4", "B4", "C5"], "together": false, "tempo": 90 },
+          "options": [
+            { "text": { "es": "Sube", "en": "Goes up", "pt": "Sobe" } },
+            { "text": { "es": "Baja", "en": "Goes down", "pt": "Desce" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "En el pentagrama, cuanto más arriba está la nota, más aguda suena.",
+            "en": "On the staff, the higher a note is written, the higher it sounds.",
+            "pt": "Na pauta, quanto mais alta a nota está escrita, mais aguda ela soa."
+          }
+        }
+      ]
+    },
+    {
+      "id": "l2-staff-notes",
+      "clefLocked": true,
+      "title": { "es": "Las notas Do a Do", "en": "Notes from Do to Do", "pt": "As notas Dó a Dó" },
+      "emoji": "🎼",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Líneas y espacios", "en": "Lines and spaces", "pt": "Linhas e espaços" },
+          "text": {
+            "es": "Las notas suben por escalones, una línea, un espacio, una línea… Las líneas, de abajo hacia arriba, son Mi, Sol, Si, Re, Fa. Los espacios son Fa, La, Do, Mi. Aquí tienes la escala completa de Do a Do agudo.",
+            "en": "Notes climb in steps: a line, a space, a line… The lines, from bottom to top, are Mi, Sol, Si, Re, Fa. The spaces are Fa, La, Do, Mi. Here is the whole scale from Do to high Do.",
+            "pt": "As notas sobem por graus: uma linha, um espaço, uma linha… As linhas, de baixo para cima, são Mi, Sol, Si, Ré, Fá. Os espaços são Fá, Lá, Dó, Mi. Aqui está a escala completa de Dó a Dó agudo."
+          },
+          "emoji": "🪜",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 90, "notes": "C4:q D4:q E4:q F4:q | G4:q A4:q B4:q C5:q" },
+          "play": true
+        },
+        {
+          "type": "identifyNote",
+          "prompt": { "es": "Esta nota está en la primera línea. ¿Cuál es?", "en": "This note sits on the first line. Which one is it?", "pt": "Esta nota está na primeira linha. Qual é?" },
+          "clef": "treble",
+          "note": "E4",
+          "explanation": {
+            "es": "La primera línea de la clave de sol es Mi (E).",
+            "en": "The first line of the treble clef is Mi (E).",
+            "pt": "A primeira linha da clave de sol é Mi (E)."
+          }
+        },
+        {
+          "type": "identifyNote",
+          "prompt": { "es": "¿Qué nota es esta, en el tercer espacio?", "en": "Which note is this one, in the third space?", "pt": "Que nota é esta, no terceiro espaço?" },
+          "clef": "treble",
+          "note": "C5",
+          "choices": ["A4", "B4", "C5", "D5"],
+          "explanation": {
+            "es": "El tercer espacio es Do (C) agudo, una octava por encima del Do central.",
+            "en": "The third space is the high Do (C), one octave above middle Do.",
+            "pt": "O terceiro espaço é o Dó (C) agudo, uma oitava acima do Dó central."
+          }
+        },
+        {
+          "type": "identifyNote",
+          "prompt": { "es": "Está en la tercera línea, la del medio. ¿Qué nota es?", "en": "It is on the third line, the middle one. Which note is it?", "pt": "Está na terceira linha, a do meio. Que nota é?" },
+          "clef": "treble",
+          "note": "B4",
+          "explanation": {
+            "es": "La línea del medio es Si (B).",
+            "en": "The middle line is Si (B).",
+            "pt": "A linha do meio é Si (B)."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca en el teclado: Mi, Sol, Si. ¡Son las tres primeras líneas!",
+            "en": "Play on the keyboard: Mi, Sol, Si. These are the first three lines!",
+            "pt": "Toque no teclado: Mi, Sol, Si. São as três primeiras linhas!"
+          },
+          "targets": ["E4", "G4", "B4"],
+          "showStaff": true,
+          "showLabels": true,
+          "clef": "treble"
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuáles son los nombres de los cuatro espacios, de abajo hacia arriba?",
+            "en": "What are the names of the four spaces, from bottom to top?",
+            "pt": "Quais são os nomes dos quatro espaços, de baixo para cima?"
+          },
+          "options": [
+            { "text": { "es": "Fa, La, Do, Mi", "en": "Fa, La, Do, Mi", "pt": "Fá, Lá, Dó, Mi" } },
+            { "text": { "es": "Mi, Sol, Si, Re", "en": "Mi, Sol, Si, Re", "pt": "Mi, Sol, Si, Ré" } },
+            { "text": { "es": "Do, Re, Mi, Fa", "en": "Do, Re, Mi, Fa", "pt": "Dó, Ré, Mi, Fá" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Los espacios forman la palabra FA-LA-DO-MI. ¡Fácil de recordar!",
+            "en": "The spaces go Fa-La-Do-Mi. Easy to remember!",
+            "pt": "Os espaços formam Fá-Lá-Dó-Mi. Fácil de lembrar!"
+          }
+        }
+      ]
+    },
+    {
+      "id": "l3-rests",
+      "title": { "es": "Los silencios", "en": "Rests", "pt": "As pausas" },
+      "emoji": "🤫",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "El silencio también cuenta", "en": "Silence counts too", "pt": "O silêncio também conta" },
+          "text": {
+            "es": "Un silencio es un momento sin sonido, pero que ocupa tiempo. Cada figura tiene su silencio: el de negra dura 1 pulso, el de blanca 2 y el de redonda 4. Escucha: suena, silencio, suena.",
+            "en": "A rest is a moment without sound, but it still takes time. Every note value has its rest: the quarter rest lasts 1 beat, the half rest 2 and the whole rest 4. Listen: sound, silence, sound.",
+            "pt": "Uma pausa é um momento sem som, mas que ocupa tempo. Cada figura tem a sua pausa: a de semínima dura 1 tempo, a de mínima 2 e a de semibreve 4. Escute: som, silêncio, som."
+          },
+          "emoji": "🤫",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "C4:q r:q E4:h | G4:h r:h | C5:w" },
+          "play": true
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuántos pulsos dura el silencio de blanca?",
+            "en": "How many beats does a half rest last?",
+            "pt": "Quantos tempos dura a pausa de mínima?"
+          },
+          "options": [
+            { "text": { "es": "1 pulso", "en": "1 beat", "pt": "1 tempo" } },
+            { "text": { "es": "2 pulsos", "en": "2 beats", "pt": "2 tempos" } },
+            { "text": { "es": "4 pulsos", "en": "4 beats", "pt": "4 tempos" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "El silencio de blanca vale lo mismo que la blanca: 2 pulsos.",
+            "en": "The half rest is worth the same as the half note: 2 beats.",
+            "pt": "A pausa de mínima vale o mesmo que a mínima: 2 tempos."
+          },
+          "melody": { "time": "4/4", "tempo": 80, "notes": "C4:h r:h" }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "Este compás tiene una negra y un silencio de negra. ¿Qué ritmo oirás?",
+            "en": "This measure has a quarter note and a quarter rest. Which rhythm will you hear?",
+            "pt": "Este compasso tem uma semínima e uma pausa de semínima. Que ritmo você vai ouvir?"
+          },
+          "options": [
+            { "melody": { "time": "4/4", "tempo": 80, "notes": "C4:q r:q C4:q r:q" } },
+            { "melody": { "time": "4/4", "tempo": 80, "notes": "C4:q C4:q C4:q C4:q" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Toca la primera opción: suena, silencio, suena, silencio. ¡El silencio también ocupa su pulso!",
+            "en": "Tap the first option: sound, rest, sound, rest. The rest still takes its beat!",
+            "pt": "Toque na primeira opção: som, pausa, som, pausa. A pausa também ocupa o seu tempo!"
+          }
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca solo cuando haya nota. En los silencios, ¡descansa!",
+            "en": "Tap only when there is a note. On the rests, take a break!",
+            "pt": "Toque só quando houver nota. Nas pausas, descanse!"
+          },
+          "melody": { "time": "4/4", "tempo": 70, "notes": "x:q r:q x:q x:q | x:q x:q x:h" },
+          "toleranceMs": 230,
+          "countIn": true,
+          "passScore": 0.5
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Escucha esta melodía y cuenta los silencios: ¿oyes cómo respira la música?",
+            "en": "Listen to this melody and count the rests: can you hear the music breathe?",
+            "pt": "Escute esta melodia e conte as pausas: você ouve a música respirar?"
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "C4:q E4:q G4:q r:q | G4:q E4:q C4:h" }
+        }
+      ]
+    },
+    {
+      "id": "l4-time-signatures",
+      "title": { "es": "Compases y barras", "en": "Measures and Bar Lines", "pt": "Compassos e barras" },
+      "emoji": "📏",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Dividir la música en compases", "en": "Dividing music into measures", "pt": "Dividir a música em compassos" },
+          "text": {
+            "es": "Las barras de compás son líneas verticales que dividen la música en grupos de pulsos iguales llamados compases. Al inicio, dos números indican el compás: el de arriba dice cuántos pulsos hay, el de abajo qué figura es un pulso (4 = negra). Así, 4/4 tiene 4 negras por compás.",
+            "en": "Bar lines are vertical lines that divide music into groups of equal beats called measures. At the start, two numbers give the time signature: the top one says how many beats there are, the bottom one which note is one beat (4 = quarter note). So 4/4 has 4 quarter notes per measure.",
+            "pt": "As barras de compasso são linhas verticais que dividem a música em grupos de tempos iguais chamados compassos. No início, dois números indicam a fórmula de compasso: o de cima diz quantos tempos há, o de baixo qual figura vale um tempo (4 = semínima). Assim, 4/4 tem 4 semínimas por compasso."
+          },
+          "emoji": "📏",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "C4:q D4:q E4:q F4:q | G4:h E4:h | C4:w" },
+          "play": true
+        },
+        {
+          "type": "explain",
+          "title": { "es": "2/4, 3/4 y 4/4", "en": "2/4, 3/4 and 4/4", "pt": "2/4, 3/4 e 4/4" },
+          "text": {
+            "es": "2/4 tiene 2 pulsos (como una marcha: 1-2, 1-2). 3/4 tiene 3 pulsos (como un vals: 1-2-3, 1-2-3). 4/4 tiene 4 pulsos (1-2-3-4). El primer pulso de cada compás se siente un poquito más fuerte.",
+            "en": "2/4 has 2 beats (like a march: 1-2, 1-2). 3/4 has 3 beats (like a waltz: 1-2-3, 1-2-3). 4/4 has 4 beats (1-2-3-4). The first beat of every measure feels a little stronger.",
+            "pt": "2/4 tem 2 tempos (como uma marcha: 1-2, 1-2). 3/4 tem 3 tempos (como uma valsa: 1-2-3, 1-2-3). 4/4 tem 4 tempos (1-2-3-4). O primeiro tempo de cada compasso soa um pouco mais forte."
+          },
+          "emoji": "💃",
+          "melody": { "clef": "treble", "time": "3/4", "key": "C", "tempo": 90, "notes": "C4:q E4:q G4:q | G4:q E4:q C4:q | C4:h." },
+          "play": true
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuántas negras caben en un compás de 3/4?",
+            "en": "How many quarter notes fit in a 3/4 measure?",
+            "pt": "Quantas semínimas cabem em um compasso 3/4?"
+          },
+          "options": [
+            { "text": { "es": "2", "en": "2", "pt": "2" } },
+            { "text": { "es": "3", "en": "3", "pt": "3" } },
+            { "text": { "es": "4", "en": "4", "pt": "4" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "El número de arriba, 3, indica tres pulsos de negra por compás.",
+            "en": "The top number, 3, means three quarter-note beats per measure.",
+            "pt": "O número de cima, 3, indica três tempos de semínima por compasso."
+          }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué compás tiene este ritmo? Cuenta los pulsos entre las barras.",
+            "en": "Which time signature does this rhythm have? Count the beats between the bar lines.",
+            "pt": "Que compasso tem este ritmo? Conte os tempos entre as barras."
+          },
+          "options": [
+            { "text": { "es": "2/4", "en": "2/4", "pt": "2/4" } },
+            { "text": { "es": "3/4", "en": "3/4", "pt": "3/4" } },
+            { "text": { "es": "4/4", "en": "4/4", "pt": "4/4" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Hay tres negras en cada compás, así que es 3/4, un compás de vals.",
+            "en": "There are three quarter notes in every measure, so it is 3/4, a waltz meter.",
+            "pt": "Há três semínimas em cada compasso, então é 3/4, um compasso de valsa."
+          },
+          "melody": { "clef": "treble", "time": "3/4", "key": "C", "tempo": 90, "notes": "G4:q G4:q G4:q | E4:q E4:q E4:q | C4:h." }
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca este ritmo en 3/4 y siente el vals: 1-2-3, 1-2-3.",
+            "en": "Tap this rhythm in 3/4 and feel the waltz: 1-2-3, 1-2-3.",
+            "pt": "Toque este ritmo em 3/4 e sinta a valsa: 1-2-3, 1-2-3."
+          },
+          "melody": { "time": "3/4", "tempo": 80, "notes": "x:q x:q x:q | x:h x:q | x:q x:q x:q" },
+          "toleranceMs": 230,
+          "countIn": true,
+          "passScore": 0.5
+        }
+      ]
+    },
+    {
+      "id": "l5-ledger-lines",
+      "clefLocked": true,
+      "title": { "es": "Líneas adicionales", "en": "Ledger Lines", "pt": "Linhas suplementares" },
+      "emoji": "➖",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Cuando el pentagrama se queda corto", "en": "When the staff runs out", "pt": "Quando a pauta fica curta" },
+          "text": {
+            "es": "Si una nota es demasiado grave o aguda para caber en el pentagrama, se le añade una pequeña línea propia: la línea adicional. El Do central (Do4) se escribe debajo del pentagrama con una línea adicional que lo atraviesa.",
+            "en": "When a note is too low or too high to fit on the staff, it gets a little line of its own: the ledger line. Middle Do (Do4) is written below the staff with a ledger line through it.",
+            "pt": "Quando uma nota é grave ou aguda demais para caber na pauta, ela ganha uma pequena linha só sua: a linha suplementar. O Dó central (Dó4) é escrito abaixo da pauta com uma linha suplementar atravessando-o."
+          },
+          "emoji": "➖",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "C4:h D4:h" },
+          "play": true
+        },
+        {
+          "type": "identifyNote",
+          "prompt": { "es": "Esta nota cuelga bajo el pentagrama con una línea adicional. ¿Cuál es?", "en": "This note hangs below the staff on a ledger line. Which one is it?", "pt": "Esta nota fica abaixo da pauta sobre uma linha suplementar. Qual é?" },
+          "clef": "treble",
+          "note": "C4",
+          "choices": ["B3", "C4", "D4", "E4"],
+          "explanation": {
+            "es": "Es el Do central (C4), la nota con línea adicional más usada.",
+            "en": "It is middle Do (C4), the most common note with a ledger line.",
+            "pt": "É o Dó central (C4), a nota com linha suplementar mais usada."
+          }
+        },
+        {
+          "type": "identifyNote",
+          "prompt": { "es": "Esta nota está justo debajo de la primera línea, sin línea adicional. ¿Cuál es?", "en": "This note is right below the first line, with no ledger line. Which one is it?", "pt": "Esta nota está logo abaixo da primeira linha, sem linha suplementar. Qual é?" },
+          "clef": "treble",
+          "note": "D4",
+          "choices": ["C4", "D4", "E4", "F4"],
+          "explanation": {
+            "es": "Re (D) cuelga debajo de la primera línea; Do (C) necesita su línea adicional.",
+            "en": "Re (D) hangs just under the first line; Do (C) needs its ledger line.",
+            "pt": "Ré (D) fica logo abaixo da primeira linha; Dó (C) precisa da sua linha suplementar."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca el Do central y sube por escalones hasta Mi.",
+            "en": "Play middle Do and climb step by step up to Mi.",
+            "pt": "Toque o Dó central e suba por graus até o Mi."
+          },
+          "targets": ["C4", "D4", "E4"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha estas notas graves. ¿La melodía sube o baja?",
+            "en": "Listen to these low notes. Does the melody go up or down?",
+            "pt": "Escute estas notas graves. A melodia sobe ou desce?"
+          },
+          "sound": { "notes": ["E4", "D4", "C4"], "together": false, "tempo": 80 },
+          "options": [
+            { "text": { "es": "Sube", "en": "Goes up", "pt": "Sobe" } },
+            { "text": { "es": "Baja", "en": "Goes down", "pt": "Desce" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Mi, Re, Do: baja hasta el Do central, apoyado en su línea adicional.",
+            "en": "Mi, Re, Do: it descends to middle Do, resting on its ledger line.",
+            "pt": "Mi, Ré, Dó: desce até o Dó central, apoiado na sua linha suplementar."
+          }
+        }
+      ]
+    },
+    {
+      "id": "l6-keyboard",
+      "title": { "es": "El teclado del piano", "en": "The Piano Keyboard", "pt": "O teclado do piano" },
+      "emoji": "🎹",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Teclas blancas y negras", "en": "White and black keys", "pt": "Teclas brancas e pretas" },
+          "text": {
+            "es": "El piano tiene teclas blancas y negras. Las negras se agrupan de 2 en 2 y de 3 en 3. Para encontrar Do, busca el grupo de dos teclas negras: Do es la tecla blanca que está justo a su izquierda. Las teclas blancas siguen el orden Do Re Mi Fa Sol La Si y vuelven a empezar.",
+            "en": "The piano has white and black keys. The black keys come in groups of 2 and groups of 3. To find Do, look for a group of two black keys: Do is the white key just to its left. The white keys follow the order Do Re Mi Fa Sol La Si and then start over.",
+            "pt": "O piano tem teclas brancas e pretas. As pretas se agrupam de 2 em 2 e de 3 em 3. Para achar o Dó, procure o grupo de duas teclas pretas: o Dó é a tecla branca logo à esquerda dele. As teclas brancas seguem a ordem Dó Ré Mi Fá Sol Lá Si e recomeçam."
+          },
+          "emoji": "🎹",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 80, "notes": "C4:q D4:q E4:q F4:q | G4:q A4:q B4:q C5:q" },
+          "play": true
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cómo ubicas la tecla Do en el piano?",
+            "en": "How do you find the key Do on the piano?",
+            "pt": "Como você localiza a tecla Dó no piano?"
+          },
+          "options": [
+            { "text": { "es": "Es la blanca a la izquierda del grupo de 2 negras", "en": "It is the white key left of the group of 2 black keys", "pt": "É a branca à esquerda do grupo de 2 pretas" } },
+            { "text": { "es": "Es la blanca a la izquierda del grupo de 3 negras", "en": "It is the white key left of the group of 3 black keys", "pt": "É a branca à esquerda do grupo de 3 pretas" } },
+            { "text": { "es": "Es siempre una tecla negra", "en": "It is always a black key", "pt": "É sempre uma tecla preta" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Do está antes del grupo de dos teclas negras. El grupo de tres empieza después de Mi.",
+            "en": "Do comes right before the group of two black keys. The group of three comes after Mi.",
+            "pt": "O Dó vem logo antes do grupo de duas teclas pretas. O grupo de três vem depois do Mi."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Encuentra y toca el Do central.",
+            "en": "Find and play middle Do.",
+            "pt": "Encontre e toque o Dó central."
+          },
+          "targets": ["C4"],
+          "showStaff": true,
+          "showLabels": true,
+          "clef": "treble"
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Ahora sin ayuda de nombres: toca Do, Mi, Sol.",
+            "en": "Now without name labels: play Do, Mi, Sol.",
+            "pt": "Agora sem os nomes: toque Dó, Mi, Sol."
+          },
+          "targets": ["C4", "E4", "G4"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha estas dos notas del teclado. ¿El segundo sonido está a la derecha o a la izquierda?",
+            "en": "Listen to these two keyboard notes. Is the second sound to the right or to the left?",
+            "pt": "Escute estas duas notas do teclado. O segundo som está à direita ou à esquerda?"
+          },
+          "sound": { "notes": ["C4", "A4"], "together": false, "tempo": 70 },
+          "options": [
+            { "text": { "es": "A la derecha (más agudo)", "en": "To the right (higher)", "pt": "À direita (mais agudo)" } },
+            { "text": { "es": "A la izquierda (más grave)", "en": "To the left (lower)", "pt": "À esquerda (mais grave)" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "En el piano, hacia la derecha los sonidos son más agudos y hacia la izquierda, más graves.",
+            "en": "On the piano, sounds get higher toward the right and lower toward the left.",
+            "pt": "No piano, os sons ficam mais agudos para a direita e mais graves para a esquerda."
+          }
+        }
+      ]
+    },
+    {
+      "id": "l7-simple-melodies",
+      "clefLocked": true,
+      "title": { "es": "Leer melodías sencillas", "en": "Reading Simple Melodies", "pt": "Ler melodias simples" },
+      "emoji": "📖",
+      "steps": [
+        {
+          "type": "explain",
+          "title": { "es": "Leer paso a paso", "en": "Reading step by step", "pt": "Ler passo a passo" },
+          "text": {
+            "es": "Para leer una melodía: 1) mira el compás, 2) fíjate en el ritmo de cada compás, 3) nombra las notas, de una en una. Aquí tienes Martinillo (Frère Jacques), una canción tradicional: ¡las notas suben y bajan por escalones!",
+            "en": "To read a melody: 1) look at the time signature, 2) check the rhythm of each measure, 3) name the notes one by one. Here is Frère Jacques, a traditional song: the notes go up and down by steps!",
+            "pt": "Para ler uma melodia: 1) olhe o compasso, 2) observe o ritmo de cada compasso, 3) diga o nome das notas, uma a uma. Aqui está Frère Jacques, uma canção tradicional: as notas sobem e descem por graus!"
+          },
+          "emoji": "🔔",
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 90, "notes": "C4:q D4:q E4:q C4:q | C4:q D4:q E4:q C4:q" },
+          "play": true
+        },
+        {
+          "type": "listen",
+          "prompt": {
+            "es": "Escucha y sigue las notas con la mirada, de izquierda a derecha.",
+            "en": "Listen and follow the notes with your eyes, from left to right.",
+            "pt": "Escute e acompanhe as notas com os olhos, da esquerda para a direita."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 90, "notes": "E4:q F4:q G4:h | E4:q F4:q G4:h" }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuál es la primera nota de esta melodía?",
+            "en": "What is the first note of this melody?",
+            "pt": "Qual é a primeira nota desta melodia?"
+          },
+          "options": [
+            { "note": "C4" },
+            { "note": "E4" },
+            { "note": "G4" }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "La melodía empieza en Mi (E), la primera línea del pentagrama.",
+            "en": "The melody starts on Mi (E), the first line of the staff.",
+            "pt": "A melodia começa no Mi (E), a primeira linha da pauta."
+          },
+          "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 90, "notes": "E4:q F4:q G4:h | E4:q F4:q G4:h" }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca el comienzo de Martinillo: Do, Re, Mi, Do.",
+            "en": "Play the start of Frère Jacques: Do, Re, Mi, Do.",
+            "pt": "Toque o começo de Frère Jacques: Dó, Ré, Mi, Dó."
+          },
+          "targets": ["C4", "D4", "E4", "C4"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca el ritmo de Martinillo.",
+            "en": "Tap the rhythm of Frère Jacques.",
+            "pt": "Toque o ritmo de Frère Jacques."
+          },
+          "melody": { "time": "4/4", "tempo": 80, "notes": "x:q x:q x:q x:q | x:q x:q x:q x:q | x:q x:q x:h | x:q x:q x:h" },
+          "toleranceMs": 220,
+          "countIn": true,
+          "passScore": 0.6
+        }
+      ]
+    },
+    {
+      "id": "l8-exam",
+      "clefLocked": true,
+      "title": { "es": "Examen del nivel 2", "en": "Level 2 Exam", "pt": "Exame do nível 2" },
+      "emoji": "🏆",
+      "isExam": true,
+      "steps": [
+        {
+          "type": "identifyNote",
+          "prompt": { "es": "¿Qué nota es esta?", "en": "Which note is this?", "pt": "Que nota é esta?" },
+          "clef": "treble",
+          "note": "A4",
+          "explanation": {
+            "es": "Es La (A), el segundo espacio.",
+            "en": "It is La (A), the second space.",
+            "pt": "É Lá (A), o segundo espaço."
+          }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Cuántos pulsos dura el silencio de redonda?",
+            "en": "How many beats does a whole rest last?",
+            "pt": "Quantos tempos dura a pausa de semibreve?"
+          },
+          "options": [
+            { "text": { "es": "1 pulso", "en": "1 beat", "pt": "1 tempo" } },
+            { "text": { "es": "2 pulsos", "en": "2 beats", "pt": "2 tempos" } },
+            { "text": { "es": "4 pulsos", "en": "4 beats", "pt": "4 tempos" } }
+          ],
+          "answer": 2,
+          "explanation": {
+            "es": "El silencio de redonda ocupa 4 pulsos, un compás entero de 4/4.",
+            "en": "The whole rest takes 4 beats, a full 4/4 measure.",
+            "pt": "A pausa de semibreve ocupa 4 tempos, um compasso inteiro de 4/4."
+          }
+        },
+        {
+          "type": "quiz",
+          "question": {
+            "es": "¿Qué compás tiene esta melodía?",
+            "en": "Which time signature does this melody have?",
+            "pt": "Que compasso tem esta melodia?"
+          },
+          "options": [
+            { "text": { "es": "2/4", "en": "2/4", "pt": "2/4" } },
+            { "text": { "es": "3/4", "en": "3/4", "pt": "3/4" } },
+            { "text": { "es": "4/4", "en": "4/4", "pt": "4/4" } }
+          ],
+          "answer": 0,
+          "explanation": {
+            "es": "Cada compás tiene dos pulsos, así que es 2/4.",
+            "en": "Every measure has two beats, so it is 2/4.",
+            "pt": "Cada compasso tem dois tempos, então é 2/4."
+          },
+          "melody": { "clef": "treble", "time": "2/4", "key": "C", "tempo": 90, "notes": "C4:q C4:q | G4:q G4:q | A4:q A4:q | G4:h" }
+        },
+        {
+          "type": "earTraining",
+          "prompt": {
+            "es": "Escucha: ¿la melodía sube o baja?",
+            "en": "Listen: does the melody go up or down?",
+            "pt": "Escute: a melodia sobe ou desce?"
+          },
+          "sound": { "notes": ["C5", "B4", "A4", "G4"], "together": false, "tempo": 90 },
+          "options": [
+            { "text": { "es": "Sube", "en": "Goes up", "pt": "Sobe" } },
+            { "text": { "es": "Baja", "en": "Goes down", "pt": "Desce" } }
+          ],
+          "answer": 1,
+          "explanation": {
+            "es": "Do, Si, La, Sol: baja por escalones.",
+            "en": "Do, Si, La, Sol: it descends by steps.",
+            "pt": "Dó, Si, Lá, Sol: desce por graus."
+          }
+        },
+        {
+          "type": "piano",
+          "prompt": {
+            "es": "Toca: Sol, La, Si, Do agudo.",
+            "en": "Play: Sol, La, Si, high Do.",
+            "pt": "Toque: Sol, Lá, Si, Dó agudo."
+          },
+          "targets": ["G4", "A4", "B4", "C5"],
+          "showStaff": true,
+          "showLabels": false,
+          "clef": "treble"
+        },
+        {
+          "type": "rhythmTap",
+          "prompt": {
+            "es": "Toca este ritmo con silencios.",
+            "en": "Tap this rhythm with rests.",
+            "pt": "Toque este ritmo com pausas."
+          },
+          "melody": { "time": "4/4", "tempo": 70, "notes": "x:q x:q x:q r:q | x:q r:q x:h" },
+          "toleranceMs": 220,
+          "countIn": true,
+          "passScore": 0.6
+        }
+      ]
+    }
+  ],
+  "solfeos": [
+    {
+      "id": "s2-martinillo",
+      "title": { "es": "Martinillo", "en": "Frère Jacques", "pt": "Frère Jacques" },
+      "description": {
+        "es": "Canción tradicional francesa. Sube y baja por escalones.",
+        "en": "Traditional French song. It moves up and down by steps.",
+        "pt": "Canção tradicional francesa. Sobe e desce por graus."
+      },
+      "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 90, "notes": "C4:q D4:q E4:q C4:q | C4:q D4:q E4:q C4:q | E4:q F4:q G4:h | E4:q F4:q G4:h | G4:8 A4:8 G4:8 F4:8 E4:q C4:q | G4:8 A4:8 G4:8 F4:8 E4:q C4:q | C4:q G3:q C4:h | C4:q G3:q C4:h" }
+    },
+    {
+      "id": "s2-oda-alegria",
+      "title": { "es": "Himno a la alegría", "en": "Ode to Joy", "pt": "Hino à alegria" },
+      "description": {
+        "es": "Tema de Beethoven, de dominio público, en la tonalidad de Do.",
+        "en": "Beethoven's public-domain theme, in the key of C.",
+        "pt": "Tema de Beethoven, de domínio público, na tonalidade de Dó."
+      },
+      "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 90, "notes": "E4:q E4:q F4:q G4:q | G4:q F4:q E4:q D4:q | C4:q C4:q D4:q E4:q | E4:q. D4:8 D4:h" }
+    },
+    {
+      "id": "s2-estrellita",
+      "title": { "es": "Estrellita, ¿dónde estás?", "en": "Twinkle, Twinkle, Little Star", "pt": "Brilha, brilha estrelinha" },
+      "description": {
+        "es": "Melodía tradicional en compás de 2/4, con saltos de quinta.",
+        "en": "Traditional melody in 2/4, with a jump of a fifth.",
+        "pt": "Melodia tradicional em compasso 2/4, com salto de quinta."
+      },
+      "melody": { "clef": "treble", "time": "2/4", "key": "C", "tempo": 90, "notes": "C4:q C4:q | G4:q G4:q | A4:q A4:q | G4:h | F4:q F4:q | E4:q E4:q | D4:q D4:q | C4:h" }
+    },
+    {
+      "id": "s2-silencios",
+      "title": { "es": "Paseo con silencios", "en": "Walk with Rests", "pt": "Passeio com pausas" },
+      "description": {
+        "es": "Ejercicio original: sube por el acorde de Do, respira en el silencio y baja.",
+        "en": "Original exercise: climb the C chord, breathe on the rest and come down.",
+        "pt": "Exercício original: sobe pelo acorde de Dó, respira na pausa e desce."
+      },
+      "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 85, "notes": "C4:q E4:q G4:q r:q | G4:q E4:q C4:h | D4:q F4:q A4:q r:q | A4:q F4:q D4:h | C4:q E4:q G4:q C5:q | C5:w" }
+    },
+    {
+      "id": "s2-vals",
+      "title": { "es": "Vals del lunes", "en": "Monday Waltz", "pt": "Valsa de segunda" },
+      "description": {
+        "es": "Ejercicio original en 3/4: uno-dos-tres, con una nota larga al final.",
+        "en": "Original exercise in 3/4: one-two-three, with a long note at the end.",
+        "pt": "Exercício original em 3/4: um-dois-três, com uma nota longa no final."
+      },
+      "melody": { "clef": "treble", "time": "3/4", "key": "C", "tempo": 90, "notes": "C4:q E4:q G4:q | G4:h r:q | F4:q A4:q C5:q | C5:h r:q | B4:q G4:q D4:q | C4:h." }
+    },
+    {
+      "id": "s2-maria-corderito",
+      "title": { "es": "María tenía un corderito", "en": "Mary Had a Little Lamb", "pt": "Mary tinha um carneirinho" },
+      "description": {
+        "es": "Canción tradicional que baja y sube con notas repetidas.",
+        "en": "Traditional song that goes down and up with repeated notes.",
+        "pt": "Canção tradicional que desce e sobe com notas repetidas."
+      },
+      "melody": { "clef": "treble", "time": "4/4", "key": "C", "tempo": 90, "notes": "E4:q D4:q C4:q D4:q | E4:q E4:q E4:h | D4:q D4:q D4:h | E4:q G4:q G4:h" }
+    }
+  ],
+  "badge": {
+    "id": "badge-level2",
+    "name": { "es": "Lector del pentagrama", "en": "Staff Reader", "pt": "Leitor da pauta" },
+    "description": {
+      "es": "Completaste el nivel Básico: ya lees notas, silencios y compases.",
+      "en": "You completed the Basics level: you can now read notes, rests and measures.",
+      "pt": "Você completou o nível Básico: já lê notas, pausas e compassos."
+    },
+    "emoji": "🎼"
+  }
+}
