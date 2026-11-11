@@ -27,6 +27,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
+import com.solfi.app.ui.theme.LocalBaseFontFamily
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
@@ -66,6 +68,7 @@ fun StaffView(
     description: String = "",
 ) {
     val measurer = rememberTextMeasurer()
+    val fontFamily = LocalBaseFontFamily.current
     val density = LocalDensity.current
     BoxWithConstraints(modifier.fillMaxWidth()) {
         val widthPx = with(density) { maxWidth.toPx() }
@@ -86,13 +89,14 @@ fun StaffView(
             detectTapGestures { pos -> layout.hitTest(pos.x, pos.y)?.let(onNoteClick) }
         }
         Canvas(Modifier.fillMaxWidth().height(h).then(tap).semantics { if (description.isNotEmpty()) contentDescription = description }) {
-            drawStaff(layout, colors, measurer, labelFor, highlightIndex, pulse)
+            drawStaff(layout, colors, measurer, labelFor, highlightIndex, pulse, fontFamily)
         }
     }
 }
 
 private fun DrawScope.drawStaff(
     L: StaffLayout, colors: StaffColors, tm: TextMeasurer, labelFor: ((Pitch) -> String)?, hi: Int, pulse: Float,
+    fontFamily: FontFamily?,
 ) {
     val g = L.gap
     val melody = L.melody
@@ -118,7 +122,7 @@ private fun DrawScope.drawStaff(
         }
         x += order.size * g
         if (s.first && L.showTime) {
-            val style = TextStyle(fontSize = (g * 2.0f).toSp(), fontWeight = FontWeight.Bold, color = colors.ink)
+            val style = TextStyle(fontSize = (g * 2.0f).toSp(), fontFamily = fontFamily, fontWeight = FontWeight.Bold, color = colors.ink)
             val num = tm.measure(melody.time.beats.toString(), style)
             val den = tm.measure(melody.time.unit.toString(), style)
             val cx = x + 1.2f * g
@@ -141,7 +145,7 @@ private fun DrawScope.drawStaff(
                 if (gl.isRest) drawRest(gl, bottom, g, col, sc) else drawNote(gl, m, melody, bottom, g, col, sc, active, colors)
                 if (labelFor != null && !gl.isRest) {
                     val p = gl.heads.last().pitch
-                    val style = TextStyle(fontSize = (g * 0.95f).toSp().let { if (it.value < 10f) 10.sp else it }, fontWeight = if (active) FontWeight.Bold else FontWeight.Medium, color = if (active) colors.highlight else colors.label)
+                    val style = TextStyle(fontSize = (g * 0.95f).toSp().let { if (it.value < 10f) 10.sp else it }, fontFamily = fontFamily, fontWeight = if (active) FontWeight.Bold else FontWeight.Medium, color = if (active) colors.highlight else colors.label)
                     val r = tm.measure(labelFor(p), style)
                     drawText(r, topLeft = Offset(gl.x - r.size.width / 2f, bottom + 3.0f * g))
                 }

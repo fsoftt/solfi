@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
+import com.solfi.app.ui.theme.LocalBaseFontFamily
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
@@ -58,6 +59,7 @@ fun PianoKeyboard(
 ) {
     val ui = LocalUi.current
     val measurer = rememberTextMeasurer()
+    val fontFamily = LocalBaseFontFamily.current
     val density = LocalDensity.current
     val whites = remember(firstMidi, lastMidi) { (firstMidi..lastMidi).filter(::isWhite) }
     val pressed: SnapshotStateMap<Int, Int> = remember { mutableStateMapOf() } // pointerId -> midi
@@ -136,7 +138,7 @@ fun PianoKeyboard(
                 if (showLabels) {
                     val p = Pitch.fromMidi(m)
                     val label = ui.noteName(p) + if (p.step == 0) p.octave.toString() else ""
-                    val r = measurer.measure(label, TextStyle(fontSize = (wk * 0.26f).coerceIn(9f, 17f).let { with(density) { it.toSp() } }, fontWeight = FontWeight.SemiBold, color = Color(0xFF4A4568)))
+                    val r = measurer.measure(label, TextStyle(fontFamily = fontFamily, fontSize = (wk * 0.26f).coerceIn(9f, 17f).let { with(density) { it.toSp() } }, fontWeight = FontWeight.SemiBold, color = Color(0xFF4A4568)))
                     drawText(r, topLeft = Offset(x + (wk - r.size.width) / 2f, heightPx - r.size.height - 8f))
                 }
             }
@@ -155,7 +157,7 @@ fun PianoKeyboard(
                     drawRoundRect(Brush.verticalGradient(listOf(color, color.copy(alpha = 0.9f))), Offset(x, 0f), Size(bw, bh), CornerRadius(7f, 7f))
                     if (showLabels && bw > 26f) {
                         val p = Pitch.fromMidi(bm)
-                        val r = measurer.measure(ui.noteName(p), TextStyle(fontSize = with(density) { (bw * 0.3f).coerceIn(8f, 12f).toSp() }, color = Color.White.copy(alpha = 0.85f)))
+                        val r = measurer.measure(ui.noteName(p), TextStyle(fontFamily = fontFamily, fontSize = with(density) { (bw * 0.3f).coerceIn(8f, 12f).toSp() }, color = Color.White.copy(alpha = 0.85f)))
                         drawText(r, topLeft = Offset(x + (bw - r.size.width) / 2f, bh - r.size.height - 6f))
                     }
                 }
