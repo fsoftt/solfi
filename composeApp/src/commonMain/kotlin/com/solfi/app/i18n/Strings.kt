@@ -265,6 +265,18 @@ interface Strings {
     val nglIntro: String
     val nglEmpty: String
     val nglSong: String
+    val nglEnsembleTitle: String
+    val nglEnsembleDesc: String
+    val nglAccompaniment: String
+    val nglAccompanimentDesc: String
+    val nglStartTake: String
+    val nglStopTake: String
+    val nglStepByStep: String
+    fun nglTakeSummary(total: Int, played: Int, onTime: Int, inTune: Int): String
+    fun nglReview(measures: String): String
+    val nglAllGood: String
+    val nglLegend: String
+    fun nglNowPlay(note: String): String
     val nglInstrument: String
     val nglVoice: String
     fun nglVoiceN(n: Int): String

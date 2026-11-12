@@ -32,6 +32,7 @@ class InstrumentListener(private val mic: MicInput?) {
     private var detector: PitchDetector? = null
     private var tuning: InstrumentTuning? = null
     private var follower: NoteFollower? = null
+    private var recorder: ((PitchReading, Double) -> Unit)? = null
     private var mutedUntil = 0L
     private val recent = ArrayDeque<Double>()
 
@@ -39,7 +40,18 @@ class InstrumentListener(private val mic: MicInput?) {
 
     /** Starts the microphone for [tuning] without a target sequence (tuner). Returns a session id for [stop]. */
     fun listen(tuning: InstrumentTuning): Int {
-        val id = lock.withLock { follower = null; _follow.value = FollowState(); ++session }
+        val id = lock.withLock { follower = null; recorder = null; _follow.value = FollowState(); ++session }
+        open(tuning)
+        return id
+    }
+
+    /**
+     * Starts the microphone and hands every (smoothed) reading to [onReading] on the capture thread, with the
+     * seconds between the middle of the analysed sound and now (detection window + smoothing), so the caller can
+     * place it on its own clock. Used to score a part played in time.
+     */
+    fun record(tuning: InstrumentTuning, onReading: (PitchReading, Double) -> Unit): Int {
+        val id = lock.withLock { follower = null; recorder = onReading; _follow.value = FollowState(); ++session }
         open(tuning)
         return id
     }
@@ -49,6 +61,7 @@ class InstrumentListener(private val mic: MicInput?) {
         val id = lock.withLock {
             val f = NoteFollower(targets, tuning, octaveFree = octaveFree)
             follower = f
+            recorder = null
             _follow.value = f.state
             ++session
         }
@@ -87,6 +100,7 @@ class InstrumentListener(private val mic: MicInput?) {
             val smoothed = smooth(r)
             _reading.value = smoothed
             follower?.let { _follow.value = it.feed(smoothed, d.hop * 1000.0 / rate) }
+            recorder?.invoke(smoothed, (d.windowSize / 2.0 + d.hop) / rate)
         }
     }
 
@@ -102,7 +116,7 @@ class InstrumentListener(private val mic: MicInput?) {
 
     fun stop() {
         mic?.stop()
-        lock.withLock { follower = null; detector?.reset(); recent.clear() }
+        lock.withLock { follower = null; recorder = null; detector?.reset(); recent.clear() }
         _status.value = null
         _reading.value = null
     }

@@ -111,7 +111,7 @@ class ScreensRenderTest {
         val book = ContentJson.decodeEnsembleBook(File("src/commonMain/composeResources/files/content/ngl.json").readText())
         app.nglPieces = book.pieces
         try {
-            render("ngl", h = 3000) { NglScreen(app) }
+            render("ngl", h = 4600) { NglScreen(app) }
             app.nglSelection = "intro" to "p5"
             render("ngl-trombone-2", h = 3000, theme = "DARK") { NglScreen(app) }
             app.nglSelection = "intro" to "p8"

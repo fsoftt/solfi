@@ -19,6 +19,8 @@ data class PlayOptions(
     val fromBeat: Double = 0.0,
     /** Other parts played together with the melody (same meter; only their notes are used). */
     val accompaniment: List<Melody> = emptyList(),
+    /** False = the melody itself is silent (only timing, clicks and accompaniment): the learner plays it. */
+    val melodyAudible: Boolean = true,
     val onFinished: (() -> Unit)? = null,
 )
 
@@ -174,7 +176,7 @@ class AudioEngine(private val sink: AudioSink? = null) {
         if (!o.pulseOnly) {
             // the accompaniment shares the mix, so every voice gets quieter as parts are added
             val velocity = if (o.accompaniment.isEmpty()) 0.8f else (0.8f / kotlin.math.sqrt(1.0 + o.accompaniment.size).toFloat()).coerceAtLeast(0.22f)
-            for (m in listOf(melody) + o.accompaniment) {
+            for (m in (if (o.melodyAudible) listOf(melody) else emptyList()) + o.accompaniment) {
                 for (n in m.soundNotes()) {
                     if (n.startBeat < from - 1e-9 || n.startBeat >= melody.totalBeats - 1e-9) continue
                     val f = clock.frameForBeat(n.startBeat - from, start)

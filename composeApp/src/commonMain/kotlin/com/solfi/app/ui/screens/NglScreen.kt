@@ -39,6 +39,9 @@ import com.solfi.app.ui.theme.LocalUi
 import com.solfi.app.ui.widgets.PressCard
 import com.solfi.app.ui.widgets.ScreenTitle
 import com.solfi.app.ui.widgets.SecondaryButton
+import com.solfi.app.ui.widgets.BigButton
+import com.solfi.app.ui.theme.Palette
+import com.solfi.app.logic.TimedScorer
 import kotlin.math.roundToInt
 
 /** Display name of an NGL instrument code. */
@@ -122,16 +125,23 @@ private fun NglPartPractice(app: AppState, piece: EnsemblePiece, part: EnsembleP
     val others = remember(piece, part) { piece.parts.filter { it.id != part.id }.map { it.concert(piece) } }
     val tuning = remember(piece, part) { part.tuning(piece) }
     val pa = rememberPlayAlong(app, written, tuning)
+    val take = rememberEnsembleTake(app, written, concert, others, tuning, app.octaveFree || tuning.octaveFree)
+    val phase by take.phase.collectAsState()
+    val results by take.results.collectAsState()
+    val taking = phase == EnsembleTake.Phase.RUNNING
     val playing by app.engine.isPlaying.collectAsState()
     var tempo by remember(piece.id) { mutableFloatStateOf(piece.tempo.toFloat()) }
     var metronome by remember { mutableStateOf(false) }
     var countIn by remember { mutableStateOf(true) }
     var showNames by remember { mutableStateOf(true) }
     var ensemble by remember { mutableStateOf(false) }
+    var accompaniment by remember { mutableStateOf(true) }
+    val listening = playing && !taking
     val hi = if (pa.active) pa.highlight(app) else engineHighlight(app.engine, written)
+    val colors = remember(results, take) { if (results.isEmpty()) null else take.colorOf(results) }
 
     fun play(all: Boolean) {
-        pa.stop()
+        take.stop(); pa.stop()
         ensemble = all
         app.engine.playMelody(
             concert,
@@ -153,26 +163,71 @@ private fun NglPartPractice(app: AppState, piece: EnsemblePiece, part: EnsembleP
                 Text(s.transposeExplain(part.transpose, ui.noteName(c), ui.noteName(tuning.concert(c))), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 18.sp)
             }
         }
+        // play with the ensemble, in time, with a verdict per note
         PressCard(Modifier.fillMaxWidth()) {
-            Box(Modifier.padding(12.dp)) {
-                StaffView(written, labelFor = if (showNames) ({ p -> ui.noteName(p) }) else null, highlightIndex = hi, description = s.cdStaff)
+            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(s.nglEnsembleTitle, fontWeight = FontWeight.ExtraBold, fontSize = 17.sp)
+                Text(s.nglEnsembleDesc, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 18.sp)
+                ToggleRow(s.nglAccompaniment, accompaniment, s.nglAccompanimentDesc, enabled = !taking) { accompaniment = it }
+                if (taking) {
+                    TakeLiveMeter(app, written, tuning)
+                    SecondaryButton(s.nglStopTake, { take.stop() })
+                } else {
+                    BigButton(s.nglStartTake, { pa.stop(); take.start(tempo.roundToInt(), metronome, accompaniment) }, leading = "▶")
+                }
+                if (results.isNotEmpty()) {
+                    val sum = TimedScorer.summary(take.notes, results)
+                    if (phase == EnsembleTake.Phase.DONE) {
+                        Text(s.nglTakeSummary(sum.total, sum.played, sum.onTime, sum.inTune), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                        Text(
+                            if (sum.measuresToReview.isEmpty()) "🎉 " + s.nglAllGood else s.nglReview(sum.measuresToReview.joinToString(", ")),
+                            color = if (sum.measuresToReview.isEmpty()) Palette.Success else MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                    }
+                    Text(s.nglLegend, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
             }
         }
+
+        PressCard(Modifier.fillMaxWidth()) {
+            Box(Modifier.padding(12.dp)) {
+                StaffView(
+                    written, labelFor = if (showNames) ({ p -> ui.noteName(p) }) else null, highlightIndex = hi, description = s.cdStaff,
+                    noteColor = if (pa.active) null else colors,
+                )
+            }
+        }
+
+        SecondaryButton(if (listening && !ensemble) s.stop else "🎧  " + s.nglListenPart, { if (listening && !ensemble) app.engine.stop() else play(false) })
+        SecondaryButton(if (listening && ensemble) s.stop else "🎶  " + s.nglListenAll, { if (listening && ensemble) app.engine.stop() else play(true) })
         PlayAlongPanel(app, pa, onFinished = { app.recordSolfeo() })
-        PlayAlongButton(pa)
-        SecondaryButton(if (playing && !ensemble) s.stop else "🎧  " + s.nglListenPart, { if (playing && !ensemble) app.engine.stop() else play(false) })
-        SecondaryButton(if (playing && ensemble) s.stop else "🎶  " + s.nglListenAll, { if (playing && ensemble) app.engine.stop() else play(true) })
+        SecondaryButton(if (pa.active) s.stopListening else "🎵  " + s.nglStepByStep, { take.stop(); pa.toggle() })
         PressCard(Modifier.fillMaxWidth()) {
             Column(Modifier.padding(horizontal = 14.dp, vertical = 8.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(s.tempo, Modifier.weight(1f), fontWeight = FontWeight.Bold)
                     Text(s.bpm(tempo.roundToInt()), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
                 }
-                Slider(tempo, { tempo = it }, valueRange = 40f..200f, onValueChangeFinished = { if (playing) play(ensemble) })
-                ToggleRow(s.metronome, metronome) { metronome = it; if (playing) play(ensemble) }
+                Slider(tempo, { tempo = it }, valueRange = 40f..200f, enabled = !taking, onValueChangeFinished = { if (listening) play(ensemble) })
+                ToggleRow(s.metronome, metronome, enabled = !taking) { metronome = it; if (listening) play(ensemble) }
                 ToggleRow(s.countIn, countIn) { countIn = it }
                 ToggleRow(s.showNoteNames, showNames) { showNames = it }
             }
         }
     }
+}
+
+/** While a take runs: the note due now and how the sound heard compares with it. */
+@Composable
+private fun TakeLiveMeter(app: AppState, written: com.solfi.app.music.Melody, tuning: com.solfi.app.music.InstrumentTuning) {
+    val ui = LocalUi.current
+    val s = ui.strings
+    val pos by app.engine.position.collectAsState()
+    val reading by app.listener.reading.collectAsState()
+    val event = written.eventAtBeat(pos)?.takeIf { !it.isRest }
+    val f = reading?.frequency?.takeIf { (reading?.clarity ?: 0.0) >= 0.75 }
+    val judgement = if (event != null && f != null) event.pitches.map { com.solfi.app.music.PitchJudge.judge(f, tuning.concertMidi(it.midi), true) }.minBy { kotlin.math.abs(it.cents) } else null
+    Text(event?.let { s.nglNowPlay(ui.noteName(it.pitches.first())) } ?: "…", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+    PitchMeter(judgement)
 }

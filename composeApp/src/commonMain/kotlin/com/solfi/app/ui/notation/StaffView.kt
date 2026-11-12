@@ -66,6 +66,8 @@ fun StaffView(
     gap: Dp = 11.dp,
     colors: StaffColors = defaultStaffColors(),
     description: String = "",
+    /** Colour for a melody event (e.g. how it was played), or null for the normal ink. */
+    noteColor: ((Int) -> Color?)? = null,
 ) {
     val measurer = rememberTextMeasurer()
     val fontFamily = LocalBaseFontFamily.current
@@ -89,7 +91,7 @@ fun StaffView(
             detectTapGestures { pos -> layout.hitTest(pos.x, pos.y)?.let(onNoteClick) }
         }
         Canvas(Modifier.fillMaxWidth().height(h).then(tap).semantics { if (description.isNotEmpty()) contentDescription = description }) {
-            drawStaff(layout, colors, measurer, labelFor, highlightIndex, pulse, fontFamily)
+            drawStaff(layout, colors, measurer, labelFor, highlightIndex, pulse, fontFamily, noteColor)
         }
     }
 }
@@ -97,6 +99,7 @@ fun StaffView(
 private fun DrawScope.drawStaff(
     L: StaffLayout, colors: StaffColors, tm: TextMeasurer, labelFor: ((Pitch) -> String)?, hi: Int, pulse: Float,
     fontFamily: FontFamily?,
+    noteColor: ((Int) -> Color?)? = null,
 ) {
     val g = L.gap
     val melody = L.melody
@@ -140,7 +143,7 @@ private fun DrawScope.drawStaff(
             // notes
             for (gl in m.glyphs) {
                 val active = gl.event.index == hi
-                val col = if (active) colors.highlight else colors.ink
+                val col = if (active) colors.highlight else noteColor?.invoke(gl.event.index) ?: colors.ink
                 val sc = if (active) 1f + 0.3f * pulse else 1f
                 if (gl.isRest) drawRest(gl, bottom, g, col, sc) else drawNote(gl, m, melody, bottom, g, col, sc, active, colors)
                 if (labelFor != null && !gl.isRest) {
