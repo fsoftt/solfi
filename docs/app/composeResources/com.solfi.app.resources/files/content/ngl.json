@@ -1,8 +1,8 @@
 {
   "pieces": [
     {
-      "id": "intro-ngl",
-      "title": "Intro NGL",
+      "id": "intro",
+      "title": "Intro",
       "time": "2/2",
       "tempo": 160,
       "parts": [
