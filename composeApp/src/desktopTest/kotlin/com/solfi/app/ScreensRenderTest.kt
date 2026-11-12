@@ -28,7 +28,7 @@ import kotlin.test.assertTrue
 /** Renders the main screens off-screen with real level-1 content (smoke test + PNGs in build/render). */
 class ScreensRenderTest {
     private val kv = KeyValueStore("solfi-render-test")
-    private val app = AppState(ProfileStore(kv), AudioEngine(null), Haptics(), "es").also { a ->
+    private val app = AppState(ProfileStore(kv), AudioEngine(null), Haptics(), "es", com.solfi.app.audio.InstrumentListener(null)).also { a ->
         val dir = listOf("src/commonMain/composeResources/files/content").map(::File).first { it.isDirectory }
         a.useLevels(listOf(ContentJson.decodeLevel(File(dir, "level1.json").readText()), null, null, null, null))
         a.createProfile("Lucía", "🦊", kid = true, lang = Lang.ES, naming = NoteNaming.SOLFEGE)
@@ -59,6 +59,30 @@ class ScreensRenderTest {
     }
 
     @Test fun home() = render("home") { HomeScreen(app) }
+    @Test fun practiceTab() = render("practice", h = 2600) { com.solfi.app.ui.screens.InstrumentPracticeScreen(app) }
+    @Test fun practiceTabTrumpet() {
+        app.updateSettings { copy(instrument = "TRUMPET") }
+        try { render("practice-trumpet", h = 2600, theme = "DARK") { com.solfi.app.ui.screens.InstrumentPracticeScreen(app) } }
+        finally { app.updateSettings { copy(instrument = "OTHER") } }
+    }
+    @Test fun practiceTuner() = render("practice-tuner") { com.solfi.app.ui.screens.PracticeTunerScreen(app) }
+    @Test fun practiceNotes() = render("practice-notes") { com.solfi.app.ui.screens.PracticeNotesScreen(app) }
+    @Test fun practiceMelodyListening() {
+        app.updateSettings { copy(instrument = "SAXOPHONE") }
+        try {
+            render("practice-melody", h = 2000) {
+                com.solfi.app.ui.screens.PracticeMelodyScreen(app, 0, 0)
+                androidx.compose.runtime.LaunchedEffect(Unit) {
+                    // the alto sax reads the first written note; play it 14 cents sharp at concert pitch
+                    val first = com.solfi.app.logic.NoteFollower.targetsOf(app.levels[0]!!.solfeos[0].melody.toMelody()).first().written.first()
+                    val f = app.tuning.concert(first).frequency * Math.pow(2.0, 14 / 1200.0)
+                    val sr = 44100
+                    val buf = FloatArray(sr / 10) { i -> (0.3 * kotlin.math.sin(2 * Math.PI * f * i / sr)).toFloat() }
+                    app.listener.feedForTest(buf, buf.size, sr)
+                }
+            }
+        } finally { app.listener.stop(); app.updateSettings { copy(instrument = "OTHER") } }
+    }
     @Test fun map() = render("map") { LevelMapScreen(app) }
     @Test fun progress() = render("progress") { ProgressScreen(app) }
     @Test fun settings() = render("settings") { SettingsScreen(app) }

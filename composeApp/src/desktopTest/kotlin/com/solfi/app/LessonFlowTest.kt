@@ -26,7 +26,7 @@ class LessonFlowTest {
     private fun level(n: Int) = LevelContent(n, t("L"), t("d"), "#112233", listOf(lesson("a"), lesson("b", exam = true)), emptyList(), BadgeSpec("b$n", t("b"), t("b")))
 
     private val kv = KeyValueStore("solfi-flow-test")
-    private val app = AppState(ProfileStore(kv), AudioEngine(null), Haptics(), "es").also { a ->
+    private val app = AppState(ProfileStore(kv), AudioEngine(null), Haptics(), "es", com.solfi.app.audio.InstrumentListener(null)).also { a ->
         a.useLevels(listOf(level(1), level(2), null, null, null))
         a.createProfile("Test", "x", kid = true, lang = Lang.ES, naming = NoteNaming.SOLFEGE)
     }

@@ -126,12 +126,14 @@ fun SolfeoPlayerScreen(app: AppState, levelIndex: Int, solfeoIndex: Int) {
     var pausedAt by remember { mutableDoubleStateOf(0.0) }
     val playing by engine.isPlaying.collectAsState()
     val pos by engine.position.collectAsState()
-    val hi = engineHighlight(engine, melody)
+    val pa = rememberPlayAlong(app, melody)
+    val hi = if (pa.active) pa.highlight(app) else engineHighlight(engine, melody)
 
     PlatformBackHandler(true) { app.pop() }
     LaunchedEffect(Unit) { engine.stop() }
 
     fun start(from: Double) {
+        pa.stop()
         engine.playMelody(
             melody,
             PlayOptions(tempo = tempo.roundToInt(), metronome = metronome || pulseOnly, countIn = countIn, loop = loop, pulseOnly = pulseOnly, fromBeat = from, onFinished = { pausedAt = 0.0; app.recordSolfeo() }),
@@ -151,7 +153,7 @@ fun SolfeoPlayerScreen(app: AppState, levelIndex: Int, solfeoIndex: Int) {
             PressCard(Modifier.fillMaxWidth()) {
                 Box(Modifier.padding(12.dp)) {
                     StaffView(
-                        melody, labelFor = if (showNames) ({ p -> ui.noteName(p) }) else null, highlightIndex = if (pulseOnly) -1 else hi,
+                        melody, labelFor = if (showNames) ({ p -> ui.noteName(p) }) else null, highlightIndex = if (pulseOnly && !pa.active) -1 else hi,
                         onNoteClick = { e -> e.pitches.forEach { engine.playPitch(it, 0.7) } }, description = s.cdStaff,
                     )
                 }
@@ -164,6 +166,7 @@ fun SolfeoPlayerScreen(app: AppState, levelIndex: Int, solfeoIndex: Int) {
                 }
             }
             PulseDots(melody.time.clickTicks, melody.time.measureTicks, if (playing) pos else AudioEngine.IDLE)
+            PlayAlongPanel(app, pa, onFinished = { app.recordSolfeo() })
 
             // transport
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
@@ -173,6 +176,8 @@ fun SolfeoPlayerScreen(app: AppState, levelIndex: Int, solfeoIndex: Int) {
                     if (playing) { pausedAt = pos.coerceAtLeast(0.0); engine.stop() } else start(pausedAt)
                 }, Modifier.size(76.dp)) { Icon(if (playing) Icons.Filled.Pause else Icons.Filled.PlayArrow, if (playing) s.pause else s.play, Modifier.size(42.dp)) }
             }
+
+            PlayAlongButton(pa)
 
             // tempo
             Column {

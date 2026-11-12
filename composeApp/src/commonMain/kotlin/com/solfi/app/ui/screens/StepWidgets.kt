@@ -77,24 +77,30 @@ fun engineHighlight(engine: AudioEngine, melody: Melody?): Int {
     return melody.eventAtBeat(pos)?.index ?: -1
 }
 
-/** Staff + play/stop button that highlights the notes while playing. */
+/** Staff + play/stop button that highlights the notes while playing; with [playAlong] it can also be played on the learner's instrument. */
 @Composable
 fun MelodyPlayerCard(
     app: AppState, spec: MelodySpec, showLabels: Boolean = true, autoLabelOff: Boolean = false, clef: Clef? = LocalClefOverride.current,
     /** Called when the sequencer reaches the end of the melody (not when playback is stopped early). */
     onPlayedToEnd: (() -> Unit)? = null,
+    playAlong: Boolean = false,
 ) {
     val ui = LocalUi.current
     val melody = rememberMelody(spec, clef) ?: return
     val playing by app.engine.isPlaying.collectAsState()
-    val hi = engineHighlight(app.engine, melody)
+    val pa = rememberPlayAlong(app, if (playAlong) melody else null)
+    val hi = if (pa.active) pa.highlight(app) else engineHighlight(app.engine, melody)
     PressCard(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(8.dp)) {
             StaffView(
                 melody, labelFor = if (showLabels && !autoLabelOff) ({ p -> ui.noteName(p) }) else null, highlightIndex = hi,
                 description = ui.strings.cdStaff,
             )
-            PlayButton(playing, onPlay = { app.engine.playMelody(melody, PlayOptions(tempo = spec.tempo, onFinished = onPlayedToEnd)) }, onStop = { app.engine.stop() })
+            PlayButton(playing, onPlay = { pa.stop(); app.engine.playMelody(melody, PlayOptions(tempo = spec.tempo, onFinished = onPlayedToEnd)) }, onStop = { app.engine.stop() })
+            if (playAlong) {
+                PlayAlongButton(pa)
+                PlayAlongPanel(app, pa, onFinished = { onPlayedToEnd?.invoke() })
+            }
         }
     }
 }

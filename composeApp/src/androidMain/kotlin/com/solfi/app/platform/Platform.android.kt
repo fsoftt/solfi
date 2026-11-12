@@ -125,3 +125,62 @@ actual fun currentTimeMillis(): Long = System.currentTimeMillis()
 actual fun PlatformBackHandler(enabled: Boolean, onBack: () -> Unit) {
     BackHandler(enabled = enabled, onBack = onBack)
 }
+
+/** Asks the user for RECORD_AUDIO; installed by MainActivity (needs an activity result launcher). */
+object MicPermission {
+    var requester: ((onResult: (Boolean) -> Unit) -> Unit)? = null
+}
+
+/** Microphone through [android.media.AudioRecord] (16-bit mono, voice-recognition source = little processing). */
+actual class MicInput actual constructor() {
+    @Volatile private var running = false
+    @Volatile private var wanted = false
+    private var record: android.media.AudioRecord? = null
+    private var thread: Thread? = null
+
+    actual fun start(onStatus: (MicStatus) -> Unit, onSamples: (FloatArray, Int, Int) -> Unit) {
+        if (running) return
+        wanted = true
+        val granted = androidx.core.content.ContextCompat.checkSelfPermission(AppContext.app, android.Manifest.permission.RECORD_AUDIO) ==
+            android.content.pm.PackageManager.PERMISSION_GRANTED
+        if (granted) { open(onStatus, onSamples); return }
+        val ask = MicPermission.requester ?: run { onStatus(MicStatus.DENIED); return }
+        ask { ok -> if (!ok) onStatus(MicStatus.DENIED) else if (wanted) open(onStatus, onSamples) }
+    }
+
+    @android.annotation.SuppressLint("MissingPermission")
+    private fun open(onStatus: (MicStatus) -> Unit, onSamples: (FloatArray, Int, Int) -> Unit) {
+        if (running) return
+        val rate = 44100
+        val min = android.media.AudioRecord.getMinBufferSize(rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
+        if (min <= 0) { onStatus(MicStatus.UNAVAILABLE); return }
+        val rec = try {
+            android.media.AudioRecord(android.media.MediaRecorder.AudioSource.VOICE_RECOGNITION, rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, maxOf(min, 4096 * 2))
+        } catch (e: Exception) { onStatus(MicStatus.UNAVAILABLE); return }
+        if (rec.state != android.media.AudioRecord.STATE_INITIALIZED) { rec.release(); onStatus(MicStatus.UNAVAILABLE); return }
+        try { rec.startRecording() } catch (e: Exception) { rec.release(); onStatus(MicStatus.UNAVAILABLE); return }
+        record = rec
+        running = true
+        onStatus(MicStatus.LISTENING)
+        thread = Thread({
+            val frames = 1024
+            val s = ShortArray(frames)
+            val f = FloatArray(frames)
+            while (running) {
+                val n = rec.read(s, 0, frames)
+                if (n <= 0) continue
+                for (i in 0 until n) f[i] = s[i] / 32768f
+                onSamples(f, n, rate)
+            }
+        }, "solfi-mic").also { it.isDaemon = true; it.start() }
+    }
+
+    actual fun stop() {
+        wanted = false
+        running = false
+        thread?.join(500)
+        record?.let { runCatching { it.stop() }; it.release() }
+        record = null
+        thread = null
+    }
+}

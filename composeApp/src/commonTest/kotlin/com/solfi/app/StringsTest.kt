@@ -51,8 +51,8 @@ class StringsTest {
             val names = all.map { (_, s) -> s.instrumentName(i) }
             names.forEach { assertTrue(it.isNotBlank(), "name $i") }
         }
-        assertEquals("Trompeta", EsStrings.instrumentName(com.solfi.app.music.Instrument.TRUMPET))
-        assertEquals("Saxophone", EnStrings.instrumentName(com.solfi.app.music.Instrument.SAXOPHONE))
-        assertEquals("Saxofone", PtStrings.instrumentName(com.solfi.app.music.Instrument.SAXOPHONE))
+        assertEquals("Trompeta (Si♭)", EsStrings.instrumentName(com.solfi.app.music.Instrument.TRUMPET))
+        assertEquals("Alto saxophone (E♭)", EnStrings.instrumentName(com.solfi.app.music.Instrument.SAXOPHONE))
+        assertEquals("Saxofone alto (Mi♭)", PtStrings.instrumentName(com.solfi.app.music.Instrument.SAXOPHONE))
     }
 }

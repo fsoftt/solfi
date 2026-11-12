@@ -33,6 +33,10 @@ import com.solfi.app.platform.KeyValueStore
 import com.solfi.app.platform.PlatformBackHandler
 import com.solfi.app.platform.systemLanguageCode
 import com.solfi.app.ui.screens.HomeScreen
+import com.solfi.app.ui.screens.InstrumentPracticeScreen
+import com.solfi.app.ui.screens.PracticeMelodyScreen
+import com.solfi.app.ui.screens.PracticeNotesScreen
+import com.solfi.app.ui.screens.PracticeTunerScreen
 import com.solfi.app.ui.screens.LessonScreen
 import com.solfi.app.ui.screens.LevelMapScreen
 import com.solfi.app.ui.screens.OnboardingScreen
@@ -90,6 +94,9 @@ private fun Root(app: AppState) {
             is Route.SkipTest -> LessonScreen(app, route.levelIndex, app.levels.getOrNull(route.levelIndex)?.lessons?.lastIndex ?: -1, skipTest = true)
             is Route.Solfeo -> SolfeoPlayerScreen(app, route.levelIndex, route.solfeoIndex)
             is Route.RandomSolfeo -> RandomSolfeoScreen(app, route.difficulty, route.seed)
+            Route.PracticeTuner -> PracticeTunerScreen(app)
+            Route.PracticeNotes -> PracticeNotesScreen(app)
+            is Route.PracticeMelody -> PracticeMelodyScreen(app, route.levelIndex, route.index)
             Route.Settings -> SettingsScreen(app)
             Route.AddProfile -> OnboardingScreen(app, onCancel = { app.pop() })
         }
@@ -103,11 +110,12 @@ private fun MainTabs(app: AppState) {
         Triple(Tab.HOME, "🏠", s.navHome),
         Triple(Tab.LEARN, "🗺️", s.navLearn),
         Triple(Tab.SOLFEOS, "🎼", s.navSolfeos),
+        Triple(Tab.PRACTICE, "🎤", s.navPractice),
         Triple(Tab.PIANO, "🎹", s.navPiano),
         Triple(Tab.PROGRESS, "🏆", s.navProgress),
     )
     // leaving a tab silences whatever was playing
-    LaunchedEffect(app.tab) { app.engine.stop() }
+    LaunchedEffect(app.tab) { app.engine.stop(); app.listener.stop() }
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
@@ -128,6 +136,7 @@ private fun MainTabs(app: AppState) {
                     Tab.HOME -> HomeScreen(app)
                     Tab.LEARN -> LevelMapScreen(app)
                     Tab.SOLFEOS -> SolfeosScreen(app)
+                    Tab.PRACTICE -> InstrumentPracticeScreen(app)
                     Tab.PIANO -> PianoScreen(app)
                     Tab.PROGRESS -> ProgressScreen(app)
                 }
