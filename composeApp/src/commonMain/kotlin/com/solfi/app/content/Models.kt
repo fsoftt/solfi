@@ -169,4 +169,6 @@ object ContentJson {
     }
 
     fun decodeLevel(text: String): LevelContent = json.decodeFromString(LevelContent.serializer(), text)
+
+    fun decodeEnsembleBook(text: String): EnsembleBook = json.decodeFromString(EnsembleBook.serializer(), text)
 }

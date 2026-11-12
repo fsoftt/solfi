@@ -38,6 +38,7 @@ import com.solfi.app.ui.screens.PracticeMelodyScreen
 import com.solfi.app.ui.screens.PracticeNotesScreen
 import com.solfi.app.ui.screens.PracticeTunerScreen
 import com.solfi.app.ui.screens.LessonScreen
+import com.solfi.app.ui.screens.NglScreen
 import com.solfi.app.ui.screens.LevelMapScreen
 import com.solfi.app.ui.screens.OnboardingScreen
 import com.solfi.app.ui.screens.PianoScreen
@@ -104,13 +105,14 @@ private fun Root(app: AppState) {
 }
 
 @Composable
-private fun MainTabs(app: AppState) {
+internal fun MainTabs(app: AppState) {
     val s = LocalUi.current.strings
     val items = listOf(
         Triple(Tab.HOME, "🏠", s.navHome),
         Triple(Tab.LEARN, "🗺️", s.navLearn),
         Triple(Tab.SOLFEOS, "🎼", s.navSolfeos),
         Triple(Tab.PRACTICE, "", s.navPractice),
+        Triple(Tab.NGL, "", s.navNgl),
         Triple(Tab.PIANO, "🎹", s.navPiano),
         Triple(Tab.PROGRESS, "🏆", s.navProgress),
     )
@@ -123,7 +125,14 @@ private fun MainTabs(app: AppState) {
                 items.forEach { (tab, icon, label) ->
                     NavigationBarItem(
                         selected = app.tab == tab, onClick = { app.tab = tab },
-                        icon = { if (tab == Tab.PRACTICE) com.solfi.app.ui.icons.InstrumentIcon(app.instrument, 26.dp) else Text(icon, fontSize = 22.sp) }, label = { Text(label, fontSize = 11.sp, maxLines = 1) },
+                        icon = {
+                            when (tab) {
+                                Tab.PRACTICE -> com.solfi.app.ui.icons.InstrumentIcon(app.instrument, 26.dp)
+                                Tab.NGL -> com.solfi.app.ui.icons.InstrumentIcon(com.solfi.app.music.Instrument.TRUMPET, 26.dp)
+                                else -> Text(icon, fontSize = 22.sp)
+                            }
+                        },
+                        label = { Text(label, fontSize = if (items.size > 6) 10.sp else 11.sp, letterSpacing = if (items.size > 6) (-0.3).sp else androidx.compose.ui.unit.TextUnit.Unspecified, maxLines = 1, softWrap = false) },
                         alwaysShowLabel = true,
                     )
                 }
@@ -137,6 +146,7 @@ private fun MainTabs(app: AppState) {
                     Tab.LEARN -> LevelMapScreen(app)
                     Tab.SOLFEOS -> SolfeosScreen(app)
                     Tab.PRACTICE -> InstrumentPracticeScreen(app)
+                    Tab.NGL -> NglScreen(app)
                     Tab.PIANO -> PianoScreen(app)
                     Tab.PROGRESS -> ProgressScreen(app)
                 }

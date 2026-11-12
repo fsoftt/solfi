@@ -250,6 +250,8 @@ object EnStrings : Strings {
     override fun transposeExplain(transpose: Int, writtenC: String, soundsAs: String) = when {
         transpose == 0 -> "Your instrument sounds as written."
         transpose == -12 -> "Your instrument sounds an octave lower than written. Solfi takes it into account."
+        transpose == 12 -> "Your instrument sounds an octave higher than written. We take it into account."
+        transpose == 24 -> "Your instrument sounds two octaves higher than written. We take it into account."
         else -> "Transposing instrument: a written $writtenC sounds $soundsAs. Just read and play: Solfi takes it into account."
     }
     override val ignoreOctave = "Accept any octave"
@@ -272,6 +274,18 @@ object EnStrings : Strings {
     override val inputKeyboard = "🎹 Keyboard"
     override val inputInstrument = "🎶 My instrument"
     override val anyOctaveAuto = "These notes are outside your instrument's range: any octave counts."
+
+    override val navNgl = "NGL"
+    override val nglTitle = "NGL"
+    override val nglIntro = "Choose your instrument and your voice, and practise your part of the ensemble. Listen to it alone or with the whole ensemble."
+    override val nglEmpty = "No pieces yet."
+    override val nglInstrument = "Instrument"
+    override val nglVoice = "Voice"
+    override fun nglVoiceN(n: Int) = "Voice $n"
+    override val nglListenPart = "Listen to my part"
+    override val nglListenAll = "Listen to the whole ensemble"
+    override val glockenspiel = "Glockenspiel"
+    override fun nglPartSummary(measures: Int, tempo: Int) = "$measures bars · $tempo quarter notes per minute"
 
     override val cdMascot = "Solfi mascot, a smiling music note"
     override val cdSettings = "Settings"

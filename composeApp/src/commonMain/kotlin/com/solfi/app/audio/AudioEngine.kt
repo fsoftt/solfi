@@ -17,6 +17,8 @@ data class PlayOptions(
     val pulseOnly: Boolean = false,
     /** Start (resume) at this beat; no count-in is played when greater than zero. */
     val fromBeat: Double = 0.0,
+    /** Other parts played together with the melody (same meter; only their notes are used). */
+    val accompaniment: List<Melody> = emptyList(),
     val onFinished: (() -> Unit)? = null,
 )
 
@@ -170,12 +172,16 @@ class AudioEngine(private val sink: AudioSink? = null) {
 
     private fun scheduleMelody(melody: Melody, clock: BeatClock, start: Long, o: PlayOptions, from: Double) {
         if (!o.pulseOnly) {
-            for (n in melody.soundNotes()) {
-                if (n.startBeat < from - 1e-9) continue
-                val f = clock.frameForBeat(n.startBeat - from, start)
-                val sustain = (clock.framesPerBeat * n.durBeats * 0.98).toLong().coerceAtLeast(200)
-                for (p in n.pitches) {
-                    mixer.schedule(Scheduled.Start(f, PianoVoice(p.frequency, 0.8f, sustain).also { it.id = mixer.newVoiceId() }))
+            // the accompaniment shares the mix, so every voice gets quieter as parts are added
+            val velocity = if (o.accompaniment.isEmpty()) 0.8f else (0.8f / kotlin.math.sqrt(1.0 + o.accompaniment.size).toFloat()).coerceAtLeast(0.22f)
+            for (m in listOf(melody) + o.accompaniment) {
+                for (n in m.soundNotes()) {
+                    if (n.startBeat < from - 1e-9 || n.startBeat >= melody.totalBeats - 1e-9) continue
+                    val f = clock.frameForBeat(n.startBeat - from, start)
+                    val sustain = (clock.framesPerBeat * n.durBeats * 0.98).toLong().coerceAtLeast(200)
+                    for (p in n.pitches) {
+                        mixer.schedule(Scheduled.Start(f, PianoVoice(p.frequency, velocity, sustain).also { it.id = mixer.newVoiceId() }))
+                    }
                 }
             }
         }

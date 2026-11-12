@@ -60,21 +60,21 @@ import kotlin.math.roundToInt
  * this only remembers whether this screen started it.
  */
 @Stable
-class PlayAlong(private val app: AppState, val targets: List<PlayTarget>) {
+class PlayAlong(private val app: AppState, val targets: List<PlayTarget>, val tuning: InstrumentTuning = app.tuning) {
     var active by mutableStateOf(false)
         private set
 
     /** Some written note is outside the instrument's range: any octave is accepted then. */
-    val outOfRange: Boolean = outOfRange(targets, app.tuning)
+    val outOfRange: Boolean = outOfRange(targets, tuning)
 
-    val octaveFree: Boolean get() = app.octaveFree || outOfRange
+    val octaveFree: Boolean get() = app.octaveFree || tuning.octaveFree || outOfRange
 
     private var session = -1
 
     fun start() {
         if (targets.isEmpty()) return
         app.engine.stop()
-        session = app.listener.follow(targets, app.tuning, octaveFree)
+        session = app.listener.follow(targets, tuning, octaveFree)
         active = true
     }
 
@@ -89,7 +89,7 @@ class PlayAlong(private val app: AppState, val targets: List<PlayTarget>) {
     fun hearCurrent(index: Int) {
         val t = targets.getOrNull(index) ?: return
         app.listener.mute(1300)
-        app.engine.playPitch(app.tuning.concert(t.written.first()), 0.9)
+        app.engine.playPitch(tuning.concert(t.written.first()), 0.9)
     }
 
     companion object {
@@ -99,16 +99,16 @@ class PlayAlong(private val app: AppState, val targets: List<PlayTarget>) {
 }
 
 @Composable
-fun rememberPlayAlong(app: AppState, targets: List<PlayTarget>): PlayAlong {
-    val pa = remember(targets, app.instrument) { PlayAlong(app, targets) }
+fun rememberPlayAlong(app: AppState, targets: List<PlayTarget>, tuning: InstrumentTuning = app.tuning): PlayAlong {
+    val pa = remember(targets, tuning) { PlayAlong(app, targets, tuning) }
     DisposableEffect(pa) { onDispose { pa.stop() } }
     return pa
 }
 
 @Composable
-fun rememberPlayAlong(app: AppState, melody: Melody?): PlayAlong {
+fun rememberPlayAlong(app: AppState, melody: Melody?, tuning: InstrumentTuning = app.tuning): PlayAlong {
     val targets = remember(melody) { melody?.let { NoteFollower.targetsOf(it) } ?: emptyList() }
-    return rememberPlayAlong(app, targets)
+    return rememberPlayAlong(app, targets, tuning)
 }
 
 /** Melody event to highlight while playing along, or -1. */
@@ -154,7 +154,7 @@ fun PlayAlongPanel(app: AppState, pa: PlayAlong, onFinished: ((FollowState) -> U
                 PitchMeter(st.live)
                 PlayFeedbackLine(app, pa, st)
                 Text(s.playAlongHint(ui.kid), textAlign = TextAlign.Center, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                if (pa.outOfRange && !app.octaveFree) Text(s.anyOctaveAuto, textAlign = TextAlign.Center, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                if (pa.outOfRange && !app.octaveFree && !pa.tuning.octaveFree) Text(s.anyOctaveAuto, textAlign = TextAlign.Center, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 TextButton({ pa.hearCurrent(st.index) }) { Text("🎧 " + s.hearNote) }
             }
             else -> Text(s.micStarting, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -181,7 +181,7 @@ private fun PlayFeedbackLine(app: AppState, pa: PlayAlong, st: FollowState) {
     val (text, color) = when {
         st.waitingRelease -> s.playItAgain to MaterialTheme.colorScheme.onSurface
         wrong != null && shownWrong == wrong.serial && wrong.targetIndex == st.index && target != null -> {
-            val heard = app.tuning.written(wrong.judgement.heardMidi)
+            val heard = pa.tuning.written(wrong.judgement.heardMidi)
             val higher = wrong.judgement.verdict == PitchVerdict.TOO_HIGH
             val oct = !pa.octaveFree && heard.step == target.written.first().step && heard.alter == target.written.first().alter
             (s.verdictText(wrong.judgement.verdict, ui.kid) + " · " + s.wrongNoteDetail(ui.noteName(heard, withOctave = oct), ui.noteName(target.written.first(), withOctave = oct), higher)) to Palette.Danger

@@ -29,7 +29,7 @@ import com.solfi.app.platform.Haptics
 import com.solfi.app.platform.todayEpochDay
 import com.solfi.app.ui.theme.UiContext
 
-enum class Tab { HOME, LEARN, SOLFEOS, PRACTICE, PIANO, PROGRESS }
+enum class Tab { HOME, LEARN, SOLFEOS, PRACTICE, NGL, PIANO, PROGRESS }
 
 sealed interface Route {
     data class Lesson(val levelIndex: Int, val lessonIndex: Int) : Route
@@ -62,6 +62,11 @@ class AppState(
         private set
     var contentLoaded by mutableStateOf(false)
         private set
+
+    /** NGL ensemble pieces (see [com.solfi.app.content.EnsembleBook]). */
+    var nglPieces by mutableStateOf<List<com.solfi.app.content.EnsemblePiece>>(emptyList())
+    /** Part chosen in the NGL tab (piece id to part id); kept while switching tabs. */
+    var nglSelection by mutableStateOf<Pair<String, String>?>(null)
 
     var profiles by mutableStateOf(store.loadProfiles())
         private set
@@ -103,6 +108,7 @@ class AppState(
 
     suspend fun loadContent() {
         useLevels(ContentRepository.loadAll())
+        nglPieces = ContentRepository.loadNgl()
     }
 
     /** Sets the loaded levels (index 0 = level 1; null = missing level). */

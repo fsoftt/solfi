@@ -8,6 +8,15 @@ object ContentRepository {
 
     fun path(level: Int) = "files/content/level$level.json"
 
+    const val NGL_PATH = "files/content/ngl.json"
+
+    /** NGL ensemble pieces; empty when the file is missing or invalid. */
+    suspend fun loadNgl(): List<EnsemblePiece> = try {
+        ContentJson.decodeEnsembleBook(Res.readBytes(NGL_PATH).decodeToString()).pieces
+    } catch (e: Exception) {
+        emptyList()
+    }
+
     /** Returns levels 1..5 (null where the file is missing or invalid). */
     suspend fun loadAll(): List<LevelContent?> = (1..MAX_LEVELS).map { n ->
         try {

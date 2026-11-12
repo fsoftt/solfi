@@ -107,6 +107,21 @@ class ScreensRenderTest {
         } finally { app.useLevels(saved) }
     }
 
+    @Test fun ngl() {
+        val book = ContentJson.decodeEnsembleBook(File("src/commonMain/composeResources/files/content/ngl.json").readText())
+        app.nglPieces = book.pieces
+        try {
+            render("ngl", h = 3000) { NglScreen(app) }
+            app.nglSelection = "intro-ngl" to "p5"
+            render("ngl-trombone-2", h = 3000, theme = "DARK") { NglScreen(app) }
+            app.nglSelection = "intro-ngl" to "p8"
+            render("ngl-glockenspiel", h = 3000) { NglScreen(app) }
+            // 360 dp phone: seven tabs must still fit in the bottom bar
+            app.tab = Tab.NGL
+            render("ngl-tab-phone", w = 720, h = 1500) { MainTabs(app) }
+        } finally { app.nglPieces = emptyList(); app.nglSelection = null; app.tab = Tab.HOME }
+    }
+
     @Test fun piano() = render("piano") { PianoScreen(app) }
     @Test fun onboarding() = render("onboarding") { OnboardingScreen(app, onCancel = {}) }
 

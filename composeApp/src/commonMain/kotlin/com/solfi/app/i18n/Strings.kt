@@ -259,6 +259,19 @@ interface Strings {
     val inputInstrument: String
     val anyOctaveAuto: String
 
+    // NGL: ensemble pieces (one practisable part per instrument and voice)
+    val navNgl: String
+    val nglTitle: String
+    val nglIntro: String
+    val nglEmpty: String
+    val nglInstrument: String
+    val nglVoice: String
+    fun nglVoiceN(n: Int): String
+    val nglListenPart: String
+    val nglListenAll: String
+    val glockenspiel: String
+    fun nglPartSummary(measures: Int, tempo: Int): String
+
     val cdBack: String
     val cdPianoKey: String
     val cdStaff: String

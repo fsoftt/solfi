@@ -250,6 +250,8 @@ object EsStrings : Strings {
     override fun transposeExplain(transpose: Int, writtenC: String, soundsAs: String) = when {
         transpose == 0 -> "Tu instrumento suena tal como se escribe."
         transpose == -12 -> "Tu instrumento suena una octava más grave de lo que se escribe. Lo tenemos en cuenta."
+        transpose == 12 -> "Tu instrumento suena una octava más agudo de lo que se escribe. Lo tenemos en cuenta."
+        transpose == 24 -> "Tu instrumento suena dos octavas más agudo de lo que se escribe. Lo tenemos en cuenta."
         else -> "Instrumento transpositor: cuando lees $writtenC suena $soundsAs. Tú lee y toca normal: Solfi lo tiene en cuenta."
     }
     override val ignoreOctave = "Aceptar cualquier octava"
@@ -272,6 +274,18 @@ object EsStrings : Strings {
     override val inputKeyboard = "🎹 Teclado"
     override val inputInstrument = "🎶 Mi instrumento"
     override val anyOctaveAuto = "Estas notas quedan fuera del registro de tu instrumento: vale cualquier octava."
+
+    override val navNgl = "NGL"
+    override val nglTitle = "NGL"
+    override val nglIntro = "Elige tu instrumento y tu voz, y practica tu parte del conjunto. Puedes escucharla sola o con todo el conjunto."
+    override val nglEmpty = "Todavía no hay piezas."
+    override val nglInstrument = "Instrumento"
+    override val nglVoice = "Voz"
+    override fun nglVoiceN(n: Int) = "Voz $n"
+    override val nglListenPart = "Escuchar mi voz"
+    override val nglListenAll = "Escuchar todo el conjunto"
+    override val glockenspiel = "Glockenspiel"
+    override fun nglPartSummary(measures: Int, tempo: Int) = "$measures compases · $tempo negras por minuto"
 
     override val cdMascot = "Mascota Solfi, una nota musical sonriente"
     override val cdSettings = "Ajustes"
