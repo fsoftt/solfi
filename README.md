@@ -24,7 +24,10 @@ Esta es la **fase 1**: arquitectura, motor de audio, toda la interfaz y el conte
 * **Preferencia de clave** por perfil: Recomendada (según el instrumento), Sol o Fa. Las melodías se reescriben en la clave elegida; el contenido que habla de posiciones del pentagrama puede fijar su clave con `clefLocked` (ver [CONTENT.md](CONTENT.md)).
 * **Piano libre**: 3 octavas con desplazamiento, multitoque y etiquetas.
 * **Progreso**: XP, 1–3 estrellas por precisión, desbloqueo secuencial, examen que desbloquea el siguiente nivel y
-  da una insignia, racha diaria. La lógica es pura y está probada (`ProgressRepository`).
+  da una insignia, racha diaria.
+* **Examen para saltar un nivel**: desde el mapa, cualquier nivel no aprobado (también los bloqueados) se puede saltar
+  haciendo directamente su examen. Con al menos un 70 % se completan sus lecciones y las de los niveles anteriores,
+  se desbloquea el siguiente y se gana la insignia del nivel; las lecciones saltadas se pueden repetir para ganar estrellas. La lógica es pura y está probada (`ProgressRepository`).
 * **Modo Niño / Adulto**: botones grandes, color, mascota dibujada (nota musical con cara), confeti y textos
   juguetones frente a un estilo más sobrio.
 * **Perfiles locales** múltiples con avatar, idioma, nombres de nota, tema y volumen propios.

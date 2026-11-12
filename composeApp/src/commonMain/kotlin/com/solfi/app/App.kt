@@ -87,6 +87,7 @@ private fun Root(app: AppState) {
         when (route) {
             null -> MainTabs(app)
             is Route.Lesson -> LessonScreen(app, route.levelIndex, route.lessonIndex)
+            is Route.SkipTest -> LessonScreen(app, route.levelIndex, app.levels.getOrNull(route.levelIndex)?.lessons?.lastIndex ?: -1, skipTest = true)
             is Route.Solfeo -> SolfeoPlayerScreen(app, route.levelIndex, route.solfeoIndex)
             is Route.RandomSolfeo -> RandomSolfeoScreen(app, route.difficulty, route.seed)
             Route.Settings -> SettingsScreen(app)

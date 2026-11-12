@@ -7,6 +7,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,10 +24,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,6 +61,7 @@ import com.solfi.app.ui.theme.Palette
 import com.solfi.app.ui.theme.parseHexColor
 import com.solfi.app.ui.widgets.ScreenTitle
 import com.solfi.app.ui.widgets.Stars
+import kotlin.math.roundToInt
 import kotlin.math.sin
 
 @Composable
@@ -62,6 +69,7 @@ fun LevelMapScreen(app: AppState) {
     val ui = LocalUi.current
     val s = ui.strings
     val levels = app.levels
+    var skipAsk by remember { mutableStateOf<LevelContent?>(null) }
     LazyColumn(Modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 24.dp)) {
         item { ScreenTitle(s.navLearn) }
         if (!app.contentLoaded) item { Text(s.loading, Modifier.padding(20.dp)) }
@@ -72,7 +80,8 @@ fun LevelMapScreen(app: AppState) {
                 continue
             }
             val unlocked = ProgressRepository.isLevelUnlocked(level.level, app.progress)
-            item(key = "head$n") { LevelHeader(level, app, unlocked) }
+            val canSkip = ProgressRepository.canTakeSkipTest(level, app.progress)
+            item(key = "head$n") { LevelHeader(level, app, unlocked, onSkip = if (canSkip) ({ skipAsk = level }) else null) }
             level.lessons.forEachIndexed { i, lesson ->
                 item(key = "l$n-${lesson.id}") {
                     LessonNode(
@@ -82,6 +91,18 @@ fun LevelMapScreen(app: AppState) {
                 }
             }
         }
+    }
+
+    skipAsk?.let { level ->
+        AlertDialog(
+            onDismissRequest = { skipAsk = null },
+            title = { Text(s.skipLevelTitle(level.level)) },
+            text = { Text(s.skipLevelText(level.level, (ProgressRepository.EXAM_PASS * 100).roundToInt())) },
+            confirmButton = {
+                TextButton({ skipAsk = null; app.push(Route.SkipTest(level.level - 1)) }) { Text(s.startSkipTest) }
+            },
+            dismissButton = { TextButton({ skipAsk = null }) { Text(s.cancel) } },
+        )
     }
 }
 
@@ -98,7 +119,7 @@ private fun ComingSoonCard(n: Int) {
 }
 
 @Composable
-private fun LevelHeader(level: LevelContent, app: AppState, unlocked: Boolean) {
+private fun LevelHeader(level: LevelContent, app: AppState, unlocked: Boolean, onSkip: (() -> Unit)?) {
     val ui = LocalUi.current
     val color = parseHexColor(level.color)
     val (done, total) = ProgressRepository.levelProgress(level, app.progress)
@@ -117,6 +138,14 @@ private fun LevelHeader(level: LevelContent, app: AppState, unlocked: Boolean) {
             )
             Text(ui.strings.lessonsDone(done, total), color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
         } else Text("🔒 ${ui.strings.levelLockedHint}", color = Color.White, fontSize = 13.sp)
+        if (onSkip != null) {
+            Text(
+                "⏭️ ${ui.strings.skipLevelButton}",
+                Modifier.padding(top = 4.dp).clip(CircleShape).border(1.5.dp, Color.White.copy(alpha = 0.85f), CircleShape)
+                    .clickable(onClick = onSkip).padding(horizontal = 14.dp, vertical = 8.dp),
+                color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp,
+            )
+        }
     }
 }
 
@@ -127,7 +156,7 @@ private fun LessonNode(level: LevelContent, index: Int, app: AppState, levelInde
     val color = parseHexColor(level.color)
     val unlocked = ProgressRepository.isLessonUnlocked(level, index, app.progress)
     val result = app.progress.result(level.level, lesson.id)
-    val completed = result != null && result.completions > 0
+    val completed = ProgressRepository.isLessonCompleted(level, index, app.progress)
     val current = unlocked && !completed
     val nodeSize = (if (ui.kid) 84.dp else 72.dp) + (if (lesson.isExam) 8.dp else 0.dp)
     val rowH = nodeSize + 66.dp
@@ -169,7 +198,7 @@ private fun LessonNode(level: LevelContent, index: Int, app: AppState, levelInde
             ) {
                 Text(if (unlocked) lesson.emoji else "🔒", fontSize = (nodeSize.value * 0.45f).sp)
             }
-            if (completed) Stars(result!!.stars, 15.dp)
+            if (completed && result != null && result.completions > 0) Stars(result.stars, 15.dp)
             Text(
                 lesson.title[ui.lang], fontSize = 12.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center, maxLines = 2,
                 color = if (unlocked) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,

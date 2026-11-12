@@ -30,6 +30,8 @@ enum class Tab { HOME, LEARN, SOLFEOS, PIANO, PROGRESS }
 
 sealed interface Route {
     data class Lesson(val levelIndex: Int, val lessonIndex: Int) : Route
+    /** Exam of a level taken directly to skip it (see ProgressRepository.canTakeSkipTest). */
+    data class SkipTest(val levelIndex: Int) : Route
     data class Solfeo(val levelIndex: Int, val solfeoIndex: Int) : Route
     /** Random solfeo of a [difficulty]; [seed] null = pick a fresh one. */
     data class RandomSolfeo(val difficulty: Difficulty, val seed: Long? = null) : Route
@@ -98,12 +100,16 @@ class AppState(
     /** Pushes [r]; locked lessons are refused (returns false). */
     fun push(r: Route): Boolean {
         if (r is Route.Lesson && !canOpenLesson(r.levelIndex, r.lessonIndex)) return false
+        if (r is Route.SkipTest && !canTakeSkipTest(r.levelIndex)) return false
         stack.add(r)
         return true
     }
 
     fun canOpenLesson(levelIndex: Int, lessonIndex: Int): Boolean =
         ProgressRepository.canOpenLesson(levels, levelIndex, lessonIndex, progress)
+    fun canTakeSkipTest(levelIndex: Int): Boolean =
+        levels.getOrNull(levelIndex)?.let { ProgressRepository.canTakeSkipTest(it, progress) } == true
+
     fun pop(): Boolean = if (stack.isNotEmpty()) { stack.removeAt(stack.lastIndex); engine.stop(); true } else false
 
     // ------------------------------------------------------------- profiles
@@ -177,6 +183,17 @@ class AppState(
         if (!canOpenLesson(levelIndex, lessonIndex)) return null
         if (!session.isFinished || session.lesson.id != level.lessons[lessonIndex].id) return null
         val r = ProgressRepository.complete(progress, level, lessonIndex, session.accuracy, todayEpochDay())
+        saveProgress(r.progress)
+        return r
+    }
+
+    /** Applies a finished skip test of the level at [levelIndex]; [session] must be a finished session of its exam. */
+    fun completeSkipTest(levelIndex: Int, session: LessonSession): CompletionResult? {
+        val level = levels.getOrNull(levelIndex) ?: return null
+        val exam = level.lessons.lastOrNull() ?: return null
+        if (!session.isFinished || session.lesson.id != exam.id || !exam.isExam) return null
+        if (level.level in progress.examsPassed) return null
+        val r = ProgressRepository.completeSkipTest(progress, level, session.accuracy, todayEpochDay())
         saveProgress(r.progress)
         return r
     }

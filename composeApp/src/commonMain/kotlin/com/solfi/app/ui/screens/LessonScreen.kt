@@ -72,13 +72,17 @@ import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
 @Composable
-fun LessonScreen(app: AppState, levelIndex: Int, lessonIndex: Int) {
+fun LessonScreen(app: AppState, levelIndex: Int, lessonIndex: Int, skipTest: Boolean = false) {
     val ui = LocalUi.current
     val s = ui.strings
     val level = app.levels.getOrNull(levelIndex)
     val lesson = level?.lessons?.getOrNull(lessonIndex)
     // Locked / missing lessons can never be shown, whatever put the route on the stack.
-    if (level == null || lesson == null || !app.canOpenLesson(levelIndex, lessonIndex)) {
+    // A skip test is checked once on entry: passing it makes it unavailable while its result is still on screen.
+    val allowed = remember(levelIndex, lessonIndex, skipTest) {
+        if (skipTest) app.canTakeSkipTest(levelIndex) && lesson?.isExam == true else app.canOpenLesson(levelIndex, lessonIndex)
+    }
+    if (level == null || lesson == null || !allowed) {
         LaunchedEffect(Unit) { app.pop() }
         return
     }
@@ -105,10 +109,17 @@ fun LessonScreen(app: AppState, levelIndex: Int, lessonIndex: Int) {
                 )
                 Text(s.stepOf((session.resolvedCount + 1).coerceAtMost(session.totalSteps), session.totalSteps), Modifier.padding(horizontal = 12.dp), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
+            if (skipTest) Text(
+                s.skipTestLabel(level.level), Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 2.dp),
+                fontSize = 13.sp, fontWeight = FontWeight.Bold, color = color, textAlign = TextAlign.Center,
+            )
         }
         val r = result
         if (r != null) {
-            LessonResultView(app, lesson.isExam, r, accuracy, onRetry = { attempt++ }, onClose = { app.pop() }, levelColor = color)
+            LessonResultView(
+                app, lesson.isExam, r, accuracy, onRetry = { attempt++ }, onClose = { app.pop() }, levelColor = color,
+                skippedLevel = if (skipTest && r.passed) level.level else null,
+            )
         } else {
             AnimatedContent(
                 slot to (session.currentIndex ?: 0), Modifier.weight(1f).fillMaxWidth(),
@@ -132,7 +143,8 @@ fun LessonScreen(app: AppState, levelIndex: Int, lessonIndex: Int) {
                     session.submit(outcome)
                     if (session.isFinished) {
                         accuracy = session.accuracy
-                        result = app.completeLesson(levelIndex, lessonIndex, session) ?: run { app.pop(); null }
+                        val done = if (skipTest) app.completeSkipTest(levelIndex, session) else app.completeLesson(levelIndex, lessonIndex, session)
+                        result = done ?: run { app.pop(); null }
                     } else slot++
                 }
                     }
@@ -156,6 +168,8 @@ fun LessonScreen(app: AppState, levelIndex: Int, lessonIndex: Int) {
 private fun LessonResultView(
     app: AppState, isExam: Boolean, r: CompletionResult, accuracy: Double,
     onRetry: () -> Unit, onClose: () -> Unit, levelColor: Color,
+    /** Level number completed by a passed skip test, or null. */
+    skippedLevel: Int? = null,
 ) {
     val ui = LocalUi.current
     val s = ui.strings
@@ -193,13 +207,14 @@ private fun LessonResultView(
                     Text(badge.name[ui.lang], fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
                 }
             }
+            skippedLevel?.let { n -> Text("⏭️ " + s.levelSkipped(n), fontWeight = FontWeight.Bold, fontSize = 16.sp, textAlign = TextAlign.Center) }
             r.unlockedLevel?.let { n ->
                 if (app.levels.getOrNull(n - 1) != null) Text("🔓 " + s.levelUnlocked(n), fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
             Spacer(Modifier.height(8.dp))
             if (!r.passed) BigButton(s.retry, onRetry, color = levelColor)
             BigButton(s.backToMap, onClose, color = if (r.passed) levelColor else MaterialTheme.colorScheme.outline)
-            if (r.passed) SecondaryButton(s.retry, onRetry)
+            if (r.passed && skippedLevel == null) SecondaryButton(s.retry, onRetry)
         }
         if (r.passed) Confetti(Modifier.fillMaxSize())
     }

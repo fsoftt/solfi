@@ -85,6 +85,12 @@ interface Strings {
     fun lessonsDone(done: Int, total: Int): String
     val examLabel: String
     val levelLockedHint: String
+    val skipLevelButton: String
+    fun skipLevelTitle(n: Int): String
+    fun skipLevelText(n: Int, percent: Int): String
+    val startSkipTest: String
+    fun skipTestLabel(n: Int): String
+    fun levelSkipped(n: Int): String
 
     // lesson player
     fun stepOf(current: Int, total: Int): String
