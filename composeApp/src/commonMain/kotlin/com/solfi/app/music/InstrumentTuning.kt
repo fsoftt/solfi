@@ -31,7 +31,7 @@ data class InstrumentTuning(
     /** Written pitch that sounds as [concertMidi] on this instrument. */
     fun written(concertMidi: Int): Pitch = Pitch.fromMidi(concertMidi - transpose)
 
-    /** Lowest frequency the detector must look for (a bit under the lowest concert note). */
+    /** Lowest / highest concert frequency of the beginner range (with a margin). The detector itself listens to the full range. */
     val minFrequency: Double get() = Pitch.frequencyOfMidi(concertMidi(lowWritten) - 5)
     val maxFrequency: Double get() = Pitch.frequencyOfMidi(concertMidi(highWritten) + 7)
 
@@ -41,7 +41,7 @@ data class InstrumentTuning(
         private fun m(text: String) = Pitch.parse(text).midi
 
         fun of(i: Instrument): InstrumentTuning = when (i) {
-            Instrument.VOICE -> InstrumentTuning(i, 0, m("C3"), m("A5"), octaveFree = true)
+            Instrument.VOICE -> InstrumentTuning(i, 0, m("E2"), m("C6"), octaveFree = true)
             Instrument.PIANO -> InstrumentTuning(i, 0, m("C2"), m("C6"))
             Instrument.GUITAR -> InstrumentTuning(i, -12, m("E3"), m("E5"))
             Instrument.VIOLIN -> InstrumentTuning(i, 0, m("G3"), m("B5"))

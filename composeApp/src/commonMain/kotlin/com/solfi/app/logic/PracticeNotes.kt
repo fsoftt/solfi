@@ -1,6 +1,7 @@
 package com.solfi.app.logic
 
 import com.solfi.app.music.Clef
+import com.solfi.app.music.ClefShift
 import com.solfi.app.music.InstrumentTuning
 import com.solfi.app.music.Pitch
 import kotlin.random.Random
@@ -29,6 +30,22 @@ object PracticeNotes {
         val inRange = withAcc.filter { it.midi in tuning.lowWritten..tuning.highWritten }
         return inRange.ifEmpty { withAcc }
     }
+
+    /**
+     * Staff for showing any single note readably (tuner): treble from middle C up, bass below, and an octave shift
+     * (written as 8va / 15ma above or 8vb / 15mb below) when it would need more than three ledger lines.
+     * Returns the clef and the octaves the note is shifted by (the staff shows `note - octaves`).
+     */
+    fun staffFor(note: Pitch): Pair<Clef, Int> {
+        val clef = if (note.midi >= 60) Clef.TREBLE else Clef.BASS
+        var oct = 0
+        while (oct < 2 && ClefShift.ledgerLines(note.diatonic - 7 * oct, clef) > 3 && note.diatonic - 7 * oct > clef.bottomLineDiatonic + 8) oct++
+        while (oct > -2 && ClefShift.ledgerLines(note.diatonic - 7 * oct, clef) > 3 && note.diatonic - 7 * oct < clef.bottomLineDiatonic) oct--
+        return clef to oct
+    }
+
+    /** "8va", "15ma", "8vb", "15mb" ("" for 0). */
+    fun ottavaMark(octaves: Int): String = when (octaves) { 1 -> "8va"; 2 -> "15ma"; -1 -> "8vb"; -2 -> "15mb"; else -> "" }
 
     /** A random candidate different from [previous] when possible. */
     fun next(tuning: InstrumentTuning, clef: Clef, accidentals: Boolean, rnd: Random, previous: Pitch? = null): Pitch {

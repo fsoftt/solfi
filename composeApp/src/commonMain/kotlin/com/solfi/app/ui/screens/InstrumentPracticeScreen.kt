@@ -90,13 +90,13 @@ fun InstrumentPracticeScreen(app: AppState) {
                 }
                 TextButton({ app.push(Route.Settings) }) { Text(s.changeInstrument) }
                 if (!tuning.octaveFree) {
-                    ToggleRow(s.ignoreOctave, app.profile?.settings?.ignoreOctave == true, s.ignoreOctaveDesc) { v -> app.updateSettings { copy(ignoreOctave = v) } }
+                    ToggleRow(s.ignoreOctave, app.octaveFree, s.ignoreOctaveDesc) { v -> app.updateSettings { copy(strictOctave = !v) } }
                 }
             }
         }
 
-        PracticeCard("🎚️", s.tunerTitle, s.tunerDesc) { app.push(Route.PracticeTuner) }
-        PracticeCard("👀", s.readAndPlayTitle, s.readAndPlayDesc) { app.push(Route.PracticeNotes) }
+        PracticeCard("🧭", s.tunerTitle, s.tunerDesc) { app.push(Route.PracticeTuner) }
+        PracticeCard("📖", s.readAndPlayTitle, s.readAndPlayDesc) { app.push(Route.PracticeNotes) }
 
         Text(s.randomMelodiesTitle, Modifier.padding(start = 20.dp, top = 8.dp), fontWeight = FontWeight.Bold, fontSize = 16.sp)
         Text(s.randomMelodiesDesc, Modifier.padding(horizontal = 20.dp), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -119,7 +119,7 @@ fun InstrumentPracticeScreen(app: AppState) {
                             Text(sf.title[ui.lang], fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Text(s.levelLabel(level.level), fontSize = 12.sp, color = parseHexColor(level.color))
                         }
-                        Text("🎤", fontSize = 20.sp)
+                        Text("🎶", fontSize = 20.sp)
                     }
                 }
             }
@@ -198,9 +198,15 @@ fun PracticeTunerScreen(app: AppState) {
                 }
                 Text("${(f * 10).roundToInt() / 10.0} Hz", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 // staff with the written note
-                val clef = PracticeNotes.clefFor(app.effectiveClef)
-                val shown = remember(written.midi, clef) { Melody.parse(clef.code, "4/4", "C", 80, "$written:w") }
-                PressCard(Modifier.fillMaxWidth()) { Box(Modifier.padding(12.dp)) { StaffView(shown, showTime = false, gap = 12.dp, description = s.cdStaff) } }
+                val (clef, oct) = remember(written.midi) { PracticeNotes.staffFor(written) }
+                val shown = remember(written.midi) { Melody.parse(clef.code, "4/4", "C", 80, "${ClefShift.shiftPitch(written, -oct)}:w") }
+                PressCard(Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        if (oct > 0) Text(PracticeNotes.ottavaMark(oct), fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                        StaffView(shown, showTime = false, gap = 12.dp, description = s.cdStaff)
+                        if (oct < 0) Text(PracticeNotes.ottavaMark(oct), fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                    }
+                }
             } else if (status == MicStatus.LISTENING) {
                 Text("🎵", fontSize = 56.sp)
                 Text(s.tunerPlaySomething, fontSize = 22.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -309,7 +315,7 @@ fun PracticeMelodyScreen(app: AppState, levelIndex: Int, index: Int) {
             PlayAlongPanel(app, pa, onFinished = { app.recordSolfeo() })
             PlayAlongButton(pa)
             com.solfi.app.ui.widgets.SecondaryButton(
-                if (playing) "■  " + s.stop else "🔊  " + s.listenAgain,
+                if (playing) s.stop else "🎧  " + s.listenAgain,
                 {
                     if (playing) app.engine.stop()
                     else { pa.stop(); app.engine.playMelody(melody, PlayOptions(tempo = melody.tempo)) }

@@ -148,6 +148,8 @@ actual class MicInput actual constructor() {
             withOptions = AVAudioSessionCategoryOptionDefaultToSpeaker or AVAudioSessionCategoryOptionMixWithOthers,
             error = null,
         )
+        // measurement mode turns off voice processing (high-pass, AGC) so low brass and basses are heard
+        session.setMode(platform.AVFAudio.AVAudioSessionModeMeasurement, error = null)
         session.setActive(true, error = null)
         val e = AVAudioEngine()
         val input = e.inputNode
@@ -172,7 +174,10 @@ actual class MicInput actual constructor() {
     actual fun stop() {
         wanted = false
         engine?.let { it.inputNode.removeTapOnBus(0u); it.stop() }
-        if (engine != null) AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error = null)
+        if (engine != null) {
+            AVAudioSession.sharedInstance().setMode(platform.AVFAudio.AVAudioSessionModeDefault, error = null)
+            AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error = null)
+        }
         engine = null
     }
 }

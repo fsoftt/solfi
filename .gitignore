@@ -12,3 +12,4 @@ captures/
 *release*.keystore
 *service-account*.json
 play-*.json
+kotlin-js-store/

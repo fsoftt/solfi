@@ -16,8 +16,11 @@ data class ProfileSettings(
     val instrument: String = "OTHER",
     /** ClefPreference name: RECOMMENDED, TREBLE or BASS. */
     val clefPreference: String = "RECOMMENDED",
-    /** Playing along: accept the right note in any octave. */
-    val ignoreOctave: Boolean = false,
+    /**
+     * Playing along: require the exact written octave. Off by default, so any octave of the right note counts.
+     * (Replaces an earlier `ignoreOctave` flag; the old key is ignored when loading.)
+     */
+    val strictOctave: Boolean = false,
 )
 
 @Serializable

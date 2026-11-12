@@ -94,8 +94,8 @@ class AppState(
     /** Transposition and range of the learner's instrument. */
     val tuning: InstrumentTuning get() = InstrumentTuning.of(instrument)
 
-    /** Accept any octave of the right note when playing along (always on for voice / other). */
-    val octaveFree: Boolean get() = tuning.octaveFree || profile?.settings?.ignoreOctave == true
+    /** Accept any octave of the right note when playing along: the default; always on for voice / other. */
+    val octaveFree: Boolean get() = tuning.octaveFree || profile?.settings?.strictOctave != true
 
     val systemLang: Lang get() = Lang.fromCode(systemLanguage)
 

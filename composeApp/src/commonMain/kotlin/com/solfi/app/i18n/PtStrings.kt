@@ -234,7 +234,7 @@ object PtStrings : Strings {
     override val micUnavailable = "Nenhum microfone foi encontrado."
     override fun playAlongHint(kid: Boolean) = if (kid) "Toque a nota marcada! Eu espero até você acertar." else "Toque a nota destacada. Avança quando a nota certa soa estável."
     override fun verdictText(v: com.solfi.app.music.PitchVerdict, kid: Boolean) = when (v) {
-        com.solfi.app.music.PitchVerdict.IN_TUNE -> if (kid) "Afinadíssimo! 🎯" else "Afinado"
+        com.solfi.app.music.PitchVerdict.IN_TUNE -> if (kid) "Afinadíssimo! 🌟" else "Afinado"
         com.solfi.app.music.PitchVerdict.SLIGHTLY_HIGH -> "Um pouco alto ↓"
         com.solfi.app.music.PitchVerdict.SLIGHTLY_LOW -> "Um pouco baixo ↑"
         com.solfi.app.music.PitchVerdict.TOO_HIGH -> "Alto demais"
@@ -270,7 +270,7 @@ object PtStrings : Strings {
     override val nextNote = "Outra nota"
     override val changeInstrument = "Trocar instrumento"
     override val inputKeyboard = "🎹 Teclado"
-    override val inputInstrument = "🎤 Meu instrumento"
+    override val inputInstrument = "🎶 Meu instrumento"
     override val anyOctaveAuto = "Estas notas ficam fora da extensão do seu instrumento: vale qualquer oitava."
 
     override val cdMascot = "Mascote Solfi, uma nota musical sorridente"
