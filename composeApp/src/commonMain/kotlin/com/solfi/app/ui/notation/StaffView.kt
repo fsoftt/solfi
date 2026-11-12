@@ -68,6 +68,9 @@ fun StaffView(
     description: String = "",
     /** Colour for a melody event (e.g. how it was played), or null for the normal ink. */
     noteColor: ((Int) -> Color?)? = null,
+    /** Event to keep in view (-1 = none): [onFollowRow] gets its line's top and bottom (px, in this view) whenever the line changes. */
+    followIndex: Int = -1,
+    onFollowRow: ((top: Float, bottom: Float) -> Unit)? = null,
 ) {
     val measurer = rememberTextMeasurer()
     val fontFamily = LocalBaseFontFamily.current
@@ -77,6 +80,18 @@ fun StaffView(
         val gapPx = with(density) { gap.toPx() }
         val layout = remember(melody, widthPx, gapPx, showTime, labelFor != null) {
             StaffLayout(melody, widthPx, gapPx, showTime, labelFor != null)
+        }
+        if (onFollowRow != null) {
+            val lastRow = remember(layout) { intArrayOf(-1) }
+            LaunchedEffect(followIndex, layout) {
+                val si = layout.glyphByEvent[followIndex]?.second
+                if (si == null) { lastRow[0] = -1; return@LaunchedEffect }
+                if (si != lastRow[0]) {
+                    lastRow[0] = si
+                    val sys = layout.systems[si]
+                    onFollowRow(sys.top, sys.bottom)
+                }
+            }
         }
         val scale = remember { Animatable(1f) }
         LaunchedEffect(highlightIndex) {

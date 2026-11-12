@@ -1,6 +1,19 @@
 package com.solfi.app.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.platform.LocalDensity
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -75,16 +88,19 @@ fun NglScreen(app: AppState) {
     val ui = LocalUi.current
     val s = ui.strings
     val pieces = app.nglPieces
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(bottom = 24.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        ScreenTitle(s.nglTitle, subtitle = s.nglIntro)
-        if (pieces.isEmpty()) {
+    if (pieces.isEmpty()) {
+        Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            ScreenTitle(s.nglTitle, subtitle = s.nglIntro)
             Text(s.nglEmpty, Modifier.padding(horizontal = 20.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
-            return@Column
         }
-        val piece = pieces.firstOrNull { it.id == app.nglSelection?.first } ?: pieces.first()
-        val part = defaultNglPart(app, piece)
-        fun select(p: EnsemblePiece, pt: EnsemblePart) { app.engine.stop(); app.nglSelection = p.id to pt.id }
+        return
+    }
+    val piece = pieces.firstOrNull { it.id == app.nglSelection?.first } ?: pieces.first()
+    val part = defaultNglPart(app, piece)
+    fun select(p: EnsemblePiece, pt: EnsemblePart) { app.engine.stop(); app.nglSelection = p.id to pt.id }
 
+    NglPartPractice(app, piece, part) {
+        ScreenTitle(s.nglTitle, subtitle = s.nglIntro)
         if (pieces.size > 1) {
             Text(s.nglSong, Modifier.padding(start = 20.dp, top = 4.dp), fontWeight = FontWeight.Bold, fontSize = 16.sp)
             FlowRow(Modifier.fillMaxWidth().padding(horizontal = 20.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -111,13 +127,16 @@ fun NglScreen(app: AppState) {
                 voices.forEach { v -> FilterChip(v.id == part.id, { select(piece, v) }, { Text(s.nglVoiceN(v.voice), maxLines = 1) }) }
             }
         }
-
-        NglPartPractice(app, piece, part)
     }
 }
 
+/**
+ * The chosen part: score, play with the ensemble, listen, note by note. While something plays the screen scrolls by
+ * itself so the line being played stays in the middle (the learner's hands are on the instrument), and the live
+ * feedback and the stop button stay pinned at the bottom.
+ */
 @Composable
-private fun NglPartPractice(app: AppState, piece: EnsemblePiece, part: EnsemblePart) {
+private fun NglPartPractice(app: AppState, piece: EnsemblePiece, part: EnsemblePart, header: @Composable ColumnScope.() -> Unit) {
     val ui = LocalUi.current
     val s = ui.strings
     val written = remember(piece, part) { part.written(piece) }
@@ -140,6 +159,23 @@ private fun NglPartPractice(app: AppState, piece: EnsemblePiece, part: EnsembleP
     val hi = if (pa.active) pa.highlight(app) else engineHighlight(app.engine, written)
     val colors = remember(results, take) { if (results.isEmpty()) null else take.colorOf(results) }
 
+    // auto-scroll: keep the line being played in the middle of the space above the pinned bar
+    val following = taking || pa.active || listening
+    val scroll = rememberScrollState()
+    val scope = rememberCoroutineScope()
+    var viewport by remember { mutableStateOf<LayoutCoordinates?>(null) }
+    var staff by remember { mutableStateOf<LayoutCoordinates?>(null) }
+    var barHeight by remember { mutableIntStateOf(0) }
+    fun centerRow(top: Float, bottom: Float) {
+        val v = viewport ?: return
+        val st = staff ?: return
+        if (!v.isAttached || !st.isAttached) return
+        val rowCenter = st.positionInRoot().y - v.positionInRoot().y + (top + bottom) / 2f
+        val visible = v.size.height - barHeight
+        val delta = rowCenter - visible / 2f
+        scope.launch { scroll.animateScrollTo((scroll.value + delta).roundToInt().coerceIn(0, scroll.maxValue), tween(450)) }
+    }
+
     fun play(all: Boolean) {
         take.stop(); pa.stop()
         ensemble = all
@@ -149,71 +185,102 @@ private fun NglPartPractice(app: AppState, piece: EnsemblePiece, part: EnsembleP
         )
     }
 
-    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        PressCard(Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    EnsembleIcon(part, 40.dp)
-                    Column(Modifier.weight(1f)) {
-                        Text(part.name, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
-                        Text(piece.title + " · " + s.nglPartSummary(written.measures.size, piece.tempo), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    Box(Modifier.fillMaxSize().onGloballyPositioned { viewport = it }) {
+        Column(
+            Modifier.fillMaxSize().verticalScroll(scroll).padding(bottom = 24.dp + with(LocalDensity.current) { barHeight.toDp() }),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            header()
+            Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                PressCard(Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            EnsembleIcon(part, 40.dp)
+                            Column(Modifier.weight(1f)) {
+                                Text(part.name, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp)
+                                Text(piece.title + " · " + s.nglPartSummary(written.measures.size, piece.tempo), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                        }
+                        val c = Pitch(0, 0, 5)
+                        Text(s.transposeExplain(part.transpose, ui.noteName(c), ui.noteName(tuning.concert(c))), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 18.sp)
                     }
                 }
-                val c = Pitch(0, 0, 5)
-                Text(s.transposeExplain(part.transpose, ui.noteName(c), ui.noteName(tuning.concert(c))), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 18.sp)
-            }
-        }
-        // play with the ensemble, in time, with a verdict per note
-        PressCard(Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(s.nglEnsembleTitle, fontWeight = FontWeight.ExtraBold, fontSize = 17.sp)
-                Text(s.nglEnsembleDesc, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 18.sp)
-                ToggleRow(s.nglAccompaniment, accompaniment, s.nglAccompanimentDesc, enabled = !taking) { accompaniment = it }
-                if (taking) {
-                    TakeLiveMeter(app, written, tuning)
-                    SecondaryButton(s.nglStopTake, { take.stop() })
-                } else {
-                    BigButton(s.nglStartTake, { pa.stop(); take.start(tempo.roundToInt(), metronome, accompaniment) }, leading = "▶")
+                // play with the ensemble, in time, with a verdict per note
+                PressCard(Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(s.nglEnsembleTitle, fontWeight = FontWeight.ExtraBold, fontSize = 17.sp)
+                        Text(s.nglEnsembleDesc, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, lineHeight = 18.sp)
+                        ToggleRow(s.nglAccompaniment, accompaniment, s.nglAccompanimentDesc, enabled = !taking) { accompaniment = it }
+                        if (!taking) BigButton(s.nglStartTake, { pa.stop(); take.start(tempo.roundToInt(), metronome, accompaniment) }, leading = "▶")
+                        if (results.isNotEmpty()) {
+                            val sum = TimedScorer.summary(take.notes, results)
+                            if (phase == EnsembleTake.Phase.DONE) {
+                                Text(s.nglTakeSummary(sum.total, sum.played, sum.onTime, sum.inTune), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                Text(
+                                    if (sum.measuresToReview.isEmpty()) "🎉 " + s.nglAllGood else s.nglReview(sum.measuresToReview.joinToString(", ")),
+                                    color = if (sum.measuresToReview.isEmpty()) Palette.Success else MaterialTheme.colorScheme.onSurface,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                            }
+                            Text(s.nglLegend, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
                 }
-                if (results.isNotEmpty()) {
-                    val sum = TimedScorer.summary(take.notes, results)
-                    if (phase == EnsembleTake.Phase.DONE) {
-                        Text(s.nglTakeSummary(sum.total, sum.played, sum.onTime, sum.inTune), fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Text(
-                            if (sum.measuresToReview.isEmpty()) "🎉 " + s.nglAllGood else s.nglReview(sum.measuresToReview.joinToString(", ")),
-                            color = if (sum.measuresToReview.isEmpty()) Palette.Success else MaterialTheme.colorScheme.onSurface,
-                            fontWeight = FontWeight.SemiBold,
+
+                PressCard(Modifier.fillMaxWidth()) {
+                    Box(Modifier.padding(12.dp)) {
+                        StaffView(
+                            written, Modifier.onGloballyPositioned { staff = it },
+                            labelFor = if (showNames) ({ p -> ui.noteName(p) }) else null, highlightIndex = hi, description = s.cdStaff,
+                            noteColor = if (pa.active) null else colors,
+                            followIndex = if (following) maxOf(hi, 0) else -1,
+                            onFollowRow = ::centerRow,
                         )
                     }
-                    Text(s.nglLegend, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+
+                if (!following) {
+                    SecondaryButton("🎧  " + s.nglListenPart, { play(false) })
+                    SecondaryButton("🎶  " + s.nglListenAll, { play(true) })
+                    SecondaryButton("🎵  " + s.nglStepByStep, { take.stop(); pa.start() })
+                }
+                PressCard(Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(horizontal = 14.dp, vertical = 8.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(s.tempo, Modifier.weight(1f), fontWeight = FontWeight.Bold)
+                            Text(s.bpm(tempo.roundToInt()), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+                        }
+                        Slider(tempo, { tempo = it }, valueRange = 40f..200f, enabled = !taking, onValueChangeFinished = { if (listening) play(ensemble) })
+                        ToggleRow(s.metronome, metronome, enabled = !taking) { metronome = it; if (listening) play(ensemble) }
+                        ToggleRow(s.countIn, countIn) { countIn = it }
+                        ToggleRow(s.showNoteNames, showNames) { showNames = it }
+                    }
                 }
             }
         }
 
-        PressCard(Modifier.fillMaxWidth()) {
-            Box(Modifier.padding(12.dp)) {
-                StaffView(
-                    written, labelFor = if (showNames) ({ p -> ui.noteName(p) }) else null, highlightIndex = hi, description = s.cdStaff,
-                    noteColor = if (pa.active) null else colors,
-                )
-            }
-        }
-
-        SecondaryButton(if (listening && !ensemble) s.stop else "🎧  " + s.nglListenPart, { if (listening && !ensemble) app.engine.stop() else play(false) })
-        SecondaryButton(if (listening && ensemble) s.stop else "🎶  " + s.nglListenAll, { if (listening && ensemble) app.engine.stop() else play(true) })
-        PlayAlongPanel(app, pa, onFinished = { app.recordSolfeo() })
-        SecondaryButton(if (pa.active) s.stopListening else "🎵  " + s.nglStepByStep, { take.stop(); pa.toggle() })
-        PressCard(Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(horizontal = 14.dp, vertical = 8.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(s.tempo, Modifier.weight(1f), fontWeight = FontWeight.Bold)
-                    Text(s.bpm(tempo.roundToInt()), color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+        // pinned bar: live feedback and stop, reachable without scrolling
+        if (following) {
+            Surface(
+                Modifier.align(Alignment.BottomCenter).fillMaxWidth().onSizeChanged { barHeight = it.height },
+                shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp), tonalElevation = 3.dp, shadowElevation = 8.dp,
+            ) {
+                Column(Modifier.padding(horizontal = 16.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    when {
+                        taking -> {
+                            TakeLiveMeter(app, written, tuning)
+                            SecondaryButton(s.nglStopTake, { take.stop() })
+                        }
+                        pa.active -> {
+                            PlayAlongPanel(app, pa, onFinished = { app.recordSolfeo() })
+                            SecondaryButton(s.stopListening, { pa.stop() })
+                        }
+                        else -> SecondaryButton(s.stop, { app.engine.stop() })
+                    }
                 }
-                Slider(tempo, { tempo = it }, valueRange = 40f..200f, enabled = !taking, onValueChangeFinished = { if (listening) play(ensemble) })
-                ToggleRow(s.metronome, metronome, enabled = !taking) { metronome = it; if (listening) play(ensemble) }
-                ToggleRow(s.countIn, countIn) { countIn = it }
-                ToggleRow(s.showNoteNames, showNames) { showNames = it }
             }
+        } else if (barHeight != 0) {
+            LaunchedEffect(Unit) { barHeight = 0 }
         }
     }
 }
