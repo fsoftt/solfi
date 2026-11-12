@@ -90,7 +90,7 @@ fun InstrumentPracticeScreen(app: AppState) {
                 }
                 TextButton({ app.push(Route.Settings) }) { Text(s.changeInstrument) }
                 if (!tuning.octaveFree) {
-                    ToggleRow(s.ignoreOctave, app.profile?.settings?.ignoreOctave == true, s.ignoreOctaveDesc) { v -> app.updateSettings { copy(ignoreOctave = v) } }
+                    ToggleRow(s.ignoreOctave, app.octaveFree, s.ignoreOctaveDesc) { v -> app.updateSettings { copy(strictOctave = !v) } }
                 }
             }
         }
