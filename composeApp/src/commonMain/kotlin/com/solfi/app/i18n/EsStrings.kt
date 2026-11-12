@@ -279,6 +279,7 @@ object EsStrings : Strings {
     override val nglTitle = "NGL"
     override val nglIntro = "Elige tu instrumento y tu voz, y practica tu parte del conjunto. Puedes escucharla sola o con todo el conjunto."
     override val nglEmpty = "Todavía no hay piezas."
+    override val nglSong = "Canción"
     override val nglInstrument = "Instrumento"
     override val nglVoice = "Voz"
     override fun nglVoiceN(n: Int) = "Voz $n"

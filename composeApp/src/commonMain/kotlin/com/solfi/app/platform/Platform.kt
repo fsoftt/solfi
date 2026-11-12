@@ -39,6 +39,12 @@ expect fun todayEpochDay(): Int
 
 expect fun currentTimeMillis(): Long
 
+/** True when the NGL tab should be shown: on the web, only when the address ends in `/ngl` (e.g. `/app/ngl`). */
+expect fun nglEnabled(): Boolean
+
+/** True for web paths that open the NGL version: `/solfi/app/ngl`, `/app/ngl/`, `ngl`… */
+fun isNglPath(path: String): Boolean = path.lowercase().trimEnd('/').let { it == "ngl" || it.endsWith("/ngl") }
+
 /** Outcome of opening the microphone. */
 enum class MicStatus {
     /** Set by the app while waiting for the permission / device (platforms never report it). */

@@ -279,6 +279,7 @@ object PtStrings : Strings {
     override val nglTitle = "NGL"
     override val nglIntro = "Escolha seu instrumento e sua voz, e pratique sua parte do conjunto. Ouça-a sozinha ou com todo o conjunto."
     override val nglEmpty = "Ainda não há peças."
+    override val nglSong = "Música"
     override val nglInstrument = "Instrumento"
     override val nglVoice = "Voz"
     override fun nglVoiceN(n: Int) = "Voz $n"

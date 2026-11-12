@@ -5,8 +5,8 @@ Every part becomes one practisable voice with the notation string described in C
 Pitches are kept as WRITTEN for the part (what the player reads); `transpose` is the semitone
 distance written -> sounding (B-flat trumpet -2, glockenspiel +24...).
 
-    python3 tools/musicxml_to_solfi.py score.mxl --id intro-ngl > piece.json
-    python3 tools/musicxml_to_solfi.py score.mxl --id intro-ngl --into composeApp/src/commonMain/composeResources/files/content/ngl.json
+    python3 tools/musicxml_to_solfi.py score.mxl --id intro --title Intro > piece.json
+    python3 tools/musicxml_to_solfi.py score.mxl --id intro --title Intro --into composeApp/src/commonMain/composeResources/files/content/ngl.json
 
 Limits (the script stops with an error when it meets them): one voice per part, no tuplets, no grace notes,
 no time-signature changes; key changes are not supported either. Repeats are not expanded.
@@ -131,7 +131,7 @@ def convert_part(part, meta):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("score")
-    ap.add_argument("--id", required=True, help="piece id, e.g. intro-ngl")
+    ap.add_argument("--id", required=True, help="piece id, e.g. intro")
     ap.add_argument("--title", help="defaults to <work-title>")
     ap.add_argument("--tempo", type=int, help="quarter notes per minute; defaults to the first <sound tempo>")
     ap.add_argument("--into", help="add (or replace) the piece in this NGL book JSON file")

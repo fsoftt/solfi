@@ -31,6 +31,7 @@ import com.solfi.app.platform.AudioSink
 import com.solfi.app.platform.Haptics
 import com.solfi.app.platform.KeyValueStore
 import com.solfi.app.platform.PlatformBackHandler
+import com.solfi.app.platform.nglEnabled
 import com.solfi.app.platform.systemLanguageCode
 import com.solfi.app.ui.screens.HomeScreen
 import com.solfi.app.ui.screens.InstrumentPracticeScreen
@@ -53,7 +54,7 @@ import com.solfi.app.ui.theme.SolfiTheme
 @Composable
 fun App() {
     val app = remember {
-        AppState(ProfileStore(KeyValueStore("solfi")), AudioEngine(AudioSink()), Haptics(), systemLanguageCode())
+        AppState(ProfileStore(KeyValueStore("solfi")), AudioEngine(AudioSink()), Haptics(), systemLanguageCode(), showNgl = nglEnabled())
     }
     LaunchedEffect(Unit) { app.loadContent() }
     DisposableEffect(Unit) { onDispose { app.engine.shutdown() } }
@@ -115,7 +116,7 @@ internal fun MainTabs(app: AppState) {
         Triple(Tab.NGL, "", s.navNgl),
         Triple(Tab.PIANO, "🎹", s.navPiano),
         Triple(Tab.PROGRESS, "🏆", s.navProgress),
-    )
+    ).filter { it.first != Tab.NGL || app.showNgl }
     // leaving a tab silences whatever was playing
     LaunchedEffect(app.tab) { app.engine.stop(); app.listener.stop() }
     Scaffold(

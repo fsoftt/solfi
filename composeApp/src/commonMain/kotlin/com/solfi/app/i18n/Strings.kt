@@ -264,6 +264,7 @@ interface Strings {
     val nglTitle: String
     val nglIntro: String
     val nglEmpty: String
+    val nglSong: String
     val nglInstrument: String
     val nglVoice: String
     fun nglVoiceN(n: Int): String

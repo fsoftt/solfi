@@ -16,8 +16,8 @@ class NglContentTest {
 
     private val pieces = ContentJson.decodeEnsembleBook(file.readText()).pieces
 
-    @Test fun introNglHasAllTenParts() {
-        val intro = pieces.single { it.id == "intro-ngl" }
+    @Test fun introHasAllTenParts() {
+        val intro = pieces.single { it.id == "intro" }
         assertEquals(listOf("TRUMPET", "TROMBONE", "TUBA", EnsemblePart.GLOCKENSPIEL), intro.instruments)
         assertEquals(listOf(1, 2, 3), intro.partsOf("TRUMPET").map { it.voice })
         assertEquals(listOf(1, 2, 3), intro.partsOf("TROMBONE").map { it.voice })
@@ -39,9 +39,14 @@ class NglContentTest {
         }
     }
 
+    @Test fun nglTabOnlyAtNglAddresses() {
+        for (p in listOf("/solfi/app/ngl", "/solfi/app/ngl/", "/piccoloreader/app/ngl", "/app/NGL/")) assertTrue(com.solfi.app.platform.isNglPath(p), p)
+        for (p in listOf("/solfi/app/", "/solfi/app/index.html", "/ngl/app/", "/solfi/app/angl")) assertTrue(!com.solfi.app.platform.isNglPath(p), p)
+    }
+
     @Test fun transposingPartsSoundTogether() {
         // bar 1: trumpet written D4 (B-flat, sounds C4), trombone 1 C4, tuba C2, glockenspiel written C4 (sounds C6)
-        val intro = pieces.single { it.id == "intro-ngl" }
+        val intro = pieces.single { it.id == "intro" }
         fun firstConcert(id: String) = intro.parts.single { it.id == id }.concert(intro).soundNotes().first().pitches.first().midi % 12
         val notes = listOf("p1", "p4", "p7", "p8").map(::firstConcert)
         assertEquals(setOf(0), notes.toSet(), "all parts start on a concert C: $notes")

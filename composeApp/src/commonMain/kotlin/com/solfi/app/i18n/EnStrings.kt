@@ -279,6 +279,7 @@ object EnStrings : Strings {
     override val nglTitle = "NGL"
     override val nglIntro = "Choose your instrument and your voice, and practise your part of the ensemble. Listen to it alone or with the whole ensemble."
     override val nglEmpty = "No pieces yet."
+    override val nglSong = "Song"
     override val nglInstrument = "Instrument"
     override val nglVoice = "Voice"
     override fun nglVoiceN(n: Int) = "Voice $n"

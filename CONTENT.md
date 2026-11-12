@@ -286,7 +286,7 @@ La pestaña **NGL** muestra piezas de conjunto: el aprendiz elige **instrumento*
 `composeResources/files/content/ngl.json` y se generan desde MusicXML (`.mxl` o `.musicxml`, p. ej. exportado de MuseScore):
 
 ```bash
-python3 tools/musicxml_to_solfi.py partitura.mxl --id intro-ngl \
+python3 tools/musicxml_to_solfi.py partitura.mxl --id intro --title Intro \
   --into composeApp/src/commonMain/composeResources/files/content/ngl.json
 ```
 

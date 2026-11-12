@@ -51,9 +51,17 @@ private fun EnsembleIcon(part: EnsemblePart, size: androidx.compose.ui.unit.Dp) 
     if (i != null) InstrumentIcon(i, size) else Text(if (part.instrument == EnsemblePart.GLOCKENSPIEL) "🔔" else "🎵", fontSize = (size.value * 0.7f).sp)
 }
 
-/** Part to show first: the saved choice, else voice 1 of the learner's instrument, else the first part. */
+/**
+ * Part to show first: the saved choice; in another song, the same instrument and voice; else voice 1 of the
+ * learner's instrument; else the first part.
+ */
 internal fun defaultNglPart(app: AppState, piece: EnsemblePiece): EnsemblePart {
-    app.nglSelection?.takeIf { it.first == piece.id }?.let { (_, id) -> piece.parts.firstOrNull { it.id == id }?.let { return it } }
+    val saved = app.nglSelection?.let { (pid, id) -> app.nglPieces.firstOrNull { it.id == pid }?.parts?.firstOrNull { it.id == id } }
+    if (saved != null) {
+        piece.parts.firstOrNull { it === saved }?.let { return it }
+        val same = piece.partsOf(saved.instrument)
+        (same.firstOrNull { it.voice == saved.voice } ?: same.firstOrNull())?.let { return it }
+    }
     return piece.partsOf(app.instrument.name).firstOrNull() ?: piece.parts.first()
 }
 
@@ -75,6 +83,7 @@ fun NglScreen(app: AppState) {
         fun select(p: EnsemblePiece, pt: EnsemblePart) { app.engine.stop(); app.nglSelection = p.id to pt.id }
 
         if (pieces.size > 1) {
+            Text(s.nglSong, Modifier.padding(start = 20.dp, top = 4.dp), fontWeight = FontWeight.Bold, fontSize = 16.sp)
             FlowRow(Modifier.fillMaxWidth().padding(horizontal = 20.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 pieces.forEach { p -> FilterChip(p.id == piece.id, { select(p, defaultNglPart(app, p)) }, { Text(p.title, maxLines = 1) }) }
             }

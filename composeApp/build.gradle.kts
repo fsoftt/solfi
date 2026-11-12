@@ -110,4 +110,11 @@ tasks.register<Sync>("publishWebApp") {
     description = "Builds the browser app and copies it to docs/app"
     from(tasks.named("wasmJsBrowserDistribution")) { exclude("*.map") }
     into(rootProject.layout.projectDirectory.dir("docs/app"))
+    // docs/app/ngl/ opens the same app with the NGL tab (the app looks at the address); <base> points the assets at docs/app/
+    doLast {
+        val out = rootProject.layout.projectDirectory.dir("docs/app").asFile
+        val html = File(out, "index.html").readText().replaceFirst("<head>", "<head>\n<base href=\"../\">")
+        File(out, "ngl").mkdirs()
+        File(out, "ngl/index.html").writeText(html)
+    }
 }

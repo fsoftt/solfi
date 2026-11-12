@@ -57,6 +57,8 @@ class AppState(
     private val systemLanguage: String,
     /** Microphone pitch listener for playing along with a real instrument. */
     val listener: InstrumentListener = InstrumentListener(MicInput()),
+    /** Show the NGL tab (web: only at `…/app/ngl`). */
+    val showNgl: Boolean = false,
 ) {
     var levels by mutableStateOf<List<LevelContent?>>(emptyList())
         private set
@@ -108,7 +110,7 @@ class AppState(
 
     suspend fun loadContent() {
         useLevels(ContentRepository.loadAll())
-        nglPieces = ContentRepository.loadNgl()
+        if (showNgl) nglPieces = ContentRepository.loadNgl()
     }
 
     /** Sets the loaded levels (index 0 = level 1; null = missing level). */
