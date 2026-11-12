@@ -103,7 +103,7 @@ fun HomeScreen(app: AppState) {
                     Text(s.practiceTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                     Text(s.instrumentName(app.instrument), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                Text("🎤", fontSize = 26.sp)
+                Text("🎶", fontSize = 26.sp)
             }
         }
     }

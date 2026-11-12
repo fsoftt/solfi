@@ -110,7 +110,7 @@ private fun MainTabs(app: AppState) {
         Triple(Tab.HOME, "🏠", s.navHome),
         Triple(Tab.LEARN, "🗺️", s.navLearn),
         Triple(Tab.SOLFEOS, "🎼", s.navSolfeos),
-        Triple(Tab.PRACTICE, "🎤", s.navPractice),
+        Triple(Tab.PRACTICE, "", s.navPractice),
         Triple(Tab.PIANO, "🎹", s.navPiano),
         Triple(Tab.PROGRESS, "🏆", s.navProgress),
     )
@@ -123,7 +123,7 @@ private fun MainTabs(app: AppState) {
                 items.forEach { (tab, icon, label) ->
                     NavigationBarItem(
                         selected = app.tab == tab, onClick = { app.tab = tab },
-                        icon = { Text(icon, fontSize = 22.sp) }, label = { Text(label, fontSize = 11.sp, maxLines = 1) },
+                        icon = { if (tab == Tab.PRACTICE) com.solfi.app.ui.icons.InstrumentIcon(app.instrument, 26.dp) else Text(icon, fontSize = 22.sp) }, label = { Text(label, fontSize = 11.sp, maxLines = 1) },
                         alwaysShowLabel = true,
                     )
                 }

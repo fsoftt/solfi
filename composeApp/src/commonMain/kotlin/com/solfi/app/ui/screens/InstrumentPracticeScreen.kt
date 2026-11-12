@@ -95,8 +95,8 @@ fun InstrumentPracticeScreen(app: AppState) {
             }
         }
 
-        PracticeCard("🎚️", s.tunerTitle, s.tunerDesc) { app.push(Route.PracticeTuner) }
-        PracticeCard("👀", s.readAndPlayTitle, s.readAndPlayDesc) { app.push(Route.PracticeNotes) }
+        PracticeCard("🧭", s.tunerTitle, s.tunerDesc) { app.push(Route.PracticeTuner) }
+        PracticeCard("📖", s.readAndPlayTitle, s.readAndPlayDesc) { app.push(Route.PracticeNotes) }
 
         Text(s.randomMelodiesTitle, Modifier.padding(start = 20.dp, top = 8.dp), fontWeight = FontWeight.Bold, fontSize = 16.sp)
         Text(s.randomMelodiesDesc, Modifier.padding(horizontal = 20.dp), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -119,7 +119,7 @@ fun InstrumentPracticeScreen(app: AppState) {
                             Text(sf.title[ui.lang], fontWeight = FontWeight.Bold, fontSize = 16.sp)
                             Text(s.levelLabel(level.level), fontSize = 12.sp, color = parseHexColor(level.color))
                         }
-                        Text("🎤", fontSize = 20.sp)
+                        Text("🎶", fontSize = 20.sp)
                     }
                 }
             }
@@ -309,7 +309,7 @@ fun PracticeMelodyScreen(app: AppState, levelIndex: Int, index: Int) {
             PlayAlongPanel(app, pa, onFinished = { app.recordSolfeo() })
             PlayAlongButton(pa)
             com.solfi.app.ui.widgets.SecondaryButton(
-                if (playing) "■  " + s.stop else "🔊  " + s.listenAgain,
+                if (playing) s.stop else "🎧  " + s.listenAgain,
                 {
                     if (playing) app.engine.stop()
                     else { pa.stop(); app.engine.playMelody(melody, PlayOptions(tempo = melody.tempo)) }

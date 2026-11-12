@@ -122,7 +122,7 @@ fun PlayAlong.highlight(app: AppState): Int {
 @Composable
 fun PlayAlongButton(pa: PlayAlong, modifier: Modifier = Modifier) {
     val s = LocalUi.current.strings
-    SecondaryButton(if (pa.active) "■  " + s.stopListening else "🎤  " + s.playWithInstrument, { pa.toggle() }, modifier)
+    SecondaryButton(if (pa.active) s.stopListening else "🎶  " + s.playWithInstrument, { pa.toggle() }, modifier)
 }
 
 /** Microphone status, live meter and feedback for an active [PlayAlong]. Renders nothing when inactive. */
@@ -148,14 +148,14 @@ fun PlayAlongPanel(app: AppState, pa: PlayAlong, onFinished: ((FollowState) -> U
             MicStatus.LISTENING -> if (st.done) {
                 Text("🎉", fontSize = 40.sp)
                 Text(s.playAlongSummary(st.total, st.firstTry, st.inTune), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 17.sp)
-                BigButton(s.playAgain, { pa.start() }, leading = "↻")
+                BigButton(s.playAgain, { pa.start() }, leading = "🔁")
             } else {
                 Text(s.noteProgress(st.index + 1, st.total), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                 PitchMeter(st.live)
                 PlayFeedbackLine(app, pa, st)
                 Text(s.playAlongHint(ui.kid), textAlign = TextAlign.Center, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 if (pa.outOfRange && !app.octaveFree) Text(s.anyOctaveAuto, textAlign = TextAlign.Center, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                TextButton({ pa.hearCurrent(st.index) }) { Text("🔊 " + s.hearNote) }
+                TextButton({ pa.hearCurrent(st.index) }) { Text("🎧 " + s.hearNote) }
             }
             else -> Text(s.micStarting, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
@@ -232,5 +232,5 @@ fun PitchMeter(judgement: PitchJudgement?, modifier: Modifier = Modifier) {
 
 fun centsText(c: Double): String {
     val v = c.roundToInt()
-    return (if (v > 0) "+" else if (v < 0) "−" else "±") + abs(v) + " ¢"
+    return (if (v > 0) "+" else if (v < 0) "-" else "±") + abs(v) + " ¢"
 }
