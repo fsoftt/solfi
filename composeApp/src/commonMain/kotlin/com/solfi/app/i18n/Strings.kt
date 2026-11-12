@@ -217,6 +217,48 @@ interface Strings {
     // accessibility
     val cdMascot: String
     val cdSettings: String
+
+    // play along with a real instrument
+    val navPractice: String
+    val practiceTitle: String
+    val practiceIntro: String
+    val playWithInstrument: String
+    val stopListening: String
+    val micStarting: String
+    val micDenied: String
+    val micUnavailable: String
+    fun playAlongHint(kid: Boolean): String
+    fun verdictText(v: com.solfi.app.music.PitchVerdict, kid: Boolean): String
+    /** [heard] was played instead of [expected]; [higher] = the played note is higher. */
+    fun wrongNoteDetail(heard: String, expected: String, higher: Boolean): String
+    val playItAgain: String
+    fun playAlongSummary(total: Int, firstTry: Int, inTune: Int): String
+    val playAgain: String
+    val hearNote: String
+    fun noteProgress(i: Int, n: Int): String
+    /** Explains how the instrument transposes: written C ([writtenC]) sounds [soundsAs]. */
+    fun transposeExplain(transpose: Int, writtenC: String, soundsAs: String): String
+    val ignoreOctave: String
+    val ignoreOctaveDesc: String
+    val tunerTitle: String
+    val tunerDesc: String
+    val tunerPlaySomething: String
+    val writtenLabel: String
+    val concertLabel: String
+    val readAndPlayTitle: String
+    val readAndPlayDesc: String
+    val melodiesTitle: String
+    val melodiesDesc: String
+    val randomMelodiesTitle: String
+    val randomMelodiesDesc: String
+    val withAccidentals: String
+    fun inARow(n: Int): String
+    val nextNote: String
+    val changeInstrument: String
+    val inputKeyboard: String
+    val inputInstrument: String
+    val anyOctaveAuto: String
+
     val cdBack: String
     val cdPianoKey: String
     val cdStaff: String

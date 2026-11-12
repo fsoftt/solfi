@@ -134,6 +134,28 @@ private fun build(i: Instrument): ImageVector = when (i) {
         fill("M34.5 33 L41.5 33 L47 23 H29 Z", Accent)
         fill(circle(24f, 17f, 1.8f) + circle(24f, 23f, 1.8f) + circle(24f, 29f, 1.8f), Accent)
     }
+    Instrument.TENOR_SAX -> icon("tenor_sax") {
+        line("M7 3 L13 7 C18 9 19 9 19 15", Accent, 3.2f)
+        line("M19 13 V33 C19 44 37 44 37 32", Body, 7.5f)
+        fill("M33 32 L41.5 32 L47.5 20 H27 Z", Accent)
+        fill(circle(19f, 17f, 2f) + circle(19f, 23.5f, 2f) + circle(19f, 30f, 2f), Accent)
+    }
+    Instrument.CLARINET -> icon("clarinet") {
+        group(rotate = 32f, pivotX = 24f, pivotY = 24f) {
+            fill(rr(21.5f, 1f, 5f, 6f, 1.5f), Accent)
+            fill(rr(20.5f, 6f, 7f, 32f, 2.5f), Body)
+            fill("M20.5 36 H27.5 L32 46.5 H16 Z", Body)
+            line("M20.5 16 H27.5 M20.5 27 H27.5", Accent, 1.6f)
+            fill(circle(24f, 12f, 1.6f) + circle(24f, 21.5f, 1.6f) + circle(24f, 32f, 1.6f), Accent)
+        }
+    }
+    Instrument.FRENCH_HORN -> icon("french_horn") {
+        line("M22 24 m-13 0 a13 13 0 1 0 26 0 a13 13 0 1 0 -26 0", Body, 4.5f)
+        line("M22 24 m-6.5 0 a6.5 6.5 0 1 0 13 0 a6.5 6.5 0 1 0 -13 0", Body, 3f)
+        fill("M31 31 L42 39 Q46.5 41 46 37 L40 28 Z", Accent)
+        line("M9 24 C4 24 3 19 5 15", Accent, 2.6f)
+        fill(circle(22f, 12f, 2.2f) + circle(27f, 13.5f, 2.2f), Accent)
+    }
     Instrument.OTHER -> icon("music") {
         fill("M19 10 L38 5 V13 L19 18 Z", Accent)
         line("M18.5 35 V11 M37.5 31 V7", Body, 3.2f)

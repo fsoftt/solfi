@@ -38,3 +38,18 @@ expect fun systemLanguageCode(): String
 expect fun todayEpochDay(): Int
 
 expect fun currentTimeMillis(): Long
+
+/** Outcome of opening the microphone. */
+enum class MicStatus {
+    /** Set by the app while waiting for the permission / device (platforms never report it). */
+    STARTING, LISTENING, DENIED, UNAVAILABLE,
+}
+
+/**
+ * Microphone capture (mono float PCM). [start] asks for permission when needed; [onStatus] and [onSamples] may be
+ * called on any thread. Samples are delivered in blocks together with the real capture sample rate.
+ */
+expect class MicInput() {
+    fun start(onStatus: (MicStatus) -> Unit, onSamples: (buffer: FloatArray, frames: Int, sampleRate: Int) -> Unit)
+    fun stop()
+}

@@ -107,7 +107,7 @@ private fun ExplainStep(app: AppState, step: Step.Explain, onNext: () -> Unit) {
         step.emoji?.let { Text(it, Modifier.align(Alignment.CenterHorizontally).scale(bounce), fontSize = if (ui.kid) 64.sp else 48.sp) }
         step.title?.let { BigText(it[ui.lang], size = if (ui.kid) 26 else 22) }
         Body(step.text[ui.lang])
-        step.melody?.let { MelodyPlayerCard(app, it, onPlayedToEnd = { st = st.copy(playedToEnd = true) }) }
+        step.melody?.let { MelodyPlayerCard(app, it, onPlayedToEnd = { st = st.copy(playedToEnd = true) }, playAlong = true) }
     }
 }
 
@@ -118,7 +118,7 @@ private fun ListenStep(app: AppState, step: Step.Listen, onNext: () -> Unit) {
     StepFrame(bottom = { GatedContinue(step, st) { if (StepCompletionPolicy.canContinue(step, st)) onNext() } }) {
         Text("🎧", Modifier.align(Alignment.CenterHorizontally), fontSize = 52.sp)
         BigText(step.prompt[ui.lang])
-        MelodyPlayerCard(app, step.melody, onPlayedToEnd = { st = st.copy(playedToEnd = true) })
+        MelodyPlayerCard(app, step.melody, onPlayedToEnd = { st = st.copy(playedToEnd = true) }, playAlong = true)
     }
 }
 
@@ -280,12 +280,23 @@ private fun PianoStep(app: AppState, step: Step.Piano, isExam: Boolean, onDone: 
     val targets = remember(step) { step.targets.map { Pitch.parse(it) } }
     val clef = runCatching { Clef.fromCode(step.clef) }.getOrDefault(Clef.TREBLE)
     val melody = remember(step) { Melody.parseLoose(targets.joinToString(" ") { "$it:q" }, clef.code) }
-    var index by remember { mutableIntStateOf(0) }
-    var mistakes by remember { mutableIntStateOf(0) }
+    var keyIndex by remember { mutableIntStateOf(0) }
+    var keyMistakes by remember { mutableIntStateOf(0) }
     var flashWrong by remember { mutableStateOf<Int?>(null) }
     var flashRight by remember { mutableStateOf<Int?>(null) }
     val held = remember { HashMap<Int, Int>() }
+
+    // Input: on-screen keyboard or the learner's own instrument through the microphone.
+    var useInstrument by remember { mutableStateOf(false) }
+    val playTargets = remember(targets) { targets.mapIndexed { i, p -> com.solfi.app.logic.PlayTarget(listOf(p), i) } }
+    val pa = rememberPlayAlong(app, playTargets)
+    val follow by app.listener.follow.collectAsState()
+    val inst = useInstrument && pa.active
+    val index = if (inst) follow.index else keyIndex
+    val mistakes = if (inst) follow.results.sumOf { it.mistakes } + (follow.lastWrong?.let { w -> if (w.targetIndex == follow.index) 1 else 0 } ?: 0) else keyMistakes
     val done = index >= targets.size
+    LaunchedEffect(useInstrument) { if (useInstrument) pa.start() else pa.stop() }
+    LaunchedEffect(done, inst) { if (done && inst) feedback(app, true) }
 
     val lo = targets.minOf { it.midi }
     val hi = targets.maxOf { it.midi }
@@ -317,6 +328,13 @@ private fun PianoStep(app: AppState, step: Step.Piano, isExam: Boolean, onDone: 
                 }
             }
         }
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)) {
+            androidx.compose.material3.FilterChip(!useInstrument, { if (!done) { useInstrument = false; keyIndex = 0; keyMistakes = 0 } }, { Text(s.inputKeyboard) })
+            androidx.compose.material3.FilterChip(useInstrument, { if (!done) useInstrument = true }, { Text(s.inputInstrument) })
+        }
+        if (useInstrument) {
+            if (!done) PlayAlongPanel(app, pa)
+        } else {
         Spacer(Modifier.height(8.dp))
         PianoKeyboard(
             firstMidi = first, lastMidi = last, height = if (ui.kid) 190.dp else 170.dp, showLabels = step.showLabels || index >= targets.size,
@@ -326,12 +344,13 @@ private fun PianoStep(app: AppState, step: Step.Piano, isExam: Boolean, onDone: 
             onDown = { p ->
                 held[p.midi] = app.engine.noteOn(p)
                 if (!done) {
-                    if (p.midi == targets[index].midi) { index++; flashRight = p.midi; if (index >= targets.size) feedback(app, true) }
-                    else { mistakes++; flashWrong = p.midi; if (app.profile?.settings?.haptics != false) app.haptics.feedback(false) }
+                    if (p.midi == targets[keyIndex].midi) { keyIndex++; flashRight = p.midi; if (keyIndex >= targets.size) feedback(app, true) }
+                    else { keyMistakes++; flashWrong = p.midi; if (app.profile?.settings?.haptics != false) app.haptics.feedback(false) }
                 }
             },
             onUp = { p -> held.remove(p.midi)?.let { app.engine.noteOff(it) } },
         )
+        }
     }
 }
 

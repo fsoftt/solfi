@@ -1,7 +1,9 @@
 package com.solfi.app.music
 
 /** The learner's instrument, used to recommend a clef. */
-enum class Instrument { VOICE, PIANO, GUITAR, VIOLIN, CELLO, BASS, FLUTE, SAXOPHONE, TRUMPET, TROMBONE, BASSOON, TUBA, OTHER;
+enum class Instrument { VOICE, PIANO, GUITAR, VIOLIN, CELLO, BASS, FLUTE, CLARINET,
+    /** Alto saxophone in E♭ (kept as SAXOPHONE so existing profiles keep their choice). */
+    SAXOPHONE, TENOR_SAX, TRUMPET, FRENCH_HORN, TROMBONE, BASSOON, TUBA, OTHER;
     companion object {
         fun fromName(name: String?): Instrument = entries.firstOrNull { it.name == name } ?: OTHER
     }
@@ -18,7 +20,8 @@ object ClefPolicy {
     /** Clef recommended for an instrument, or null when the content's own clef should be kept (piano, other). */
     fun recommended(instrument: Instrument): Clef? = when (instrument) {
         Instrument.CELLO, Instrument.BASS, Instrument.BASSOON, Instrument.TROMBONE, Instrument.TUBA -> Clef.BASS
-        Instrument.VOICE, Instrument.GUITAR, Instrument.VIOLIN, Instrument.FLUTE, Instrument.SAXOPHONE, Instrument.TRUMPET -> Clef.TREBLE
+        Instrument.VOICE, Instrument.GUITAR, Instrument.VIOLIN, Instrument.FLUTE, Instrument.CLARINET, Instrument.SAXOPHONE,
+        Instrument.TENOR_SAX, Instrument.TRUMPET, Instrument.FRENCH_HORN -> Clef.TREBLE
         Instrument.PIANO, Instrument.OTHER -> null
     }
 

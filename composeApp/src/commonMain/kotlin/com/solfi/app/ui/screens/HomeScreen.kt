@@ -96,6 +96,16 @@ fun HomeScreen(app: AppState) {
             QuickCard("🎼", s.practiceSolfeos, Modifier.weight(1f)) { app.tab = Tab.SOLFEOS }
             QuickCard("🎹", s.freePiano, Modifier.weight(1f)) { app.tab = Tab.PIANO }
         }
+        PressCard(Modifier.fillMaxWidth(), onClick = { app.tab = Tab.PRACTICE }) {
+            Row(Modifier.padding(18.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+                com.solfi.app.ui.icons.InstrumentIcon(app.instrument, 44.dp)
+                Column(Modifier.weight(1f)) {
+                    Text(s.practiceTitle, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                    Text(s.instrumentName(app.instrument), fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Text("🎤", fontSize = 26.sp)
+            }
+        }
     }
 }
 

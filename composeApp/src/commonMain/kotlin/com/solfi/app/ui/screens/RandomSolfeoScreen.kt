@@ -149,11 +149,14 @@ fun RandomSolfeoScreen(app: AppState, difficulty: Difficulty, initialSeed: Long?
     val playing by engine.isPlaying.collectAsState()
     val pos by engine.position.collectAsState()
     val hi = engineHighlight(engine, melody)
+    val pa = rememberPlayAlong(app, melody)
+    val paHi = if (pa.active) pa.highlight(app) else -1
 
     PlatformBackHandler(true) { app.pop() }
     LaunchedEffect(Unit) { engine.stop() }
 
     fun start(newMode: Int, from: Double = 0.0) {
+        pa.stop()
         mode = newMode
         val solution = newMode == MODE_SOLUTION
         engine.playMelody(
@@ -186,7 +189,7 @@ fun RandomSolfeoScreen(app: AppState, difficulty: Difficulty, initialSeed: Long?
                 Box(Modifier.padding(12.dp)) {
                     StaffView(
                         melody, labelFor = if (showNames) ({ p -> ui.noteName(p) }) else null,
-                        highlightIndex = if (mode == MODE_SOLUTION && playing) hi else -1,
+                        highlightIndex = if (pa.active) paHi else if (mode == MODE_SOLUTION && playing) hi else -1,
                         onNoteClick = { e -> e.pitches.forEach { engine.playPitch(it, 0.7) } }, description = s.cdStaff,
                     )
                 }
@@ -208,6 +211,9 @@ fun RandomSolfeoScreen(app: AppState, difficulty: Difficulty, initialSeed: Long?
                     Text(if (solPlaying) s.stop else s.listenSolution, fontWeight = FontWeight.Bold, maxLines = 2, lineHeight = 16.sp, fontSize = 14.sp)
                 }
             }
+
+            PlayAlongButton(pa)
+            PlayAlongPanel(app, pa)
 
             // self-assessment
             PressCard(Modifier.fillMaxWidth()) {

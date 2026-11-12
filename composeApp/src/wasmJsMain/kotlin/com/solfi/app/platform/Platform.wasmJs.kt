@@ -166,3 +166,69 @@ actual fun todayEpochDay(): Int {
 }
 
 actual fun currentTimeMillis(): Long = nowMillis().toLong()
+
+// ------------------------------------------------------------------------------------------ microphone
+
+private fun micOpen(onStatus: (Int) -> Unit, onBuffer: (JsAny, Int) -> Unit): JsAny = js(
+    """{
+    const h = { stream: null, ctx: null, node: null, src: null, sink: null, closed: false };
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { onStatus(2); return h; }
+    navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } })
+        .then(function (stream) {
+            if (h.closed) { stream.getTracks().forEach(function (t) { t.stop(); }); return; }
+            const C = window.AudioContext || window.webkitAudioContext;
+            const ctx = new C();
+            const src = ctx.createMediaStreamSource(stream);
+            const node = ctx.createScriptProcessor(2048, 1, 1);
+            node.onaudioprocess = function (e) { onBuffer(e.inputBuffer.getChannelData(0), ctx.sampleRate | 0); };
+            // a ScriptProcessor only runs while connected to the destination: route it through a muted gain
+            const sink = ctx.createGain();
+            sink.gain.value = 0;
+            src.connect(node); node.connect(sink); sink.connect(ctx.destination);
+            if (ctx.state !== 'running') ctx.resume();
+            h.stream = stream; h.ctx = ctx; h.node = node; h.src = src; h.sink = sink;
+            onStatus(0);
+        })
+        .catch(function (err) {
+            const denied = err && (err.name === 'NotAllowedError' || err.name === 'SecurityError' || err.name === 'PermissionDeniedError');
+            onStatus(denied ? 1 : 2);
+        });
+    return h;
+}"""
+)
+
+private fun micClose(h: JsAny): Unit = js(
+    """{
+    h.closed = true;
+    try { if (h.node) { h.node.onaudioprocess = null; h.node.disconnect(); } } catch (e) {}
+    try { if (h.src) h.src.disconnect(); } catch (e) {}
+    try { if (h.stream) h.stream.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {}
+    try { if (h.ctx) h.ctx.close(); } catch (e) {}
+}"""
+)
+
+private fun f32Get(a: JsAny, i: Int): Float = js("a[i]")
+
+/** Microphone through getUserMedia + a ScriptProcessorNode (needs a secure context: https or localhost). */
+actual class MicInput actual constructor() {
+    private var handle: JsAny? = null
+    private var scratch = FloatArray(2048)
+
+    actual fun start(onStatus: (MicStatus) -> Unit, onSamples: (FloatArray, Int, Int) -> Unit) {
+        if (handle != null) return
+        handle = micOpen(
+            { code -> onStatus(when (code) { 0 -> MicStatus.LISTENING; 1 -> MicStatus.DENIED; else -> MicStatus.UNAVAILABLE }) },
+            { buf, rate ->
+                val n = f32Length(buf)
+                if (scratch.size < n) scratch = FloatArray(n)
+                for (i in 0 until n) scratch[i] = f32Get(buf, i)
+                onSamples(scratch, n, rate)
+            },
+        )
+    }
+
+    actual fun stop() {
+        handle?.let(::micClose)
+        handle = null
+    }
+}

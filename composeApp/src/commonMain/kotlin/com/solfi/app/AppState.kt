@@ -5,6 +5,9 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.solfi.app.audio.AudioEngine
+import com.solfi.app.audio.InstrumentListener
+import com.solfi.app.platform.MicInput
+import com.solfi.app.music.InstrumentTuning
 import com.solfi.app.content.ContentRepository
 import com.solfi.app.content.LevelContent
 import com.solfi.app.data.Profile
@@ -26,7 +29,7 @@ import com.solfi.app.platform.Haptics
 import com.solfi.app.platform.todayEpochDay
 import com.solfi.app.ui.theme.UiContext
 
-enum class Tab { HOME, LEARN, SOLFEOS, PIANO, PROGRESS }
+enum class Tab { HOME, LEARN, SOLFEOS, PRACTICE, PIANO, PROGRESS }
 
 sealed interface Route {
     data class Lesson(val levelIndex: Int, val lessonIndex: Int) : Route
@@ -35,6 +38,13 @@ sealed interface Route {
     data class Solfeo(val levelIndex: Int, val solfeoIndex: Int) : Route
     /** Random solfeo of a [difficulty]; [seed] null = pick a fresh one. */
     data class RandomSolfeo(val difficulty: Difficulty, val seed: Long? = null) : Route
+    /** Practice with the learner's instrument: tuner, read-and-play notes and melodies. */
+    data object PracticeTuner : Route
+    data object PracticeNotes : Route
+    /** A lesson solfeo ([levelIndex], [index]) or, with [levelIndex] = [RANDOM], a random melody of difficulty ordinal [index]. */
+    data class PracticeMelody(val levelIndex: Int, val index: Int) : Route {
+        companion object { const val RANDOM = -1 }
+    }
     data object Settings : Route
     data object AddProfile : Route
 }
@@ -45,6 +55,8 @@ class AppState(
     val engine: AudioEngine,
     val haptics: Haptics,
     private val systemLanguage: String,
+    /** Microphone pitch listener for playing along with a real instrument. */
+    val listener: InstrumentListener = InstrumentListener(MicInput()),
 ) {
     var levels by mutableStateOf<List<LevelContent?>>(emptyList())
         private set
@@ -76,6 +88,14 @@ class AppState(
     /** Clef the learner wants to read in, or null to keep each lesson's own clef. */
     val effectiveClef: Clef?
         get() = profile?.settings?.let { ClefPolicy.effective(ClefPreference.fromName(it.clefPreference), Instrument.fromName(it.instrument)) }
+
+    val instrument: Instrument get() = Instrument.fromName(profile?.settings?.instrument)
+
+    /** Transposition and range of the learner's instrument. */
+    val tuning: InstrumentTuning get() = InstrumentTuning.of(instrument)
+
+    /** Accept any octave of the right note when playing along (always on for voice / other). */
+    val octaveFree: Boolean get() = tuning.octaveFree || profile?.settings?.ignoreOctave == true
 
     val systemLang: Lang get() = Lang.fromCode(systemLanguage)
 
@@ -110,7 +130,7 @@ class AppState(
     fun canTakeSkipTest(levelIndex: Int): Boolean =
         levels.getOrNull(levelIndex)?.let { ProgressRepository.canTakeSkipTest(it, progress) } == true
 
-    fun pop(): Boolean = if (stack.isNotEmpty()) { stack.removeAt(stack.lastIndex); engine.stop(); true } else false
+    fun pop(): Boolean = if (stack.isNotEmpty()) { stack.removeAt(stack.lastIndex); engine.stop(); listener.stop(); true } else false
 
     // ------------------------------------------------------------- profiles
 

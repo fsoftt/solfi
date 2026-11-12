@@ -3,12 +3,16 @@ package com.solfi.app.platform
 import androidx.compose.runtime.Composable
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.FloatVar
+import kotlinx.cinterop.get
 import kotlinx.cinterop.pointed
 import kotlinx.cinterop.reinterpret
 import kotlinx.cinterop.set
 import platform.AVFAudio.AVAudioEngine
 import platform.AVFAudio.AVAudioFormat
 import platform.AVFAudio.AVAudioSession
+import platform.AVFAudio.AVAudioSessionCategoryOptionDefaultToSpeaker
+import platform.AVFAudio.AVAudioSessionCategoryOptionMixWithOthers
+import platform.AVFAudio.AVAudioSessionCategoryPlayAndRecord
 import platform.AVFAudio.AVAudioSessionCategoryPlayback
 import platform.AVFAudio.AVAudioSourceNode
 import platform.AVFAudio.setActive
@@ -114,3 +118,61 @@ actual fun currentTimeMillis(): Long = (NSDate().timeIntervalSince1970 * 1000).t
 
 @Composable
 actual fun PlatformBackHandler(enabled: Boolean, onBack: () -> Unit) {}
+
+/**
+ * Microphone through AVAudioEngine's input node. While listening the session switches to play-and-record (keeping
+ * the loudspeaker as output); it returns to playback afterwards.
+ * NOTE: like AudioSink, not compile-verified here (needs Xcode/macOS). The app's Info.plist must contain
+ * NSMicrophoneUsageDescription.
+ */
+@OptIn(ExperimentalForeignApi::class)
+actual class MicInput actual constructor() {
+    private var engine: AVAudioEngine? = null
+    private var wanted = false
+
+    actual fun start(onStatus: (MicStatus) -> Unit, onSamples: (FloatArray, Int, Int) -> Unit) {
+        if (engine != null) return
+        wanted = true
+        AVAudioSession.sharedInstance().requestRecordPermission { granted ->
+            platform.darwin.dispatch_async(platform.darwin.dispatch_get_main_queue()) {
+                if (!granted) onStatus(MicStatus.DENIED) else if (wanted) open(onStatus, onSamples)
+            }
+        }
+    }
+
+    private fun open(onStatus: (MicStatus) -> Unit, onSamples: (FloatArray, Int, Int) -> Unit) {
+        if (engine != null) return
+        val session = AVAudioSession.sharedInstance()
+        session.setCategory(
+            AVAudioSessionCategoryPlayAndRecord,
+            withOptions = AVAudioSessionCategoryOptionDefaultToSpeaker or AVAudioSessionCategoryOptionMixWithOthers,
+            error = null,
+        )
+        session.setActive(true, error = null)
+        val e = AVAudioEngine()
+        val input = e.inputNode
+        val format = input.outputFormatForBus(0u)
+        val rate = format.sampleRate.toInt()
+        if (rate <= 0) { onStatus(MicStatus.UNAVAILABLE); return }
+        var scratch = FloatArray(4096)
+        input.installTapOnBus(0u, bufferSize = 2048u, format = format) { buffer, _ ->
+            val b = buffer ?: return@installTapOnBus
+            val n = b.frameLength.toInt()
+            val ch = b.floatChannelData?.get(0) ?: return@installTapOnBus
+            if (scratch.size < n) scratch = FloatArray(n)
+            for (i in 0 until n) scratch[i] = ch[i]
+            onSamples(scratch, n, rate)
+        }
+        e.prepare()
+        if (!e.startAndReturnError(null)) { input.removeTapOnBus(0u); onStatus(MicStatus.UNAVAILABLE); return }
+        engine = e
+        onStatus(MicStatus.LISTENING)
+    }
+
+    actual fun stop() {
+        wanted = false
+        engine?.let { it.inputNode.removeTapOnBus(0u); it.stop() }
+        if (engine != null) AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, error = null)
+        engine = null
+    }
+}

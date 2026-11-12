@@ -16,6 +16,8 @@ data class ProfileSettings(
     val instrument: String = "OTHER",
     /** ClefPreference name: RECOMMENDED, TREBLE or BASS. */
     val clefPreference: String = "RECOMMENDED",
+    /** Playing along: accept the right note in any octave. */
+    val ignoreOctave: Boolean = false,
 )
 
 @Serializable
