@@ -181,3 +181,5 @@ actual class MicInput actual constructor() {
         engine = null
     }
 }
+
+actual fun nglEnabled(): Boolean = false

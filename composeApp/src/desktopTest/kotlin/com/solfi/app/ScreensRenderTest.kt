@@ -28,7 +28,7 @@ import kotlin.test.assertTrue
 /** Renders the main screens off-screen with real level-1 content (smoke test + PNGs in build/render). */
 class ScreensRenderTest {
     private val kv = KeyValueStore("solfi-render-test")
-    private val app = AppState(ProfileStore(kv), AudioEngine(null), Haptics(), "es", com.solfi.app.audio.InstrumentListener(null)).also { a ->
+    private val app = AppState(ProfileStore(kv), AudioEngine(null), Haptics(), "es", com.solfi.app.audio.InstrumentListener(null), showNgl = true).also { a ->
         val dir = listOf("src/commonMain/composeResources/files/content").map(::File).first { it.isDirectory }
         a.useLevels(listOf(ContentJson.decodeLevel(File(dir, "level1.json").readText()), null, null, null, null))
         a.createProfile("Lucía", "🦊", kid = true, lang = Lang.ES, naming = NoteNaming.SOLFEGE)
@@ -105,6 +105,27 @@ class ScreensRenderTest {
             assertTrue(idx >= 0)
             render("s4-sixteenths", h = 1400) { SolfeoPlayerScreen(app, 3, idx) }
         } finally { app.useLevels(saved) }
+    }
+
+    @Test fun ngl() {
+        val book = ContentJson.decodeEnsembleBook(File("src/commonMain/composeResources/files/content/ngl.json").readText())
+        app.nglPieces = book.pieces
+        try {
+            render("ngl", h = 4600) { NglScreen(app) }
+            app.nglSelection = "intro" to "p5"
+            render("ngl-trombone-2", h = 3000, theme = "DARK") { NglScreen(app) }
+            app.nglSelection = "intro" to "p8"
+            render("ngl-glockenspiel", h = 3000) { NglScreen(app) }
+            // a second song keeps the chosen instrument and voice
+            app.nglPieces = book.pieces + book.pieces[0].copy(id = "otra", title = "Otra canción")
+            app.nglSelection = "intro" to "p9"
+            app.nglSelection = "otra" to com.solfi.app.ui.screens.defaultNglPart(app, app.nglPieces[1]).id
+            assertTrue(app.nglSelection!!.second == "p9")
+            render("ngl-two-songs", h = 1600) { NglScreen(app) }
+            // 360 dp phone: seven tabs must still fit in the bottom bar
+            app.tab = Tab.NGL
+            render("ngl-tab-phone", w = 720, h = 1500) { MainTabs(app) }
+        } finally { app.nglPieces = emptyList(); app.nglSelection = null; app.tab = Tab.HOME }
     }
 
     @Test fun piano() = render("piano") { PianoScreen(app) }

@@ -66,6 +66,8 @@ fun StaffView(
     gap: Dp = 11.dp,
     colors: StaffColors = defaultStaffColors(),
     description: String = "",
+    /** Colour for a melody event (e.g. how it was played), or null for the normal ink. */
+    noteColor: ((Int) -> Color?)? = null,
 ) {
     val measurer = rememberTextMeasurer()
     val fontFamily = LocalBaseFontFamily.current
@@ -89,7 +91,7 @@ fun StaffView(
             detectTapGestures { pos -> layout.hitTest(pos.x, pos.y)?.let(onNoteClick) }
         }
         Canvas(Modifier.fillMaxWidth().height(h).then(tap).semantics { if (description.isNotEmpty()) contentDescription = description }) {
-            drawStaff(layout, colors, measurer, labelFor, highlightIndex, pulse, fontFamily)
+            drawStaff(layout, colors, measurer, labelFor, highlightIndex, pulse, fontFamily, noteColor)
         }
     }
 }
@@ -97,6 +99,7 @@ fun StaffView(
 private fun DrawScope.drawStaff(
     L: StaffLayout, colors: StaffColors, tm: TextMeasurer, labelFor: ((Pitch) -> String)?, hi: Int, pulse: Float,
     fontFamily: FontFamily?,
+    noteColor: ((Int) -> Color?)? = null,
 ) {
     val g = L.gap
     val melody = L.melody
@@ -140,7 +143,7 @@ private fun DrawScope.drawStaff(
             // notes
             for (gl in m.glyphs) {
                 val active = gl.event.index == hi
-                val col = if (active) colors.highlight else colors.ink
+                val col = if (active) colors.highlight else noteColor?.invoke(gl.event.index) ?: colors.ink
                 val sc = if (active) 1f + 0.3f * pulse else 1f
                 if (gl.isRest) drawRest(gl, bottom, g, col, sc) else drawNote(gl, m, melody, bottom, g, col, sc, active, colors)
                 if (labelFor != null && !gl.isRest) {
@@ -155,12 +158,17 @@ private fun DrawScope.drawStaff(
             // ties
             for (gl in m.glyphs) if (gl.event.tieNext) {
                 val next = L.glyphByEvent[gl.event.index + 1] ?: continue
-                if (next.second != si) continue
-                drawTie(gl, next.first, bottom, g, colors.ink)
+                if (next.second == si) {
+                    drawTie(gl, gl.x + g * 0.7f, next.first.x - g * 0.7f, bottom, g, colors.ink)
+                } else {
+                    // tie across a line break: open to the end of this line, close from the start of the next one
+                    drawTie(gl, gl.x + g * 0.7f, endX + g * 0.2f, bottom, g, colors.ink)
+                    val ns = L.systems[next.second]
+                    val start = ns.measures.firstOrNull()?.startX ?: (next.first.x - 2 * g)
+                    drawTie(gl, start - g * 0.2f, next.first.x - g * 0.7f, ns.staffTop + 4 * g, g, colors.ink)
+                }
             }
         }
-        // ties between measures of same system handled above only when next in same system and same measure loop;
-        // cross-measure ties: the next glyph is looked up globally, so they are covered.
     }
 }
 
@@ -272,12 +280,11 @@ private fun DrawScope.drawBeam(b: BeamGroup, bottom: Float, g: Float, color: Col
     }
 }
 
-private fun DrawScope.drawTie(a: NoteGlyph, b: NoteGlyph, bottom: Float, g: Float, color: Color) {
+/** Tie arc for note [a] from [x1] to [x2] on the staff whose bottom line is at [bottom] (same pitch both ends). */
+private fun DrawScope.drawTie(a: NoteGlyph, x1: Float, x2: Float, bottom: Float, g: Float, color: Color) {
     val up = !a.stemUp // tie on the side opposite the stem
     val pos = if (up) a.highPos else a.lowPos
     val y = posY(bottom, g, pos) + (if (up) -g * 0.65f else g * 0.65f)
-    val x1 = a.x + g * 0.7f
-    val x2 = b.x - g * 0.7f
     val cy = y + (if (up) -g * 0.9f else g * 0.9f)
     val path = Path().apply { moveTo(x1, y); quadraticTo((x1 + x2) / 2, cy, x2, y) }
     drawPath(path, color, style = Stroke(g * 0.2f, cap = StrokeCap.Round))

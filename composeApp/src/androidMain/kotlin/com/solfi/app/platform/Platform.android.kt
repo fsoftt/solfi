@@ -189,3 +189,5 @@ actual class MicInput actual constructor() {
         thread = null
     }
 }
+
+actual fun nglEnabled(): Boolean = false

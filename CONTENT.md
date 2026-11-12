@@ -278,3 +278,20 @@ En una lección, `clefLocked: true` bloquea todos sus pasos.
 3. Todas las melodías con compases completos; `answer` válido; `color` `#RRGGBB`.
 4. ≥ 4 solfeos con `id` únicos y una `badge` con `id` único.
 5. `./gradlew :composeApp:desktopTest` en verde.
+
+## NGL: piezas de conjunto (`ngl.json`)
+
+La pestaña **NGL** muestra piezas de conjunto: el aprendiz elige **instrumento** y **voz** y practica su parte
+(lectura, escuchar su voz o todo el conjunto, y tocar con el micrófono). Las piezas viven en
+`composeResources/files/content/ngl.json` y se generan desde MusicXML (`.mxl` o `.musicxml`, p. ej. exportado de MuseScore):
+
+```bash
+python3 tools/musicxml_to_solfi.py partitura.mxl --id intro --title Intro \
+  --into composeApp/src/commonMain/composeResources/files/content/ngl.json
+```
+
+Cada parte guarda las notas **tal como las lee el músico** (escritas) y `transpose`, los semitonos de escrita a sonido
+(trompeta en Si♭ −2, glockenspiel +24). El instrumento y el número de voz salen del nombre de la parte
+(«Trompeta en Sib 2» → `TRUMPET`, voz 2). Se descartan los compases finales en silencio en todas las partes.
+Límites: una voz por parte, sin tresillos ni notas de adorno y sin cambios de compás o armadura (el script avisa).
+`NglContentTest` comprueba que todas las partes se lean y tengan la misma duración.

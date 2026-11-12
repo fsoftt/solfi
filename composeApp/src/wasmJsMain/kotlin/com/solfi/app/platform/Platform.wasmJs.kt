@@ -232,3 +232,7 @@ actual class MicInput actual constructor() {
         handle = null
     }
 }
+
+private fun locationPath(): String = js("window.location.pathname")
+
+actual fun nglEnabled(): Boolean = isNglPath(locationPath())

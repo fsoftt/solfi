@@ -132,3 +132,6 @@ actual class MicInput actual constructor() {
         thread = null
     }
 }
+
+/** Desktop: start with `-Dsolfi.ngl=true` to show the NGL tab. */
+actual fun nglEnabled(): Boolean = System.getProperty("solfi.ngl") == "true"
