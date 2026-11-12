@@ -92,10 +92,10 @@ class InstrumentPlayTest {
             (amp * v / (if (harmonics) 2.15 else 1.0)).toFloat()
         }
 
-    private fun detect(freq: Double, minF: Double = 60.0, maxF: Double = 1600.0, sr: Int = 44100): Double? {
-        val d = PitchDetector(sr, minF, maxF)
+    /** Last reading of the full-range detector (the one the app uses) over half a second of [sig]. */
+    private fun detectSignal(sig: FloatArray, sr: Int): Double? {
+        val d = PitchDetector(sr)
         var last: PitchReading? = null
-        val sig = tone(freq, sr, sr / 2)
         var i = 0
         while (i < sig.size) {
             val n = minOf(512, sig.size - i)
@@ -105,13 +105,44 @@ class InstrumentPlayTest {
         return last?.frequency
     }
 
-    @Test fun detectsPitchAcrossInstrumentRanges() {
-        for (name in listOf("E1", "A1", "E2", "G2", "C3", "A3", "C4", "A4", "E5", "C6")) {
-            val f = Pitch.parse(name).frequency
-            val got = assertNotNull(detect(f, minF = 30.0), name)
-            val err = 1200 * log2(got / f)
-            assertTrue(abs(err) < 5.0, "$name: expected $f got $got (${err} cents)")
-        }
+    private fun assertDetects(name: String, sig: (Double, Int) -> FloatArray, sr: Int = 44100, tolCents: Double = 5.0) {
+        val f = Pitch.parse(name).frequency
+        val got = assertNotNull(detectSignal(sig(f, sr), sr), "$name @ $sr Hz: nothing detected")
+        val err = 1200 * log2(got / f)
+        assertTrue(abs(err) < tolCents, "$name @ $sr Hz: expected $f got $got ($err cents)")
+    }
+
+    // A0 (below a BB♭ tuba's pedal B♭0) … C8 (top of the piccolo), every few semitones.
+    private val fullRange = (21..108 step 5).map { Pitch.fromMidi(it).toString() } + listOf("Bb0", "D1", "E2", "C8")
+
+    @Test fun detectsTheFullRangeFromTubaToPiccolo() {
+        for (sr in listOf(44100, 48000)) for (name in fullRange) assertDetects(name, { f, r -> tone(f, r, r / 2) }, sr)
+    }
+
+    @Test fun detectsPureSinesAcrossTheRange() {
+        for (name in fullRange) assertDetects(name, { f, r -> tone(f, r, r / 2, harmonics = false) })
+    }
+
+    /** Low brass: the fundamental is much weaker than the 2nd and 3rd harmonics. It must not read an octave up. */
+    @Test fun lowBrassWithWeakFundamentalIsNotAnOctaveOff() {
+        for (name in listOf("Bb0", "D1", "F1", "Bb1", "F2")) assertDetects(name, { f, sr ->
+            FloatArray(sr / 2) { i ->
+                val t = i.toDouble() / sr
+                (0.1 * (0.25 * sin(2 * PI * f * t) + sin(2 * PI * 2 * f * t) + 0.8 * sin(2 * PI * 3 * f * t) + 0.4 * sin(2 * PI * 4 * f * t))).toFloat()
+            }
+        })
+    }
+
+    /** Voices from bass (E2) to soprano (C6), with a ±20-cent vibrato at 5.5 Hz: the reading stays near the note. */
+    @Test fun detectsVoicesWithVibrato() {
+        for (name in listOf("E2", "A2", "D3", "G3", "C4", "F4", "A4", "D5", "G5", "C6")) assertDetects(name, { f, sr ->
+            var phase = 0.0
+            FloatArray(sr / 2) { i ->
+                val inst = f * 2.0.pow(20.0 / 1200.0 * sin(2 * PI * 5.5 * i / sr))
+                phase += 2 * PI * inst / sr
+                (0.2 * (sin(phase) + 0.5 * sin(2 * phase) + 0.25 * sin(3 * phase))).toFloat()
+            }
+        }, tolCents = 25.0)
     }
 
     @Test fun detectsPureSineAndSilence() {
@@ -217,6 +248,23 @@ class InstrumentListenerTest {
             assertTrue(c.none { (it.step == 2 || it.step == 6) && it.alter == 1 || (it.step == 3 || it.step == 0) && it.alter == -1 })
             var prev: Pitch? = null
             repeat(20) { val n = com.solfi.app.logic.PracticeNotes.next(t, clef, true, rnd, prev); if (c.size > 1) assertTrue(n != prev); prev = n }
+        }
+    }
+}
+
+class TunerStaffTest {
+    private fun staff(n: String) = com.solfi.app.logic.PracticeNotes.staffFor(Pitch.parse(n))
+
+    @Test fun extremeNotesUseOttavaInsteadOfManyLedgerLines() {
+        assertEquals(com.solfi.app.music.Clef.TREBLE to 0, staff("A4"))
+        assertEquals(com.solfi.app.music.Clef.BASS to 0, staff("G2"))
+        assertEquals(com.solfi.app.music.Clef.TREBLE to 1, staff("C7"))
+        assertEquals(com.solfi.app.music.Clef.TREBLE to 2, staff("C8"))
+        assertEquals(com.solfi.app.music.Clef.BASS to -1, staff("D1"))
+        for (m in 21..108) {
+            val p = Pitch.fromMidi(m)
+            val (clef, oct) = com.solfi.app.logic.PracticeNotes.staffFor(p)
+            assertTrue(com.solfi.app.music.ClefShift.ledgerLines(p.diatonic - 7 * oct, clef) <= 3, "$p")
         }
     }
 }

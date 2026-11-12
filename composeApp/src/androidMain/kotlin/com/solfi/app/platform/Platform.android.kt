@@ -155,7 +155,12 @@ actual class MicInput actual constructor() {
         val min = android.media.AudioRecord.getMinBufferSize(rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
         if (min <= 0) { onStatus(MicStatus.UNAVAILABLE); return }
         val rec = try {
-            android.media.AudioRecord(android.media.MediaRecorder.AudioSource.VOICE_RECOGNITION, rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, maxOf(min, 4096 * 2))
+            // UNPROCESSED keeps the low end (tuba, double bass) that voice processing filters out; it is optional
+            // on devices, so fall back to VOICE_RECOGNITION (also lightly processed) when it is not supported.
+            val am = AppContext.app.getSystemService(Context.AUDIO_SERVICE) as android.media.AudioManager
+            val unprocessed = am.getProperty(android.media.AudioManager.PROPERTY_SUPPORT_AUDIO_SOURCE_UNPROCESSED) == "true"
+            val source = if (unprocessed) android.media.MediaRecorder.AudioSource.UNPROCESSED else android.media.MediaRecorder.AudioSource.VOICE_RECOGNITION
+            android.media.AudioRecord(source, rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, maxOf(min, 4096 * 2))
         } catch (e: Exception) { onStatus(MicStatus.UNAVAILABLE); return }
         if (rec.state != android.media.AudioRecord.STATE_INITIALIZED) { rec.release(); onStatus(MicStatus.UNAVAILABLE); return }
         try { rec.startRecording() } catch (e: Exception) { rec.release(); onStatus(MicStatus.UNAVAILABLE); return }

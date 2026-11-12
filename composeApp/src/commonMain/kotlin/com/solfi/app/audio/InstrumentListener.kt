@@ -63,7 +63,7 @@ class InstrumentListener(private val mic: MicInput?) {
     fun mute(ms: Long) = lock.withLock { mutedUntil = currentTimeMillis() + ms }
 
     private fun open(t: InstrumentTuning) {
-        lock.withLock { if (tuning != t) detector = null; tuning = t }
+        lock.withLock { tuning = t }
         val st = _status.value
         if (st == MicStatus.LISTENING || st == MicStatus.STARTING) return
         if (mic == null) { _status.value = MicStatus.UNAVAILABLE; return }
@@ -79,9 +79,9 @@ class InstrumentListener(private val mic: MicInput?) {
 
     private fun onSamples(buf: FloatArray, n: Int, rate: Int) {
         lock.withLock {
-            val t = tuning ?: return@withLock
-            val d = detector?.takeIf { it.sampleRate == rate }
-                ?: PitchDetector(rate, t.minFrequency.coerceAtLeast(28.0), t.maxFrequency.coerceAtMost(2500.0)).also { detector = it }
+            if (tuning == null) return@withLock
+            // Always the full musical range (tuba to piccolo, any voice): the learner may play in another octave.
+            val d = detector?.takeIf { it.sampleRate == rate } ?: PitchDetector(rate).also { detector = it }
             var r = d.push(buf, n) ?: return@withLock
             if (currentTimeMillis() < mutedUntil) r = PitchReading(null, 0.0, 0.0)
             val smoothed = smooth(r)

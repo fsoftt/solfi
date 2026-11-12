@@ -198,9 +198,15 @@ fun PracticeTunerScreen(app: AppState) {
                 }
                 Text("${(f * 10).roundToInt() / 10.0} Hz", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 // staff with the written note
-                val clef = PracticeNotes.clefFor(app.effectiveClef)
-                val shown = remember(written.midi, clef) { Melody.parse(clef.code, "4/4", "C", 80, "$written:w") }
-                PressCard(Modifier.fillMaxWidth()) { Box(Modifier.padding(12.dp)) { StaffView(shown, showTime = false, gap = 12.dp, description = s.cdStaff) } }
+                val (clef, oct) = remember(written.midi) { PracticeNotes.staffFor(written) }
+                val shown = remember(written.midi) { Melody.parse(clef.code, "4/4", "C", 80, "${ClefShift.shiftPitch(written, -oct)}:w") }
+                PressCard(Modifier.fillMaxWidth()) {
+                    Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        if (oct > 0) Text(PracticeNotes.ottavaMark(oct), fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                        StaffView(shown, showTime = false, gap = 12.dp, description = s.cdStaff)
+                        if (oct < 0) Text(PracticeNotes.ottavaMark(oct), fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                    }
+                }
             } else if (status == MicStatus.LISTENING) {
                 Text("🎵", fontSize = 56.sp)
                 Text(s.tunerPlaySomething, fontSize = 22.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurfaceVariant)
